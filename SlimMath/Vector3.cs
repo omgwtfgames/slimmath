@@ -29,6 +29,7 @@ namespace SlimMath
 
                 throw new ArgumentOutOfRangeException("index", "Indices for Vector3 run from 0 to 2, inclusive.");
             }
+
             set
             {
                 switch (index)
@@ -391,10 +392,10 @@ namespace SlimMath
         public static void TransformCoordinate(ref Vector3 coordinate, ref Matrix transform, out Vector3 result)
         {
             Vector4 vector = new Vector4();
-            vector.X = (((coordinate.X * transform.M11) + (coordinate.Y * transform.M21)) + (coordinate.Z * transform.M31)) + transform.M41;
-            vector.Y = (((coordinate.X * transform.M12) + (coordinate.Y * transform.M22)) + (coordinate.Z * transform.M32)) + transform.M42;
-            vector.Z = (((coordinate.X * transform.M13) + (coordinate.Y * transform.M23)) + (coordinate.Z * transform.M33)) + transform.M43;
-            vector.W = 1 / ((((coordinate.X * transform.M14) + (coordinate.Y * transform.M24)) + (coordinate.Z * transform.M34)) + transform.M44);
+            vector.X = (coordinate.X * transform.M11) + (coordinate.Y * transform.M21) + (coordinate.Z * transform.M31) + transform.M41;
+            vector.Y = (coordinate.X * transform.M12) + (coordinate.Y * transform.M22) + (coordinate.Z * transform.M32) + transform.M42;
+            vector.Z = (coordinate.X * transform.M13) + (coordinate.Y * transform.M23) + (coordinate.Z * transform.M33) + transform.M43;
+            vector.W = 1 / ((coordinate.X * transform.M14) + (coordinate.Y * transform.M24) + (coordinate.Z * transform.M34) + transform.M44);
 
             result = new Vector3(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W);
         }
