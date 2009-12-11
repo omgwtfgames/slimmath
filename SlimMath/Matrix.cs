@@ -70,69 +70,22 @@ namespace SlimMath
 
                 switch ((row * 4) + column)
                 {
-                    case 0:
-                        M11 = value;
-                        break;
-
-                    case 1:
-                        M12 = value;
-                        break;
-
-                    case 2:
-                        M13 = value;
-                        break;
-
-                    case 3:
-                        M14 = value;
-                        break;
-
-                    case 4:
-                        M21 = value;
-                        break;
-
-                    case 5:
-                        M22 = value;
-                        break;
-
-                    case 6:
-                        M23 = value;
-                        break;
-
-                    case 7:
-                        M24 = value;
-                        break;
-
-                    case 8:
-                        M31 = value;
-                        break;
-
-                    case 9:
-                        M32 = value;
-                        break;
-
-                    case 10:
-                        M33 = value;
-                        break;
-
-                    case 11:
-                        M34 = value;
-                        break;
-
-                    case 12:
-                        M41 = value;
-                        break;
-
-                    case 13:
-                        M42 = value;
-                        break;
-
-                    case 14:
-                        M43 = value;
-                        break;
-
-                    case 15:
-                        M44 = value;
-                        break;
+                    case 0: M11 = value; break;
+                    case 1: M12 = value; break;
+                    case 2: M13 = value; break;
+                    case 3: M14 = value; break;
+                    case 4: M21 = value; break;
+                    case 5: M22 = value; break;
+                    case 6: M23 = value; break;
+                    case 7: M24 = value; break;
+                    case 8: M31 = value; break;
+                    case 9: M32 = value; break;
+                    case 10: M33 = value; break;
+                    case 11: M34 = value; break;
+                    case 12: M41 = value; break;
+                    case 13: M42 = value; break;
+                    case 14: M43 = value; break;
+                    case 15: M44 = value; break;
                 }
             }
         }
@@ -1050,11 +1003,11 @@ namespace SlimMath
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "[[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]]", M11.ToString(CultureInfo.CurrentCulture), 
-                M12.ToString(CultureInfo.CurrentCulture), M13.ToString(CultureInfo.CurrentCulture), M14.ToString(CultureInfo.CurrentCulture), 
+            return string.Format(CultureInfo.CurrentCulture, "[[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]]", M11.ToString(CultureInfo.CurrentCulture),
+                M12.ToString(CultureInfo.CurrentCulture), M13.ToString(CultureInfo.CurrentCulture), M14.ToString(CultureInfo.CurrentCulture),
                 M21.ToString(CultureInfo.CurrentCulture), M22.ToString(CultureInfo.CurrentCulture), M23.ToString(CultureInfo.CurrentCulture),
-                M24.ToString(CultureInfo.CurrentCulture), M31.ToString(CultureInfo.CurrentCulture), M32.ToString(CultureInfo.CurrentCulture), 
-                M33.ToString(CultureInfo.CurrentCulture), M34.ToString(CultureInfo.CurrentCulture), M41.ToString(CultureInfo.CurrentCulture), 
+                M24.ToString(CultureInfo.CurrentCulture), M31.ToString(CultureInfo.CurrentCulture), M32.ToString(CultureInfo.CurrentCulture),
+                M33.ToString(CultureInfo.CurrentCulture), M34.ToString(CultureInfo.CurrentCulture), M41.ToString(CultureInfo.CurrentCulture),
                 M42.ToString(CultureInfo.CurrentCulture), M43.ToString(CultureInfo.CurrentCulture), M44.ToString(CultureInfo.CurrentCulture));
         }
 

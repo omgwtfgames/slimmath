@@ -57,10 +57,16 @@ namespace SlimMath
             }
         }
 
-        /*public Vector3 Axis
+        public Vector3 Axis
         {
             get
             {
+                float length = (X * X) + (Y * Y) + (Z * Z);
+                if (length < 0.0001f)
+                    return Vector3.UnitX;
+
+                float inv = 1.0f / length;
+                return new Vector3(X * inv, Y * inv, Z * inv);
             }
         }
 
@@ -68,8 +74,13 @@ namespace SlimMath
         {
             get
             {
+                float length = (X * X) + (Y * Y) + (Z * Z);
+                if (length < 0.0001f)
+                    return 0.0f;
+
+                return (float)(2.0 * Math.Acos(W));
             }
-        }*/
+        }
 
         public float Length()
         {
@@ -183,26 +194,18 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Barycentric(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, float weight1, float weight2, out Quaternion result)
-        //{
-        //}
-
-        //public static Quaternion Barycentric(Quaternion source1, Quaternion source2, Quaternion source3, float weight1, float weight2)
-        //{
-        //}
-
-        public static void Divide(ref Quaternion left, ref Quaternion right, out Quaternion result)
+        public static void Barycentric(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, float weight1, float weight2, out Quaternion result)
         {
-            result.X = left.X / right.X;
-            result.Y = left.Y / right.Y;
-            result.Z = left.Z / right.Z;
-            result.W = left.W / right.W;
+            Quaternion start, end;
+            Slerp(ref source1, ref source2, weight1 + weight2, out start);
+            Slerp(ref source1, ref source3, weight1 + weight2, out end);
+            Slerp(ref start, ref end, weight2 / (weight1 + weight2), out result);
         }
 
-        public static Quaternion Divide(Quaternion left, Quaternion right)
+        public static Quaternion Barycentric(Quaternion source1, Quaternion source2, Quaternion source3, float weight1, float weight2)
         {
             Quaternion result;
-            Divide(ref left, ref right, out result);
+            Barycentric(ref source1, ref source2, ref source3, weight1, weight2, out result);
             return result;
         }
 
@@ -211,13 +214,30 @@ namespace SlimMath
             return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
 
-        //public static void Exponential(ref Quaternion quaternion, out Quaternion result)
-        //{
-        //}
+        public static void Exponential(ref Quaternion quaternion, out Quaternion result)
+        {
+            float angle = (float)Math.Sqrt((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z));
+            float sin = (float)Math.Sin(angle);
 
-        //public static Quaternion Exponential(Quaternion quaternion)
-        //{
-        //}
+            if (Math.Abs(sin) >= 0.00001f)
+            {
+                float coeff = angle / sin;
+                result.X = coeff * quaternion.X;
+                result.Y = coeff * quaternion.Y;
+                result.Z = coeff * quaternion.Z;
+            }
+            else
+                result = quaternion;
+
+            result.W = (float)Math.Cos(angle);
+        }
+
+        public static Quaternion Exponential(Quaternion quaternion)
+        {
+            Quaternion result;
+            Exponential(ref quaternion, out result);
+            return result;
+        }
 
         public static void Lerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
         {
@@ -254,13 +274,34 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Logarithm(ref Quaternion quaternion, out Quaternion result)
-        //{
-        //}
+        public static void Logarithm(ref Quaternion quaternion, out Quaternion result)
+        {
+            if (Math.Abs(quaternion.W) < 1.0)
+            {
+                float angle = (float)Math.Acos(quaternion.W);
+                float sin = (float)Math.Sin(angle);
+                if (Math.Abs(sin) >= 0.00001f)
+                {
+                    float coeff = angle / sin;
+                    result.X = quaternion.X * coeff;
+                    result.Y = quaternion.Y * coeff;
+                    result.Z = quaternion.Z * coeff;
+                    result.W = 0.0f;
 
-        //public static Quaternion Logarithm(Quaternion quaternion)
-        //{
-        //}
+                    return;
+                }
+            }
+
+            result = quaternion;
+            result.W = 0.0f;
+        }
+
+        public static Quaternion Logarithm(Quaternion quaternion)
+        {
+            Quaternion result;
+            Logarithm(ref quaternion, out result);
+            return result;
+        }
 
         public static void Multiply(ref Quaternion quaternion, float scale, out Quaternion result)
         {
@@ -461,13 +502,20 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Squad(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, ref Quaternion source4, float amount, out Quaternion result)
-        //{
-        //}
+        public static void Squad(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, ref Quaternion source4, float amount, out Quaternion result)
+        {
+            Quaternion start, end;
+            Slerp(ref source1, ref source4, amount, out start);
+            Slerp(ref source2, ref source3, amount, out end);
+            Slerp(ref start, ref end, 2 * amount * (1.0f - amount), out result);
+        }
 
-        //public static Quaternion Squad(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4, float amount)
-        //{
-        //}
+        public static Quaternion Squad(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4, float amount)
+        {
+            Quaternion result;
+            Squad(ref source1, ref source2, ref source3, ref source4, amount, out result);
+            return result;
+        }
 
         //public static Quaternion[] SquadSetup(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4)
         //{
@@ -493,13 +541,6 @@ namespace SlimMath
             Multiply(ref left, ref right, out result);
             return result;
         }
-
-        //public static Quaternion operator /(Quaternion left, float right)
-        //{
-        //    Quaternion result;
-        //    Divide(ref left, right, out result);
-        //    return result;
-        //}
 
         public static Quaternion operator +(Quaternion left, Quaternion right)
         {
