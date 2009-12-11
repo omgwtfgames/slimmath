@@ -36,24 +36,11 @@ namespace SlimMath
             {
                 switch (index)
                 {
-                    case 0:
-                        X = value;
-                        break;
-
-                    case 1:
-                        Y = value;
-                        break;
-
-                    case 2:
-                        Z = value;
-                        break;
-
-                    case 3:
-                        W = value;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
+                    case 0: X = value; break;
+                    case 1: Y = value; break;
+                    case 2: Z = value; break;
+                    case 3: W = value; break;
+                    default: throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
                 }
             }
         }
@@ -352,41 +339,6 @@ namespace SlimMath
             return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
 
-        public static Vector4[] Transform(Vector4[] vectors, ref Quaternion rotation)
-        {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
-
-            int count = vectors.Length;
-            Vector4[] results = new Vector4[count];
-
-            float x = rotation.X + rotation.X;
-            float y = rotation.Y + rotation.Y;
-            float z = rotation.Z + rotation.Z;
-            float wx = rotation.W * x;
-            float wy = rotation.W * y;
-            float wz = rotation.W * z;
-            float xx = rotation.X * x;
-            float xy = rotation.X * y;
-            float xz = rotation.X * z;
-            float yy = rotation.Y * y;
-            float yz = rotation.Y * z;
-            float zz = rotation.Z * z;
-
-            for (int i = 0; i < count; i++)
-            {
-                Vector4 r = new Vector4();
-                r.X = ((vectors[i].X * ((1.0f - yy) - zz)) + (vectors[i].Y * (xy - wz))) + (vectors[i].Z * (xz + wy));
-                r.Y = ((vectors[i].X * (xy + wz)) + (vectors[i].Y * ((1.0f - xx) - zz))) + (vectors[i].Z * (yz - wx));
-                r.Z = ((vectors[i].X * (xz - wy)) + (vectors[i].Y * (yz + wx))) + (vectors[i].Z * ((1.0f - xx) - yy));
-                r.W = vectors[i].W;
-
-                results[i] = r;
-            }
-
-            return results;
-        }
-
         public static void Transform(ref Vector4 vector, ref Quaternion rotation, out Vector4 result)
         {
             float x = rotation.X + rotation.X;
@@ -413,27 +365,6 @@ namespace SlimMath
             Vector4 result;
             Transform(ref vector, ref rotation, out result);
             return result;
-        }
-
-        public static Vector4[] Transform(Vector4[] vectors, ref Matrix transform)
-        {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
-
-            int count = vectors.Length;
-            Vector4[] results = new Vector4[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                Vector4 r = new Vector4();
-                r.X = (vectors[i].X * transform.M11) + (vectors[i].Y * transform.M21) + (vectors[i].Z * transform.M31) + (vectors[i].W * transform.M41);
-                r.Y = (vectors[i].X * transform.M12) + (vectors[i].Y * transform.M22) + (vectors[i].Z * transform.M32) + (vectors[i].W * transform.M42);
-                r.Z = (vectors[i].X * transform.M13) + (vectors[i].Y * transform.M23) + (vectors[i].Z * transform.M33) + (vectors[i].W * transform.M43);
-                r.W = (vectors[i].X * transform.M14) + (vectors[i].Y * transform.M24) + (vectors[i].Z * transform.M34) + (vectors[i].W * transform.M44);
-
-                results[i] = r;
-            }
-            return results;
         }
 
         public static void Transform(ref Vector4 vector, ref Matrix transform, out Vector4 result)
