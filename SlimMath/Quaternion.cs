@@ -517,9 +517,24 @@ namespace SlimMath
             return result;
         }
 
-        //public static Quaternion[] SquadSetup(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4)
-        //{
-        //}
+        public static Quaternion[] SquadSetup(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4)
+        {
+            Quaternion q0 = (source1 + source2).LengthSquared() < (source1 - source2).LengthSquared() ? -source1 : source1;
+            Quaternion q2 = (source2 + source3).LengthSquared() < (source2 - source3).LengthSquared() ? -source3 : source3;
+            Quaternion q3 = (source3 + source4).LengthSquared() < (source3 - source4).LengthSquared() ? -source4 : source4;
+            Quaternion q1 = source2;
+
+            Quaternion q1Exp, q2Exp;
+            Exponential(ref q1, out q1Exp);
+            Exponential(ref q2, out q2Exp);
+
+            Quaternion[] results = new Quaternion[3];
+            results[0] = q1 * Exponential(-0.25f * (Logarithm(q1Exp * q2) + Logarithm(q1Exp * q0)));
+            results[1] = q2 * Exponential(-0.25f * (Logarithm(q2Exp * q3) + Logarithm(q2Exp * q1)));
+            results[2] = q2;
+
+            return results;
+        }
 
         public static Quaternion operator *(float scale, Quaternion quaternion)
         {
