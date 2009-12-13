@@ -21,41 +21,11 @@
 */
 #include "stdafx.h"
 #include "Asserts.h"
+#include "TestValues.h"
 
 using namespace testing;
 using namespace System;
 using namespace SlimMath;
-
-Matrix CreateTestMatrix()
-{
-	Matrix matrix;
-	matrix.M11 = 0.25f;
-	matrix.M12 = 0.5f;
-	matrix.M13 = 0.75f;
-	matrix.M14 = 1.0f;
-	matrix.M21 = 0.25f;
-	matrix.M22 = 0.5f;
-	matrix.M23 = 0.75f;
-	matrix.M24 = 1.0f;
-	matrix.M31 = 0.25f;
-	matrix.M32 = 0.5f;
-	matrix.M33 = 0.75f;
-	matrix.M34 = 1.0f;
-	matrix.M41 = 0.25f;
-	matrix.M42 = 0.5f;
-	matrix.M43 = 0.75f;
-	matrix.M44 = 1.0f;
-
-	return matrix;
-}
-
-void AssertEq(D3DXVECTOR4 result1, Vector4 result2)
-{
-	ASSERT_LE(abs(result1.x - result2.X), 0.0000001f);
-	ASSERT_LE(abs(result1.y - result2.Y), 0.0000001f);
-	ASSERT_LE(abs(result1.z - result2.Z), 0.0000001f);
-	ASSERT_LE(abs(result1.w - result2.W), 0.0000001f);
-}
 
 // ----- CONSTRUCTOR TESTS ----- //
 
@@ -766,6 +736,8 @@ TEST(Vector4Tests, MaximizeByRef)
 	AssertEq(result1, result2);
 }
 
+// ----- OPERATOR TESTS ----- //
+
 TEST(Vector4Tests, AddOperator)
 {
 	Vector4 vector1 = Vector4(1.0f, 2.0f, 3.0f, 4.0f);
@@ -863,6 +835,8 @@ TEST(Vector4Tests, InequalityOperator)
 	ASSERT_FALSE(vector2 != vector1);
 	ASSERT_TRUE(vector3 != vector1);
 }
+
+// ----- EQUALS TESTS ----- //
 
 TEST(Vector4Tests, StaticEquals)
 {

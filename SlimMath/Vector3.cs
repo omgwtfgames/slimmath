@@ -10,7 +10,7 @@ namespace SlimMath
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct Vector3 : IEquatable<Vector3>
     {
-        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector4));
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector3));
 
         public float X;
         public float Y;
@@ -346,7 +346,7 @@ namespace SlimMath
             return result;
         }
 
-        public static void Transform(ref Vector3 vector, ref Quaternion rotation, out Vector4 result)
+        public static void Transform(ref Vector3 vector, ref Quaternion rotation, out Vector3 result)
         {
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
@@ -364,12 +364,11 @@ namespace SlimMath
             result.X = ((vector.X * ((1.0f - yy) - zz)) + (vector.Y * (xy - wz))) + (vector.Z * (xz + wy));
             result.Y = ((vector.X * (xy + wz)) + (vector.Y * ((1.0f - xx) - zz))) + (vector.Z * (yz - wx));
             result.Z = ((vector.X * (xz - wy)) + (vector.Y * (yz + wx))) + (vector.Z * ((1.0f - xx) - yy));
-            result.W = 1.0f;
         }
 
-        public static Vector4 Transform(Vector3 vector, Quaternion rotation)
+        public static Vector3 Transform(Vector3 vector, Quaternion rotation)
         {
-            Vector4 result;
+            Vector3 result;
             Transform(ref vector, ref rotation, out result);
             return result;
         }

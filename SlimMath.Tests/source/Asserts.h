@@ -21,6 +21,9 @@
 */
 #pragma once
 
+void AssertEq(D3DXVECTOR3 result1, SlimMath::Vector3 result2);
+void AssertEq(D3DXVECTOR4 result1, SlimMath::Vector4 result2);
+
 // This macro is based on the similarly-named macros from Google Test.
 // Since Google Test is a C++ library, it catches exceptions as "const T&"
 // which, while it will compile in C++/CLI, will never match the thrown
