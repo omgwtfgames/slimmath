@@ -49,22 +49,24 @@ Matrix CreateTestMatrix()
 
 Matrix CreateTestMatrix(int index)
 {
+	float scale = static_cast<float>(index);
+
 	Matrix matrix;
-	matrix.M11 = index * 0.5f;
-	matrix.M12 = index * 0.5f;
-	matrix.M13 = index * 0.5f;
+	matrix.M11 = scale * 0.5f;
+	matrix.M12 = scale * 0.5f;
+	matrix.M13 = scale * 0.5f;
 	matrix.M14 = 1.0f;
-	matrix.M21 = index;
-	matrix.M22 = index;
-	matrix.M23 = index;
+	matrix.M21 = scale;
+	matrix.M22 = scale;
+	matrix.M23 = scale;
 	matrix.M24 = 0.5f;
-	matrix.M31 = index * 3.0f;
-	matrix.M32 = index * 2.0f;
-	matrix.M33 = index * 2.0f;
+	matrix.M31 = scale * 3.0f;
+	matrix.M32 = scale * 2.0f;
+	matrix.M33 = scale * 2.0f;
 	matrix.M34 = 1.0f;
-	matrix.M41 = index * 2.0f;
-	matrix.M42 = index * 3.0f;
-	matrix.M43 = index * 3.0f;
+	matrix.M41 = scale * 2.0f;
+	matrix.M42 = scale * 3.0f;
+	matrix.M43 = scale * 3.0f;
 	matrix.M44 = 2.5f;
 
 	return matrix;

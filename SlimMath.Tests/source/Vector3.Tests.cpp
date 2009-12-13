@@ -758,10 +758,10 @@ TEST(Vector3Tests, Project)
 	Matrix matrix3 = CreateTestMatrix(3);
 
 	D3DVIEWPORT9 viewport;
-	viewport.X = x;
-	viewport.Y = y;
-	viewport.Width = width;
-	viewport.Height = height;
+	viewport.X = (DWORD)x;
+	viewport.Y = (DWORD)y;
+	viewport.Width = (DWORD)width;
+	viewport.Height = (DWORD)height;
 	viewport.MinZ = minZ;
 	viewport.MaxZ = maxZ;
 
@@ -787,10 +787,10 @@ TEST(Vector3Tests, ProjectByRef)
 	Matrix matrix3 = CreateTestMatrix(3);
 
 	D3DVIEWPORT9 viewport;
-	viewport.X = x;
-	viewport.Y = y;
-	viewport.Width = width;
-	viewport.Height = height;
+	viewport.X = (DWORD)x;
+	viewport.Y = (DWORD)y;
+	viewport.Width = (DWORD)width;
+	viewport.Height = (DWORD)height;
 	viewport.MinZ = minZ;
 	viewport.MaxZ = maxZ;
 
@@ -817,10 +817,10 @@ TEST(Vector3Tests, Unproject)
 	Matrix matrix3 = CreateTestMatrix(3);
 
 	D3DVIEWPORT9 viewport;
-	viewport.X = x;
-	viewport.Y = y;
-	viewport.Width = width;
-	viewport.Height = height;
+	viewport.X = (DWORD)x;
+	viewport.Y = (DWORD)y;
+	viewport.Width = (DWORD)width;
+	viewport.Height = (DWORD)height;
 	viewport.MinZ = minZ;
 	viewport.MaxZ = maxZ;
 
@@ -846,10 +846,10 @@ TEST(Vector3Tests, UnprojectByRef)
 	Matrix matrix3 = CreateTestMatrix(3);
 
 	D3DVIEWPORT9 viewport;
-	viewport.X = x;
-	viewport.Y = y;
-	viewport.Width = width;
-	viewport.Height = height;
+	viewport.X = (DWORD)x;
+	viewport.Y = (DWORD)y;
+	viewport.Width = (DWORD)width;
+	viewport.Height = (DWORD)height;
 	viewport.MinZ = minZ;
 	viewport.MaxZ = maxZ;
 
