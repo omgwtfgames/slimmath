@@ -194,6 +194,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Utilities"
+			>
+			<File
+				RelativePath=".\source\Asserts.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\source\AssemblyInfo.cpp"
 			>

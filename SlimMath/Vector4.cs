@@ -263,9 +263,9 @@ namespace SlimMath
         {
             float squared = amount * amount;
             float cubed = amount * squared;
-            float part1 = (float)(((2.0 * cubed) - (3.0 * squared)) + 1.0);
-            float part2 = (float)((-2.0 * cubed) + (3.0 * squared));
-            float part3 = (cubed - ((float)(2.0 * squared))) + amount;
+            float part1 = ((2.0f * cubed) - (3.0f * squared)) + 1.0f;
+            float part2 = (-2.0f * cubed) + (3.0f * squared);
+            float part3 = (cubed - (2.0f * squared)) + amount;
             float part4 = cubed - squared;
 
             result = new Vector4((((value1.X * part1) + (value2.X * part2)) + (tangent1.X * part3)) + (tangent2.X * part4),
