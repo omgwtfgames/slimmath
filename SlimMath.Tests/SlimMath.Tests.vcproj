@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" &quot;$(SolutionDir)external\GMock\x86\gmockd.lib&quot;"
+				AdditionalDependencies="&quot;$(SolutionDir)external\GMock\x86\gmockd.lib&quot; d3dx9.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" &quot;$(SolutionDir)external\GMock\x86\gmock.lib&quot;"
+				AdditionalDependencies="&quot;$(SolutionDir)external\GMock\x86\gmock.lib&quot; d3dx9.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -180,11 +180,39 @@
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{DC7A5C99-7C3B-4225-A2C5-D5DE54453D31}"
+			RelativePathToProject=".\SlimMath\SlimMath.csproj"
+		/>
 	</References>
 	<Files>
+		<Filter
+			Name="Tests"
+			>
+			<File
+				RelativePath=".\source\Vector4.Tests.cpp"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\source\AssemblyInfo.cpp"
 			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\source\main.cpp"

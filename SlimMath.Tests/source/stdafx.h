@@ -26,3 +26,5 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #pragma warning(pop)
+
+#include <d3dx9.h>
