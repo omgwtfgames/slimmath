@@ -47,7 +47,7 @@ TEST(Vector3Tests, ConstructWithX)
 	ASSERT_EQ(0.75f, vector.Z);
 }
 
-TEST(Vector3Tests, ConstructWithXYZW)
+TEST(Vector3Tests, ConstructWithXYZ)
 {
 	Vector3 vector = Vector3(0.75f, 1.25f, 1.75f);
 
@@ -118,9 +118,9 @@ TEST(Vector3Tests, IndexerGet)
 	ASSERT_NO_THROW(y = vector[1]);
 	ASSERT_NO_THROW(z = vector[2]);
 
-	ASSERT_EQ(vector.X, 1.0f);
-	ASSERT_EQ(vector.Y, 2.0f);
-	ASSERT_EQ(vector.Z, 3.0f);
+	ASSERT_EQ(x, 1.0f);
+	ASSERT_EQ(y, 2.0f);
+	ASSERT_EQ(z, 3.0f);
 }
 
 TEST(Vector3Tests, IndexerGetOutOfRange)

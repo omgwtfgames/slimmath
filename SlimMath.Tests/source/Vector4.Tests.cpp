@@ -148,10 +148,10 @@ TEST(Vector4Tests, IndexerGet)
 	ASSERT_NO_THROW(z = vector[2]);
 	ASSERT_NO_THROW(w = vector[3]);
 
-	ASSERT_EQ(vector.X, 1.0f);
-	ASSERT_EQ(vector.Y, 2.0f);
-	ASSERT_EQ(vector.Z, 3.0f);
-	ASSERT_EQ(vector.W, 4.0f);
+	ASSERT_EQ(x, 1.0f);
+	ASSERT_EQ(y, 2.0f);
+	ASSERT_EQ(z, 3.0f);
+	ASSERT_EQ(w, 4.0f);
 }
 
 TEST(Vector4Tests, IndexerGetOutOfRange)

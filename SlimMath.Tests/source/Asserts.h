@@ -21,6 +21,7 @@
 */
 #pragma once
 
+void AssertEq(D3DXVECTOR2 result1, SlimMath::Vector2 result2);
 void AssertEq(D3DXVECTOR3 result1, SlimMath::Vector3 result2);
 void AssertEq(D3DXVECTOR4 result1, SlimMath::Vector4 result2);
 

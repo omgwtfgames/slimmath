@@ -305,7 +305,7 @@ namespace SlimMath
             return (left.X * right.X) + (left.Y * right.Y);
         }
 
-        public static void Transform(ref Vector2 vector, ref Quaternion rotation, out Vector4 result)
+        public static void Transform(ref Vector2 vector, ref Quaternion rotation, out Vector2 result)
         {
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
@@ -320,15 +320,13 @@ namespace SlimMath
             float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
-            result.X = ((float)(vector.X * ((1.0 - yy) - zz))) + (vector.Y * (xy - wz));
-            result.Y = (vector.X * (xy + wz)) + ((float)(vector.Y * ((1.0 - xx) - zz)));
-            result.Z = (vector.X * (xz - wy)) + (vector.Y * (yz + wx));
-            result.W = 1.0f;
+            result.X = (vector.X * (1.0f - yy - zz)) + (vector.Y * (xy - wz));
+            result.Y = (vector.X * (xy + wz)) + (vector.Y * (1.0f - xx - zz));
         }
 
-        public static Vector4 Transform(Vector2 vector, Quaternion rotation)
+        public static Vector2 Transform(Vector2 vector, Quaternion rotation)
         {
-            Vector4 result;
+            Vector2 result;
             Transform(ref vector, ref rotation, out result);
             return result;
         }

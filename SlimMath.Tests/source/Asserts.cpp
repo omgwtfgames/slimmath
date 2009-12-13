@@ -22,6 +22,12 @@
 #include "stdafx.h"
 #include "Asserts.h"
 
+void AssertEq(D3DXVECTOR2 result1, SlimMath::Vector2 result2)
+{
+	ASSERT_LE(abs(result1.x - result2.X), 0.000001f);
+	ASSERT_LE(abs(result1.y - result2.Y), 0.000001f);
+}
+
 void AssertEq(D3DXVECTOR3 result1, SlimMath::Vector3 result2)
 {
 	ASSERT_LE(abs(result1.x - result2.X), 0.000001f);
