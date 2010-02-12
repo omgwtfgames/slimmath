@@ -20,10 +20,8 @@
 * THE SOFTWARE.
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace SlimMath
 {

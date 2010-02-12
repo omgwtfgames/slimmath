@@ -20,10 +20,8 @@
 * THE SOFTWARE.
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace SlimMath
 {
@@ -551,17 +549,17 @@ namespace SlimMath
 
         public override int GetHashCode()
         {
-            return X.GetHashCode() + Y.GetHashCode();
+            return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode();
         }
 
         public static bool Equals(ref Vector3 value1, ref Vector3 value2)
         {
-            return (value1.X == value2.X && value1.Y == value2.Y);
+            return (value1.X == value2.X && value1.Y == value2.Y && value1.Z == value2.Z);
         }
 
         public bool Equals(Vector3 value)
         {
-            return (X == value.X && Y == value.Y);
+            return (X == value.X && Y == value.Y && Z == value.Z);
         }
 
         public override bool Equals(object value)
