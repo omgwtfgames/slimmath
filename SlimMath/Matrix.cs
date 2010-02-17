@@ -28,6 +28,18 @@ using System.Globalization;
 
 namespace SlimMath
 {
+    public enum Handedness
+    {
+        Left = 1,
+        Right = -1
+    }
+
+    public enum ProjectionType
+    {
+        Orthographic,
+        Perspective
+    }
+
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct Matrix : IEquatable<Matrix>
@@ -624,18 +636,6 @@ namespace SlimMath
             return result;
         }
 
-        public enum Handedness
-        {
-            Left = 1,
-            Right = -1
-        }
-
-        public enum ProjectionType
-        {
-            Orthographic,
-            Perspective
-        }
-
         //public static Matrix PerspectiveFov(Handedness handedness, float fov, float aspect, float znear, float zfar)
         //{
         //    float yScale = (float)(1.0 / Math.Tan(fov / 2.0f));
@@ -657,43 +657,43 @@ namespace SlimMath
         //    return Projection(ProjectionType.Orthographic, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
         //}
 
-        //public static Matrix Projection(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
-        //{
-        //    Matrix result = new Matrix();
-        //    result.M11 = 2.0f / (right - left);
-        //    result.M22 = 2.0f / (top - bottom);
-        //    result.M33 = 1.0f / (zfar - znear);
-        //    result.M43 = znear / (znear - zfar);
+        public static Matrix Projection1(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
+        {
+            Matrix result = new Matrix();
+            result.M11 = 2.0f / (right - left);
+            result.M22 = 2.0f / (top - bottom);
+            result.M33 = 1.0f / (zfar - znear);
+            result.M43 = znear / (znear - zfar);
 
-        //    if (type == ProjectionType.Orthographic)
-        //    {
-        //        result.M41 = (left + right) / (left - right);
-        //        result.M42 = (top + bottom) / (bottom - top);
-        //        result.M44 = left;
-        //    }
-        //    else
-        //    {
-        //        result.M11 *= znear;
-        //        result.M22 *= znear;
-        //        result.M33 *= -zfar;
-        //        result.M43 *= zfar;
-        //        result.M31 = (left + right) / (left - right);
-        //        result.M32 = (top + bottom) / (bottom - top);
-        //        result.M34 = 1.0f;
-        //    }
+            if (type == ProjectionType.Orthographic)
+            {
+                result.M41 = (left + right) / (left - right);
+                result.M42 = (top + bottom) / (bottom - top);
+                result.M44 = left;
+            }
+            else
+            {
+                result.M11 *= znear;
+                result.M22 *= znear;
+                result.M33 *= -zfar;
+                result.M43 *= zfar;
+                result.M31 = (left + right) / (left - right);
+                result.M32 = (top + bottom) / (bottom - top);
+                result.M34 = 1.0f;
+            }
 
-        //    if (handedness == Handedness.Right)
-        //    {
-        //        result.M31 *= -1.0f;
-        //        result.M32 *= -1.0f;
-        //        result.M33 *= -1.0f;
-        //        result.M34 *= -1.0f;
-        //    }
+            if (handedness == Handedness.Right)
+            {
+                result.M31 *= -1.0f;
+                result.M32 *= -1.0f;
+                result.M33 *= -1.0f;
+                result.M34 *= -1.0f;
+            }
 
-        //    return result;
-        //}
+            return result;
+        }
 
-        public static Matrix Projection(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix Projection2(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result = new Matrix();
             int t = (int)type;
@@ -1018,13 +1018,17 @@ namespace SlimMath
             return result;
         }
 
-        //public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
-        //{
-        //}
+        public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
+        {
+            result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) * Translation(rotationCenter) * Translation(translation);
+        }
 
-        //public static Matrix AffineTransformation(float scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
-        //{
-        //}
+        public static Matrix AffineTransformation(float scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
+        {
+            Matrix result;
+            AffineTransformation(scaling, ref rotationCenter, ref rotation, ref translation, out result);
+            return result;
+        }
 
         //public static void AffineTransformation2D(float scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
         //{
