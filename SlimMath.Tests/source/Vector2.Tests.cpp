@@ -652,7 +652,7 @@ TEST(Vector2Tests, TransformNormalByRef)
 	AssertEq(result1, result2);
 }
 
-TEST(Vector2Tests, Minimize)
+TEST(Vector2Tests, Min)
 {
 	Vector2 vector1(0.0f, 2.0f);
 	Vector2 vector2(1.0f, 2.0f);
@@ -660,12 +660,12 @@ TEST(Vector2Tests, Minimize)
 	D3DXVECTOR2 result1;
 	D3DXVec2Minimize(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector1), reinterpret_cast<D3DXVECTOR2*>(&vector2));
 
-	Vector2 result2 = Vector2::Minimize(vector1, vector2);
+	Vector2 result2 = Vector2::Min(vector1, vector2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector2Tests, MinimizeByRef)
+TEST(Vector2Tests, MineByRef)
 {
 	Vector2 vector1(0.0f, 2.0f);
 	Vector2 vector2(1.0f, 2.0f);
@@ -674,12 +674,12 @@ TEST(Vector2Tests, MinimizeByRef)
 	D3DXVec2Minimize(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector1), reinterpret_cast<D3DXVECTOR2*>(&vector2));
 
 	Vector2 result2;
-	Vector2::Minimize(vector1, vector2, result2);
+	Vector2::Min(vector1, vector2, result2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector2Tests, Maximize)
+TEST(Vector2Tests, Max)
 {
 	Vector2 vector1(0.0f, 2.0f);
 	Vector2 vector2(1.0f, 2.0f);
@@ -687,12 +687,12 @@ TEST(Vector2Tests, Maximize)
 	D3DXVECTOR2 result1;
 	D3DXVec2Maximize(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector1), reinterpret_cast<D3DXVECTOR2*>(&vector2));
 
-	Vector2 result2 = Vector2::Maximize(vector1, vector2);
+	Vector2 result2 = Vector2::Max(vector1, vector2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector2Tests, MaximizeByRef)
+TEST(Vector2Tests, MaxByRef)
 {
 	Vector2 vector1(0.0f, 2.0f);
 	Vector2 vector2(1.0f, 2.0f);
@@ -701,7 +701,7 @@ TEST(Vector2Tests, MaximizeByRef)
 	D3DXVec2Maximize(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector1), reinterpret_cast<D3DXVECTOR2*>(&vector2));
 
 	Vector2 result2;
-	Vector2::Maximize(vector1, vector2, result2);
+	Vector2::Max(vector1, vector2, result2);
 
 	AssertEq(result1, result2);
 }

@@ -127,7 +127,7 @@ namespace SlimMath
         {
             get
             {
-                Matrix result = new Matrix();
+                Matrix result = new Matrix() { M11 = 1.0f };
                 result.M11 = 1.0f;
                 result.M22 = 1.0f;
                 result.M33 = 1.0f;
@@ -636,28 +636,28 @@ namespace SlimMath
             return result;
         }
 
-        //public static Matrix PerspectiveFov(Handedness handedness, float fov, float aspect, float znear, float zfar)
-        //{
-        //    float yScale = (float)(1.0 / Math.Tan(fov / 2.0f));
-        //    float xScale = yScale / aspect;
+        public static Matrix PerspectiveFov(Handedness handedness, float fov, float aspect, float znear, float zfar)
+        {
+            float yScale = (float)(1.0 / Math.Tan(fov / 2.0f));
+            float xScale = yScale / aspect;
 
-        //    float width = 2 * znear / xScale;
-        //    float height = 2 * znear / yScale;
+            float width = 2 * znear / xScale;
+            float height = 2 * znear / yScale;
 
-        //    return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
-        //}
+            return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
+        }
 
-        //public static Matrix Perspective(Handedness handedness, float width, float height, float znear, float zfar)
-        //{
-        //    return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
-        //}
+        public static Matrix Perspective(Handedness handedness, float width, float height, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
+        }
 
-        //public static Matrix Orthographic(Handedness handedness, float width, float height, float znear, float zfar)
-        //{
-        //    return Projection(ProjectionType.Orthographic, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
-        //}
+        public static Matrix Orthographic(Handedness handedness, float width, float height, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Orthographic, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
+        }
 
-        public static Matrix Projection1(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
+        public static Matrix Projection(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result = new Matrix();
             result.M11 = 2.0f / (right - left);
@@ -693,29 +693,6 @@ namespace SlimMath
             return result;
         }
 
-        public static Matrix Projection2(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
-        {
-            Matrix result = new Matrix();
-            int t = (int)type;
-            int h = (int)handedness;
-
-            result.M11 = 2.0f / (right - left) + (znear / (right - left)) * t;
-            result.M22 = 2.0f / (top - bottom) + (znear / (top-bottom)) * t;
-            result.M33 = 1.0f / (zfar - znear) - (zfar / (zfar - znear)) * t;
-            result.M43 = znear / (znear - zfar) + (zfar / (znear - zfar)) * t;
-
-            result[3 - t, 0] = (left + right) / (left - right);
-            result[3 - t, 1] = (top + bottom) / (bottom - top);
-            result[3 - t, 3] = (t * 1.0f) + ((1 - t) * left);
-
-            result.M31 *= h;
-            result.M32 *= h;
-            result.M33 *= h;
-            result.M34 *= h;
-
-            return result;
-        }
-
         //public static void LookAtLH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
         //{
         //}
@@ -732,85 +709,125 @@ namespace SlimMath
         //{
         //}
 
-        //public static void OrthoLH(float width, float height, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("OrthoLH is obsolete. Use the generic Orthographic method instead.")]
+        public static void OrthoLH(float width, float height, float znear, float zfar, out Matrix result)
+        {
+            result = Orthographic(Handedness.Left, width, height, znear, zfar);
+        }
 
-        //public static Matrix OrthoLH(float width, float height, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("OrthoLH is obsolete. Use the generic Orthographic method instead.")]
+        public static Matrix OrthoLH(float width, float height, float znear, float zfar)
+        {
+            return Orthographic(Handedness.Left, width, height, znear, zfar);
+        }
 
-        //public static void OrthoRH(float width, float height, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("OrthoRH is obsolete. Use the generic Orthographic method instead.")]
+        public static void OrthoRH(float width, float height, float znear, float zfar, out Matrix result)
+        {
+            result = Orthographic(Handedness.Right, width, height, znear, zfar);
+        }
 
-        //public static Matrix OrthoRH(float width, float height, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("OrthoRH is obsolete. Use the generic Orthographic method instead.")]
+        public static Matrix OrthoRH(float width, float height, float znear, float zfar)
+        {
+            return Orthographic(Handedness.Right, width, height, znear, zfar);
+        }
 
-        //public static void OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("OrthoOffCenterLH is obsolete. Use the generic Projection method instead.")]
+        public static void OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        {
+            result = Projection(ProjectionType.Orthographic, Handedness.Left, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static Matrix OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("OrthoOffCenterLH is obsolete. Use the generic Projection method instead.")]
+        public static Matrix OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Orthographic, Handedness.Left, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static void OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("OrthoOffCenterRH is obsolete. Use the generic Projection method instead.")]
+        public static void OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        {
+            result = Projection(ProjectionType.Orthographic, Handedness.Right, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static Matrix OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("OrthoOffCenterRH is obsolete. Use the generic Projection method instead.")]
+        public static Matrix OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Orthographic, Handedness.Right, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static void PerspectiveLH(float width, float height, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveLH is obsolete. Use the generic Perspective method instead.")]
+        public static void PerspectiveLH(float width, float height, float znear, float zfar, out Matrix result)
+        {
+            result = Perspective(Handedness.Left, width, height, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveLH(float width, float height, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveLH is obsolete. Use the generic Perspective method instead.")]
+        public static Matrix PerspectiveLH(float width, float height, float znear, float zfar)
+        {
+            return Perspective(Handedness.Left, width, height, znear, zfar);
+        }
 
-        //public static void PerspectiveRH(float width, float height, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveRH is obsolete. Use the generic Perspective method instead.")]
+        public static void PerspectiveRH(float width, float height, float znear, float zfar, out Matrix result)
+        {
+            result = Perspective(Handedness.Right, width, height, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveRH(float width, float height, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveRH is obsolete. Use the generic Perspective method instead.")]
+        public static Matrix PerspectiveRH(float width, float height, float znear, float zfar)
+        {
+            return Perspective(Handedness.Right, width, height, znear, zfar);
+        }
 
-        //public static void PerspectiveFovLH(float fov, float aspect, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveFovLH is obsolete. Use the generic PerspectiveFov method instead.")]
+        public static void PerspectiveFovLH(float fov, float aspect, float znear, float zfar, out Matrix result)
+        {
+            result = PerspectiveFov(Handedness.Left, fov, aspect, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveFovLH(float fov, float aspect, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveFovLH is obsolete. Use the generic PerspectiveFov method instead.")]
+        public static Matrix PerspectiveFovLH(float fov, float aspect, float znear, float zfar)
+        {
+            return PerspectiveFov(Handedness.Left, fov, aspect, znear, zfar);
+        }
 
-        //public static void PerspectiveFovRH(float fov, float aspect, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveFovRH is obsolete. Use the generic PerspectiveFov method instead.")]
+        public static void PerspectiveFovRH(float fov, float aspect, float znear, float zfar, out Matrix result)
+        {
+            result = PerspectiveFov(Handedness.Right, fov, aspect, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveFovRH(float fov, float aspect, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveFovRH is obsolete. Use the generic PerspectiveFov method instead.")]
+        public static Matrix PerspectiveFovRH(float fov, float aspect, float znear, float zfar)
+        {
+            return PerspectiveFov(Handedness.Right, fov, aspect, znear, zfar);
+        }
 
-        //public static void PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveOffCenterLH is obsolete. Use the generic Projection method instead.")]
+        public static void PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        {
+            result = Projection(ProjectionType.Perspective, Handedness.Left, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveOffCenterLH is obsolete. Use the generic Projection method instead.")]
+        public static Matrix PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Perspective, Handedness.Left, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static void PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
-        //{
-        //}
+        [Obsolete("PerspectiveOffCenterRH is obsolete. Use the generic Projection method instead.")]
+        public static void PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
+        {
+            result = Projection(ProjectionType.Perspective, Handedness.Right, left, right, bottom, top, znear, zfar);
+        }
 
-        //public static Matrix PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
-        //{
-        //}
+        [Obsolete("PerspectiveOffCenterRH is obsolete. Use the generic Projection method instead.")]
+        public static Matrix PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
+        {
+            return Projection(ProjectionType.Perspective, Handedness.Right, left, right, bottom, top, znear, zfar);
+        }
 
         //public static void Reflection(ref Plane plane, out Matrix result)
         //{
@@ -1020,7 +1037,8 @@ namespace SlimMath
 
         public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
-            result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) * Translation(rotationCenter) * Translation(translation);
+            result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) * 
+                Translation(rotationCenter) * Translation(translation);
         }
 
         public static Matrix AffineTransformation(float scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
@@ -1030,13 +1048,18 @@ namespace SlimMath
             return result;
         }
 
-        //public static void AffineTransformation2D(float scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
-        //{
-        //}
+        public static void AffineTransformation2D(float scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
+        {
+            result = Scaling(scaling, scaling, 1.0f) * Translation(new Vector3(-rotationCenter, 0.0f)) * RotationZ(rotation) *
+                Translation(new Vector3(rotationCenter, 0.0f)) * Translation(new Vector3(translation, 0.0f));
+        }
 
-        //public static Matrix AffineTransformation2D(float scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
-        //{
-        //}
+        public static Matrix AffineTransformation2D(float scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
+        {
+            Matrix result;
+            AffineTransformation2D(scaling, ref rotationCenter, rotation, ref translation, out result);
+            return result;
+        }
 
         //public static void Transformation(ref Vector3 scalingCenter, ref Quaternion scalingRotation, ref Vector3 scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         //{

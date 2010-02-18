@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright (c) 2007-2009 SlimDX Group
+* Copyright (c) 2007-2010 SlimDX Group
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,22 @@
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace SlimMath
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Vector2 : IEquatable<Vector2>
+    [TypeConverter(typeof(SlimMath.Design.Vector2Converter))]
+    public struct Vector2 : IEquatable<Vector2>, IFormattable
     {
+        public const float ZeroTolerance = 1e-8f;
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2));
+
+        public static readonly Vector2 Zero = new Vector2(0.0f, 0.0f);
+        public static readonly Vector2 UnitX = new Vector2(1.0f, 0.0f);
+        public static readonly Vector2 UnitY = new Vector2(0.0f, 1.0f);
+        public static readonly Vector2 One = new Vector2(1.0f, 1.0f);
 
         public float X;
         public float Y;
@@ -58,21 +66,6 @@ namespace SlimMath
             }
         }
 
-        public static Vector2 Zero
-        {
-            get { return new Vector2(0.0f, 0.0f); }
-        }
-
-        public static Vector2 UnitX
-        {
-            get { return new Vector2(1.0f, 0.0f); }
-        }
-
-        public static Vector2 UnitY
-        {
-            get { return new Vector2(0.0f, 1.0f); }
-        }
-
         public Vector2(float x, float y)
         {
             X = x;
@@ -85,6 +78,17 @@ namespace SlimMath
             Y = value;
         }
 
+        public Vector2(float[] values)
+        {
+            if (values == null)
+                throw new ArgumentNullException("values");
+            if (values.Length != 2)
+                throw new ArgumentOutOfRangeException("values", "There must be two and only two input values for Vector2.");
+
+            X = values[0];
+            Y = values[1];
+        }
+
         public float Length()
         {
             return (float)Math.Sqrt((X * X) + (Y * Y));
@@ -95,28 +99,20 @@ namespace SlimMath
             return (X * X) + (Y * Y);
         }
 
-        public static void Normalize(ref Vector2 vector, out Vector2 result)
-        {
-            Vector2 temp = vector;
-            result = vector;
-            result.Normalize();
-        }
-
-        public static Vector2 Normalize(Vector2 vector)
-        {
-            vector.Normalize();
-            return vector;
-        }
-
         public void Normalize()
         {
             float length = Length();
-            if (length != 0.0f)
+            if (length > ZeroTolerance)
             {
                 float inv = 1.0f / length;
                 X *= inv;
                 Y *= inv;
             }
+        }
+
+        public float[] ToArray()
+        {
+            return new float[] { X, Y };
         }
 
         public static void Add(ref Vector2 left, ref Vector2 right, out Vector2 result)
@@ -233,6 +229,27 @@ namespace SlimMath
             return result;
         }
 
+        public static float Distance(Vector2 value1, Vector2 value2)
+        {
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+
+            return (float)Math.Sqrt((x * x) + (y * y));
+        }
+
+        public static float DistanceSquared(Vector2 value1, Vector2 value2)
+        {
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+
+            return (x * x) + (y * y);
+        }
+
+        public static float Dot(Vector2 left, Vector2 right)
+        {
+            return (left.X * right.X) + (left.Y * right.Y);
+        }
+
         public static void Hermite(ref Vector2 value1, ref Vector2 tangent1, ref Vector2 value2, ref Vector2 tangent2, float amount, out Vector2 result)
         {
             float squared = amount * amount;
@@ -266,6 +283,60 @@ namespace SlimMath
             return result;
         }
 
+        public static void Min(ref Vector2 left, ref Vector2 right, out Vector2 result)
+        {
+            result.X = (left.X < right.X) ? left.X : right.X;
+            result.Y = (left.Y < right.Y) ? left.Y : right.Y;
+        }
+
+        public static Vector2 Min(Vector2 left, Vector2 right)
+        {
+            Vector2 result;
+            Min(ref left, ref right, out result);
+            return result;
+        }
+
+        public static void Max(ref Vector2 left, ref Vector2 right, out Vector2 result)
+        {
+            result.X = (left.X > right.X) ? left.X : right.X;
+            result.Y = (left.Y > right.Y) ? left.Y : right.Y;
+        }
+
+        public static Vector2 Max(Vector2 left, Vector2 right)
+        {
+            Vector2 result;
+            Max(ref left, ref right, out result);
+            return result;
+        }
+
+        public static void Normalize(ref Vector2 vector, out Vector2 result)
+        {
+            Vector2 temp = vector;
+            result = vector;
+            result.Normalize();
+        }
+
+        public static Vector2 Normalize(Vector2 vector)
+        {
+            vector.Normalize();
+            return vector;
+        }
+
+        public static void Reflect(ref Vector2 vector, ref Vector2 normal, out Vector2 result)
+        {
+            float dot = (vector.X * normal.X) + (vector.Y * normal.Y);
+
+            result.X = vector.X - ((2.0f * dot) * normal.X);
+            result.Y = vector.Y - ((2.0f * dot) * normal.Y);
+        }
+
+        public static Vector2 Reflect(Vector2 vector, Vector2 normal)
+        {
+            Vector2 result;
+            Reflect(ref vector, ref normal, out result);
+            return result;
+        }
+
         public static void SmoothStep(ref Vector2 start, ref Vector2 end, float amount, out Vector2 result)
         {
             amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
@@ -280,27 +351,6 @@ namespace SlimMath
             Vector2 result;
             SmoothStep(ref start, ref end, amount, out result);
             return result;
-        }
-
-        public static float Distance(Vector2 value1, Vector2 value2)
-        {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-
-            return (float)Math.Sqrt((x * x) + (y * y));
-        }
-
-        public static float DistanceSquared(Vector2 value1, Vector2 value2)
-        {
-            float x = value1.X - value2.X;
-            float y = value1.Y - value2.Y;
-
-            return (x * x) + (y * y);
-        }
-
-        public static float Dot(Vector2 left, Vector2 right)
-        {
-            return (left.X * right.X) + (left.Y * right.Y);
         }
 
         public static void Transform(ref Vector2 vector, ref Quaternion rotation, out Vector2 result)
@@ -318,8 +368,7 @@ namespace SlimMath
             float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
-            result.X = (vector.X * (1.0f - yy - zz)) + (vector.Y * (xy - wz));
-            result.Y = (vector.X * (xy + wz)) + (vector.Y * (1.0f - xx - zz));
+            result = new Vector2((vector.X * (1.0f - yy - zz)) + (vector.Y * (xy - wz)), (vector.X * (xy + wz)) + (vector.Y * (1.0f - xx - zz)));
         }
 
         public static Vector2 Transform(Vector2 vector, Quaternion rotation)
@@ -331,10 +380,11 @@ namespace SlimMath
 
         public static void Transform(ref Vector2 vector, ref Matrix transform, out Vector4 result)
         {
-            result.X = (vector.X * transform.M11) + (vector.Y * transform.M21) + transform.M41;
-            result.Y = (vector.X * transform.M12) + (vector.Y * transform.M22) + transform.M42;
-            result.Z = (vector.X * transform.M13) + (vector.Y * transform.M23) + transform.M43;
-            result.W = (vector.X * transform.M14) + (vector.Y * transform.M24) + transform.M44;
+            result = new Vector4(
+                (vector.X * transform.M11) + (vector.Y * transform.M21) + transform.M41,
+                (vector.X * transform.M12) + (vector.Y * transform.M22) + transform.M42,
+                (vector.X * transform.M13) + (vector.Y * transform.M23) + transform.M43,
+                (vector.X * transform.M14) + (vector.Y * transform.M24) + transform.M44);
         }
 
         public static Vector4 Transform(Vector2 vector, Matrix transform)
@@ -364,40 +414,15 @@ namespace SlimMath
 
         public static void TransformNormal(ref Vector2 normal, ref Matrix transform, out Vector2 result)
         {
-            result.X = (normal.X * transform.M11) + (normal.Y * transform.M21);
-            result.Y = (normal.X * transform.M12) + (normal.Y * transform.M22);
+            result = new Vector2(
+                (normal.X * transform.M11) + (normal.Y * transform.M21),
+                (normal.X * transform.M12) + (normal.Y * transform.M22));
         }
 
         public static Vector2 TransformNormal(Vector2 normal, Matrix transform)
         {
             Vector2 result;
             TransformNormal(ref normal, ref transform, out result);
-            return result;
-        }
-
-        public static void Minimize(ref Vector2 left, ref Vector2 right, out Vector2 result)
-        {
-            result.X = (left.X < right.X) ? left.X : right.X;
-            result.Y = (left.Y < right.Y) ? left.Y : right.Y;
-        }
-
-        public static Vector2 Minimize(Vector2 left, Vector2 right)
-        {
-            Vector2 result;
-            Minimize(ref left, ref right, out result);
-            return result;
-        }
-
-        public static void Maximize(ref Vector2 left, ref Vector2 right, out Vector2 result)
-        {
-            result.X = (left.X > right.X) ? left.X : right.X;
-            result.Y = (left.Y > right.Y) ? left.Y : right.Y;
-        }
-
-        public static Vector2 Maximize(Vector2 left, Vector2 right)
-        {
-            Vector2 result;
-            Maximize(ref left, ref right, out result);
             return result;
         }
 
@@ -418,7 +443,7 @@ namespace SlimMath
 
         public static Vector2 operator *(float scale, Vector2 vector)
         {
-            return vector * scale;
+            return new Vector2(vector.X * scale, vector.Y * scale);
         }
 
         public static Vector2 operator *(Vector2 vector, float scale)
@@ -441,9 +466,44 @@ namespace SlimMath
             return !Equals(ref left, ref right);
         }
 
+        public static explicit operator Vector3(Vector2 value)
+        {
+            return new Vector3(value, 0.0f);
+        }
+
+        public static explicit operator Vector4(Vector2 value)
+        {
+            return new Vector4(value, 0.0f, 0.0f);
+        }
+
+        public static explicit operator Vector2(float[] values)
+        {
+            return new Vector2(values);
+        }
+
+        public static implicit operator float[](Vector2 value)
+        {
+            return value.ToArray();
+        }
+
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1}", X.ToString(CultureInfo.CurrentCulture), Y.ToString(CultureInfo.CurrentCulture));
+            return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1}", X, Y);
+        }
+
+        public string ToString(string format)
+        {
+            return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1}", X.ToString(format, CultureInfo.CurrentCulture), Y.ToString(format, CultureInfo.CurrentCulture));
+        }
+
+        public string ToString(IFormatProvider formatProvider)
+        {
+            return string.Format(formatProvider, "X:{0} Y:{1}", X, Y);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format(formatProvider, "X:{0} Y:{1}", X.ToString(format, formatProvider), Y.ToString(format, formatProvider));
         }
 
         public override int GetHashCode()
