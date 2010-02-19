@@ -28,20 +28,21 @@ using System.Globalization;
 namespace SlimMath.Design
 {
     /// <summary>
-    /// Defines a type converter for <see cref="Vector2"/>.
+    /// Defines a type converter for <see cref="Vector3"/>.
     /// </summary>
-    public class Vector2Converter : BaseConverter
+    public class Vector3Converter : BaseConverter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2Converter"/> class.
+        /// Initializes a new instance of the <see cref="Vector3Converter"/> class.
         /// </summary>
-        public Vector2Converter()
+        public Vector3Converter()
         {
-            Type type = typeof(Vector2);
+            Type type = typeof(Vector3);
             Properties = new PropertyDescriptorCollection(new[] 
             { 
                 new FieldPropertyDescriptor(type.GetField("X")), 
-                new FieldPropertyDescriptor(type.GetField("Y")) 
+                new FieldPropertyDescriptor(type.GetField("Y")),
+                new FieldPropertyDescriptor(type.GetField("Z")) 
             });
         }
 
@@ -66,15 +67,15 @@ namespace SlimMath.Design
             if (destinationType == null)
                 throw new ArgumentNullException("destinationType");
 
-            if (value is Vector2)
+            if (value is Vector3)
             {
-                Vector2 vector = (Vector2)value;
+                Vector3 vector = (Vector3)value;
 
                 if (destinationType == typeof(string))
                     return ConvertFromValues(context, culture, vector.ToArray());
                 else if (destinationType == typeof(InstanceDescriptor))
                 {
-                    var constructor = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) });
+                    var constructor = typeof(Vector3).GetConstructor(new[] { typeof(float), typeof(float), typeof(float) });
                     if (constructor != null)
                         return new InstanceDescriptor(constructor, vector.ToArray());
                 }
@@ -99,7 +100,7 @@ namespace SlimMath.Design
         {
             var values = ConvertToValues<float>(context, culture, value);
             if (values != null)
-                return new Vector2(values);
+                return new Vector3(values);
 
             return base.ConvertFrom(context, culture, value);
         }
@@ -117,7 +118,7 @@ namespace SlimMath.Design
             if (propertyValues == null)
                 throw new ArgumentNullException("propertyValues");
 
-            return new Vector2((float)propertyValues["X"], (float)propertyValues["Y"]);
+            return new Vector3((float)propertyValues["X"], (float)propertyValues["Y"], (float)propertyValues["Z"]);
         }
     }
 }

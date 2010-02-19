@@ -77,7 +77,7 @@ namespace SlimMath
         /// <value>The value of the X or Y component, depending on the index.</value>
         /// <param name="index">The index of the component to access. Use 0 for the X component and 1 for the Y component.</param>
         /// <returns>The value of the component at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of range [0, 1].</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 1].</exception>
         public float this[int index]
         {
             get
@@ -553,31 +553,6 @@ namespace SlimMath
         /// </summary>
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
-        /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
-        public static void Min(ref Vector2 left, ref Vector2 right, out Vector2 result)
-        {
-            result.X = (left.X < right.X) ? left.X : right.X;
-            result.Y = (left.Y < right.Y) ? left.Y : right.Y;
-        }
-
-        /// <summary>
-        /// Returns a vector containing the smallest components of the specified vectors.
-        /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
-        /// <returns>A vector containing the smallest components of the source vectors.</returns>
-        public static Vector2 Min(Vector2 left, Vector2 right)
-        {
-            Vector2 result;
-            Min(ref left, ref right, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns a vector containing the smallest components of the specified vectors.
-        /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the largest components of the source vectors.</param>
         public static void Max(ref Vector2 left, ref Vector2 right, out Vector2 result)
         {
@@ -595,6 +570,31 @@ namespace SlimMath
         {
             Vector2 result;
             Max(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a vector containing the smallest components of the specified vectors.
+        /// </summary>
+        /// <param name="left">The first source vector.</param>
+        /// <param name="right">The second source vector.</param>
+        /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
+        public static void Min(ref Vector2 left, ref Vector2 right, out Vector2 result)
+        {
+            result.X = (left.X < right.X) ? left.X : right.X;
+            result.Y = (left.Y < right.Y) ? left.Y : right.Y;
+        }
+
+        /// <summary>
+        /// Returns a vector containing the smallest components of the specified vectors.
+        /// </summary>
+        /// <param name="left">The first source vector.</param>
+        /// <param name="right">The second source vector.</param>
+        /// <returns>A vector containing the smallest components of the source vectors.</returns>
+        public static Vector2 Min(Vector2 left, Vector2 right)
+        {
+            Vector2 result;
+            Min(ref left, ref right, out result);
             return result;
         }
 
@@ -974,11 +974,10 @@ namespace SlimMath
         /// </summary>
         /// <param name="value1">The first value to compare.</param>
         /// <param name="value2">The second value to compare.</param>
-        /// <returns><c>true</c> if <paramref name="value1"/> is the same instance as <paramref name="value2"/> or 
-        /// if both are <c>null</c> references or if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
         public static bool Equals(ref Vector2 value1, ref Vector2 value2)
         {
-            return (value1.X == value2.X && value1.Y == value2.Y);
+            return value1.Equals(value2);
         }
 
         /// <summary>
