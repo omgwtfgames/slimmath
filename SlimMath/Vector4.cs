@@ -34,8 +34,6 @@ namespace SlimMath
     [TypeConverter(typeof(SlimMath.Design.Vector4Converter))]
     public struct Vector4 : IEquatable<Vector4>, IFormattable
     {
-        const float ZeroTolerance = 1e-8f;
-
         /// <summary>
         /// The size of the <see cref="Vector4"/> type, in bytes.
         /// </summary>
@@ -231,7 +229,7 @@ namespace SlimMath
         public void Normalize()
         {
             float length = Length();
-            if (length > ZeroTolerance)
+            if (length > Utilities.ZeroTolerance)
             {
                 float inverse = 1.0f / length;
                 X *= inverse;

@@ -28,21 +28,37 @@ using System.Globalization;
 namespace SlimMath.Design
 {
     /// <summary>
-    /// Defines a type converter for <see cref="Vector3"/>.
+    /// Defines a type converter for <see cref="Matrix"/>.
     /// </summary>
-    public class Vector3Converter : BaseConverter
+    public class MatrixConverter : BaseConverter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector3Converter"/> class.
+        /// Initializes a new instance of the <see cref="MatrixConverter"/> class.
         /// </summary>
-        public Vector3Converter()
+        public MatrixConverter()
         {
-            Type type = typeof(Vector3);
+            Type type = typeof(Matrix);
             Properties = new PropertyDescriptorCollection(new[] 
             { 
-                new FieldPropertyDescriptor(type.GetField("X")), 
-                new FieldPropertyDescriptor(type.GetField("Y")),
-                new FieldPropertyDescriptor(type.GetField("Z")) 
+                new FieldPropertyDescriptor(type.GetField("M11")), 
+                new FieldPropertyDescriptor(type.GetField("M12")),
+                new FieldPropertyDescriptor(type.GetField("M13")),
+                new FieldPropertyDescriptor(type.GetField("M14")),
+
+                new FieldPropertyDescriptor(type.GetField("M21")), 
+                new FieldPropertyDescriptor(type.GetField("M22")),
+                new FieldPropertyDescriptor(type.GetField("M23")),
+                new FieldPropertyDescriptor(type.GetField("M24")),
+
+                new FieldPropertyDescriptor(type.GetField("M31")), 
+                new FieldPropertyDescriptor(type.GetField("M32")),
+                new FieldPropertyDescriptor(type.GetField("M33")),
+                new FieldPropertyDescriptor(type.GetField("M34")),
+
+                new FieldPropertyDescriptor(type.GetField("M41")), 
+                new FieldPropertyDescriptor(type.GetField("M42")),
+                new FieldPropertyDescriptor(type.GetField("M43")),
+                new FieldPropertyDescriptor(type.GetField("M44")),
             });
         }
 
@@ -67,17 +83,17 @@ namespace SlimMath.Design
             if (destinationType == null)
                 throw new ArgumentNullException("destinationType");
 
-            if (value is Vector3)
+            if (value is Matrix)
             {
-                Vector3 vector = (Vector3)value;
+                Matrix matrix = (Matrix)value;
 
                 if (destinationType == typeof(string))
-                    return ConvertFromValues(context, culture, vector.ToArray());
+                    return ConvertFromValues(context, culture, matrix.ToArray());
                 else if (destinationType == typeof(InstanceDescriptor))
                 {
-                    var constructor = typeof(Vector3).GetConstructor(Utilities.Array(typeof(float), 3));
+                    var constructor = typeof(Matrix).GetConstructor(Utilities.Array(typeof(float), 16));
                     if (constructor != null)
-                        return new InstanceDescriptor(constructor, vector.ToArray());
+                        return new InstanceDescriptor(constructor, matrix.ToArray());
                 }
             }
 
@@ -100,7 +116,7 @@ namespace SlimMath.Design
         {
             var values = ConvertToValues<float>(context, culture, value);
             if (values != null)
-                return new Vector3(values);
+                return new Matrix(values);
 
             return base.ConvertFrom(context, culture, value);
         }
@@ -118,7 +134,28 @@ namespace SlimMath.Design
             if (propertyValues == null)
                 throw new ArgumentNullException("propertyValues");
 
-            return new Vector3((float)propertyValues["X"], (float)propertyValues["Y"], (float)propertyValues["Z"]);
+            Matrix matrix = new Matrix();
+            matrix.M11 = (float)propertyValues["M11"];
+            matrix.M12 = (float)propertyValues["M12"];
+            matrix.M13 = (float)propertyValues["M13"];
+            matrix.M14 = (float)propertyValues["M14"];
+
+            matrix.M21 = (float)propertyValues["M21"];
+            matrix.M22 = (float)propertyValues["M22"];
+            matrix.M23 = (float)propertyValues["M23"];
+            matrix.M24 = (float)propertyValues["M24"];
+
+            matrix.M31 = (float)propertyValues["M31"];
+            matrix.M32 = (float)propertyValues["M32"];
+            matrix.M33 = (float)propertyValues["M33"];
+            matrix.M34 = (float)propertyValues["M34"];
+
+            matrix.M41 = (float)propertyValues["M41"];
+            matrix.M42 = (float)propertyValues["M42"];
+            matrix.M43 = (float)propertyValues["M43"];
+            matrix.M44 = (float)propertyValues["M44"];
+
+            return matrix;
         }
     }
 }

@@ -36,8 +36,6 @@ namespace SlimMath
     [TypeConverter(typeof(SlimMath.Design.QuaternionConverter))]
     public struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
-        const float ZeroTolerance = 1e-8f;
-
         /// <summary>
         /// The size of the <see cref="Quaternion"/> type, in bytes.
         /// </summary>
@@ -183,7 +181,7 @@ namespace SlimMath
             get
             {
                 float length = (X * X) + (Y * Y) + (Z * Z);
-                if (length < ZeroTolerance)
+                if (length < Utilities.ZeroTolerance)
                     return 0.0f;
 
                 return (float)(2.0 * Math.Acos(W));
@@ -199,7 +197,7 @@ namespace SlimMath
             get
             {
                 float length = (X * X) + (Y * Y) + (Z * Z);
-                if (length < ZeroTolerance)
+                if (length < Utilities.ZeroTolerance)
                     return Vector3.UnitX;
 
                 float inv = 1.0f / length;
@@ -258,7 +256,7 @@ namespace SlimMath
         public void Invert()
         {
             float lengthSq = LengthSquared();
-            if (lengthSq > ZeroTolerance)
+            if (lengthSq > Utilities.ZeroTolerance)
             {
                 lengthSq = 1.0f / lengthSq;
 
@@ -301,7 +299,7 @@ namespace SlimMath
         public void Normalize()
         {
             float length = Length();
-            if (length > ZeroTolerance)
+            if (length > Utilities.ZeroTolerance)
             {
                 float inverse = 1.0f / length;
                 X *= inverse;
@@ -541,7 +539,7 @@ namespace SlimMath
             float angle = (float)Math.Sqrt((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z));
             float sin = (float)Math.Sin(angle);
 
-            if (Math.Abs(sin) >= ZeroTolerance)
+            if (Math.Abs(sin) >= Utilities.ZeroTolerance)
             {
                 float coeff = angle / sin;
                 result.X = coeff * quaternion.X;
@@ -653,7 +651,7 @@ namespace SlimMath
             float angle = (float)Math.Acos(quaternion.W);
             float sin = (float)Math.Sin(angle);
 
-            if (Math.Abs(quaternion.W) < 1.0 && Math.Abs(sin) >= ZeroTolerance)
+            if (Math.Abs(quaternion.W) < 1.0 && Math.Abs(sin) >= Utilities.ZeroTolerance)
             {
                 float coeff = angle / sin;
                 result.X = quaternion.X * coeff;
@@ -853,7 +851,7 @@ namespace SlimMath
             float inverse;
             float dot = Dot(start, end);
 
-            if (Math.Abs(dot) > 1.0f - ZeroTolerance)
+            if (Math.Abs(dot) > 1.0f - Utilities.ZeroTolerance)
             {
                 inverse = 1.0f - amount;
                 opposite = amount * Math.Sign(dot);

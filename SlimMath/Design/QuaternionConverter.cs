@@ -76,7 +76,7 @@ namespace SlimMath.Design
                     return ConvertFromValues(context, culture, quaternion.ToArray());
                 else if (destinationType == typeof(InstanceDescriptor))
                 {
-                    var constructor = typeof(Quaternion).GetConstructor(new[] { typeof(float), typeof(float), typeof(float), typeof(float) });
+                    var constructor = typeof(Quaternion).GetConstructor(Utilities.Array(typeof(float), 4));
                     if (constructor != null)
                         return new InstanceDescriptor(constructor, quaternion.ToArray());
                 }
