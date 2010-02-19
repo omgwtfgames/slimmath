@@ -42,7 +42,7 @@ namespace SlimMath
         /// <summary>
         /// A <see cref="Vector4"/> with all of its components set to zero.
         /// </summary>
-        public static readonly Vector4 Zero = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+        public static readonly Vector4 Zero = new Vector4();
 
         /// <summary>
         /// The X unit <see cref="Vector4"/> (1, 0, 0, 0).

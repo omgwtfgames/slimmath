@@ -44,7 +44,7 @@ namespace SlimMath
         /// <summary>
         /// A <see cref="Quaternion"/> with all of its components set to zero.
         /// </summary>
-        public static readonly Quaternion Zero = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+        public static readonly Quaternion Zero = new Quaternion();
 
         /// <summary>
         /// A <see cref="Quaternion"/> with all of its components set to one.

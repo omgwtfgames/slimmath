@@ -40,29 +40,122 @@ namespace SlimMath
         Perspective
     }
 
+    /// <summary>
+    /// Represents a 4x4 mathematical matrix.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Matrix : IEquatable<Matrix>
+    [TypeConverter(typeof(SlimMath.Design.MatrixConverter))]
+    public struct Matrix : IEquatable<Matrix>, IFormattable
     {
+        /// <summary>
+        /// The size of the <see cref="Matrix"/> type, in bytes.
+        /// </summary>
+        public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Matrix));
+
+        /// <summary>
+        /// A <see cref="Matrix"/> with all of its components set to zero.
+        /// </summary>
+        public static readonly Matrix Zero = new Matrix();
+
+        /// <summary>
+        /// The identity <see cref="Matrix"/>.
+        /// </summary>
+        public static readonly Matrix Identity = new Matrix() { M11 = 1.0f, M22 = 1.0f, M33 = 1.0f, M44 = 1.0f };
+
+        /// <summary>
+        /// Value at row 1 column 1 of the matrix. 
+        /// </summary>
         public float M11;
+
+        /// <summary>
+        /// Value at row 1 column 2 of the matrix. 
+        /// </summary>
         public float M12;
+
+        /// <summary>
+        /// Value at row 1 column 3 of the matrix. 
+        /// </summary>
         public float M13;
+
+        /// <summary>
+        /// Value at row 1 column 4 of the matrix. 
+        /// </summary>
         public float M14;
+
+        /// <summary>
+        /// Value at row 2 column 1 of the matrix. 
+        /// </summary>
         public float M21;
+
+        /// <summary>
+        /// Value at row 2 column 2 of the matrix. 
+        /// </summary>
         public float M22;
+
+        /// <summary>
+        /// Value at row 2 column 3 of the matrix. 
+        /// </summary>
         public float M23;
+
+        /// <summary>
+        /// Value at row 3 column 4 of the matrix. 
+        /// </summary>
         public float M24;
+
+        /// <summary>
+        /// Value at row 3 column 1 of the matrix. 
+        /// </summary>
         public float M31;
+
+        /// <summary>
+        /// Value at row 3 column 2 of the matrix. 
+        /// </summary>
         public float M32;
+
+        /// <summary>
+        /// Value at row 3 column 3 of the matrix. 
+        /// </summary>
         public float M33;
+
+        /// <summary>
+        /// Value at row 3 column 4 of the matrix. 
+        /// </summary>
         public float M34;
+
+        /// <summary>
+        /// Value at row 4 column 1 of the matrix. 
+        /// </summary>
         public float M41;
+
+        /// <summary>
+        /// Value at row 4 column 2 of the matrix. 
+        /// </summary>
         public float M42;
+
+        /// <summary>
+        /// Value at row 4 column 3 of the matrix. 
+        /// </summary>
         public float M43;
+
+        /// <summary>
+        /// Value at row 4 column 4 of the matrix. 
+        /// </summary>
         public float M44;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// </summary>
+        /// <param name="values">The values to assign to the components of the matrix. This must be an array with sixteen elements.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> contains more or less than sixteen elements.</exception>
         public Matrix(float[] values)
         {
+            if (values == null)
+                throw new ArgumentNullException("values");
+            if (values.Length != 16)
+                throw new ArgumentOutOfRangeException("values", "There must be sixteen and only sixteen input values for Matrix.");
+
             M11 = values[0];
             M12 = values[1];
             M13 = values[2];
@@ -84,7 +177,25 @@ namespace SlimMath
             M44 = values[15];
         }
 
-        [Browsable(false)]
+        /// <summary>
+        /// Gets a value indicating whether this instance is an identity matrix.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is an identity matrix; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsIdentity
+        {
+            get { return this.Equals(Identity); }
+        }
+
+        /// <summary>
+        /// Gets or sets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the matrix component, depending on the index.</value>
+        /// <param name="row">The row of the matrix to access.</param>
+        /// <param name="column">The column of the matrix to access.</param>
+        /// <returns>The value of the component at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="row"/> or <paramref name="column"/>is out of the range [0, 3].</exception>
         public float this[int row, int column]
         {
             get
@@ -146,63 +257,6 @@ namespace SlimMath
             }
         }
 
-        public static Matrix Identity
-        {
-            get
-            {
-                Matrix result = new Matrix() { M11 = 1.0f };
-                result.M11 = 1.0f;
-                result.M22 = 1.0f;
-                result.M33 = 1.0f;
-                result.M44 = 1.0f;
-                return result;
-            }
-        }
-
-        [Browsable(false)]
-        public bool IsIdentity
-        {
-            get
-            {
-                if (M11 != 1.0f || M22 != 1.0f || M33 != 1.0f || M44 != 1.0f)
-                    return false;
-
-                if (M12 != 0.0f || M13 != 0.0f || M14 != 0.0f ||
-                    M21 != 0.0f || M23 != 0.0f || M24 != 0.0f ||
-                    M31 != 0.0f || M32 != 0.0f || M34 != 0.0f ||
-                    M41 != 0.0f || M42 != 0.0f || M43 != 0.0f)
-                    return false;
-
-                return true;
-            }
-        }
-
-        public float[] ToArray()
-        {
-            return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
-        }
-
-        public static void Invert(ref Matrix matrix, out Matrix result)
-        {
-            Matrix m = matrix;
-            result = m;
-            result.Invert();
-        }
-
-        public static Matrix Invert(Matrix matrix)
-        {
-            matrix.Invert();
-            return matrix;
-        }
-
-        public void Invert()
-        {
-        }
-
-        //public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
-        //{
-        //}
-
         public float Determinant()
         {
             float temp1 = (M33 * M44) - (M34 * M43);
@@ -216,6 +270,28 @@ namespace SlimMath
                 (M23 * temp4)) + (M24 * temp5)))) + (M13 * (((M21 * temp2) - (M22 * temp4)) + (M24 * temp6)))) -
                 (M14 * (((M21 * temp3) - (M22 * temp5)) + (M23 * temp6))));
         }
+
+        public void Invert()
+        {
+            Invert(ref this, out this);
+        }
+
+        /// <summary>
+        /// Creates an array containing the elements of the matrix.
+        /// </summary>
+        /// <returns>A sixteen-element array containing the components of the matrix.</returns>
+        public float[] ToArray()
+        {
+            return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
+        }
+
+        
+
+        //public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
+        //{
+        //}
+
+        
 
         public static void Add(ref Matrix left, ref Matrix right, out Matrix result)
         {
@@ -300,6 +376,7 @@ namespace SlimMath
 
         public static void Multiply(ref Matrix left, ref Matrix right, out Matrix result)
         {
+            result = new Matrix();
             result.M11 = (left.M11 * right.M11) + (left.M12 * right.M21) + (left.M13 * right.M31) + (left.M14 * right.M41);
             result.M12 = (left.M11 * right.M12) + (left.M12 * right.M22) + (left.M13 * right.M32) + (left.M14 * right.M42);
             result.M13 = (left.M11 * right.M13) + (left.M12 * right.M23) + (left.M13 * right.M33) + (left.M14 * right.M43);
@@ -476,27 +553,68 @@ namespace SlimMath
             return result;
         }
 
+        public static void Invert(ref Matrix matrix, out Matrix result)
+        {
+            float a0 = (matrix.M11 * matrix.M22) - (matrix.M12 * matrix.M21);
+            float a1 = (matrix.M11 * matrix.M23) - (matrix.M13 * matrix.M21);
+            float a2 = (matrix.M11 * matrix.M24) - (matrix.M14 * matrix.M21);
+            float a3 = (matrix.M12 * matrix.M23) - (matrix.M13 * matrix.M22);
+            float a4 = (matrix.M12 * matrix.M24) - (matrix.M14 * matrix.M22);
+            float a5 = (matrix.M13 * matrix.M24) - (matrix.M14 * matrix.M23);
+
+            float b0 = (matrix.M31 * matrix.M42) - (matrix.M32 * matrix.M41);
+            float b1 = (matrix.M31 * matrix.M43) - (matrix.M33 * matrix.M41);
+            float b2 = (matrix.M31 * matrix.M44) - (matrix.M34 * matrix.M41);
+            float b3 = (matrix.M32 * matrix.M43) - (matrix.M33 * matrix.M42);
+            float b4 = (matrix.M32 * matrix.M44) - (matrix.M34 * matrix.M42);
+            float b5 = (matrix.M33 * matrix.M44) - (matrix.M34 * matrix.M43);
+
+            float det = a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
+            if (Math.Abs(det) <= Utilities.ZeroTolerance)
+                result = Matrix.Zero;
+            else
+            {
+                result = new Matrix();
+                result.M11 = matrix.M22 * b5 - matrix.M23 * b4 + matrix.M24 * b3;
+                result.M12 = -matrix.M12 * b5 + matrix.M13 * b4 - matrix.M14 * b3;
+                result.M13 = matrix.M42 * a5 - matrix.M43 * a4 + matrix.M44 * a3;
+                result.M14 = -matrix.M32 * a5 + matrix.M33 * a4 - matrix.M34 * a3;
+
+                result.M21 = -matrix.M21 * b5 + matrix.M23 * b2 - matrix.M24 * b1;
+                result.M22 = matrix.M11 * b5 - matrix.M13 * b2 + matrix.M14 * b1;
+                result.M23 = -matrix.M41 * a5 + matrix.M43 * a2 - matrix.M44 * a1;
+                result.M24 = matrix.M31 * a5 - matrix.M33 * a2 + matrix.M34 * a1;
+
+                result.M31 = matrix.M21 * b4 - matrix.M22 * b2 + matrix.M24 * b0;
+                result.M32 = -matrix.M11 * b4 + matrix.M12 * b2 - matrix.M14 * b0;
+                result.M33 = matrix.M41 * a4 - matrix.M42 * a2 + matrix.M44 * a0;
+                result.M34 = -matrix.M31 * a4 + matrix.M32 * a2 - matrix.M34 * a0;
+
+                result.M41 = -matrix.M21 * b3 + matrix.M22 * b1 - matrix.M23 * b0;
+                result.M42 = matrix.M11 * b3 - matrix.M12 * b1 + matrix.M13 * b0;
+                result.M43 = -matrix.M41 * a3 + matrix.M42 * a1 - matrix.M43 * a0;
+                result.M44 = matrix.M31 * a3 - matrix.M32 * a1 + matrix.M33 * a0;
+
+                result *= (1.0f / det);
+            }
+        }
+
+        public static Matrix Invert(Matrix matrix)
+        {
+            matrix.Invert();
+            return matrix;
+        }
+
         public static void RotationX(float angle, out Matrix result)
         {
             float cos = (float)Math.Cos(angle);
             float sin = (float)Math.Sin(angle);
 
-            result.M11 = 1.0f;
-            result.M12 = 0.0f;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
+            result = Matrix.Identity;
             result.M22 = cos;
             result.M23 = sin;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
             result.M32 = -sin;
             result.M33 = cos;
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix RotationX(float angle)
@@ -511,22 +629,11 @@ namespace SlimMath
             float cos = (float)Math.Cos(angle);
             float sin = (float)Math.Sin(angle);
 
+            result = Matrix.Identity;
             result.M11 = cos;
-            result.M12 = 0.0f;
             result.M13 = -sin;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
-            result.M22 = 1.0f;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
             result.M31 = sin;
-            result.M32 = 0.0f;
             result.M33 = cos;
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix RotationY(float angle)
@@ -541,22 +648,11 @@ namespace SlimMath
             float cos = (float)Math.Cos(angle);
             float sin = (float)Math.Sin(angle);
 
+            result = Matrix.Identity;
             result.M11 = cos;
             result.M12 = sin;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
             result.M21 = -sin;
             result.M22 = cos;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
-            result.M32 = 0.0f;
-            result.M33 = 1.0f;
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix RotationZ(float angle)
@@ -583,22 +679,16 @@ namespace SlimMath
             float xz = x * z;
             float yz = y * z;
 
+            result = Matrix.Identity;
             result.M11 = xx + (cos * (1.0f - xx));
             result.M12 = (xy - (cos * xy)) + (sin * z);
             result.M13 = (xz - (cos * xz)) - (sin * y);
-            result.M14 = 0.0f;
             result.M21 = (xy - (cos * xy)) - (sin * z);
             result.M22 = yy + (cos * (1.0f - yy));
             result.M23 = (yz - (cos * yz)) + (sin * x);
-            result.M24 = 0.0f;
             result.M31 = (xz - (cos * xz)) + (sin * y);
             result.M32 = (yz - (cos * yz)) - (sin * x);
             result.M33 = zz + (cos * (1.0f - zz));
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix RotationAxis(Vector3 axis, float angle)
@@ -620,22 +710,16 @@ namespace SlimMath
             float yz = rotation.Y * rotation.Z;
             float xw = rotation.X * rotation.W;
 
+            result = Matrix.Identity;
             result.M11 = 1.0f - (2.0f * (yy + zz));
             result.M12 = 2.0f * (xy + zw);
             result.M13 = 2.0f * (zx - yw);
-            result.M14 = 0.0f;
             result.M21 = 2.0f * (xy - zw);
             result.M22 = 1.0f - (2.0f * (zz + xx));
             result.M23 = 2.0f * (yz + xw);
-            result.M24 = 0.0f;
             result.M31 = 2.0f * (zx + yw);
             result.M32 = 2.0f * (yz - xw);
             result.M33 = 1.0f - (2.0f * (yy + xx));
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix RotationQuaternion(Quaternion rotation)
@@ -890,22 +974,7 @@ namespace SlimMath
 
         public static void Scaling(ref Vector3 scale, out Matrix result)
         {
-            result.M11 = scale.X;
-            result.M12 = 0.0f;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
-            result.M22 = scale.Y;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
-            result.M32 = 0.0f;
-            result.M33 = scale.Z;
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
+            Scaling(scale.X, scale.Y, scale.Z, out result);
         }
 
         public static Matrix Scaling(Vector3 scale)
@@ -917,22 +986,10 @@ namespace SlimMath
 
         public static void Scaling(float x, float y, float z, out Matrix result)
         {
+            result = Matrix.Identity;
             result.M11 = x;
-            result.M12 = 0.0f;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
             result.M22 = y;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
-            result.M32 = 0.0f;
             result.M33 = z;
-            result.M34 = 0.0f;
-            result.M41 = 0.0f;
-            result.M42 = 0.0f;
-            result.M43 = 0.0f;
-            result.M44 = 1.0f;
         }
 
         public static Matrix Scaling(float x, float y, float z)
@@ -979,22 +1036,7 @@ namespace SlimMath
 
         public static void Translation(ref Vector3 amount, out Matrix result)
         {
-            result.M11 = 1.0f;
-            result.M12 = 0.0f;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
-            result.M22 = 1.0f;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
-            result.M32 = 0.0f;
-            result.M33 = 1.0f;
-            result.M34 = 0.0f;
-            result.M41 = amount.X;
-            result.M42 = amount.Y;
-            result.M43 = amount.Z;
-            result.M44 = 1.0f;
+            Translation(amount.X, amount.Y, amount.Z, out result);
         }
 
         public static Matrix Translation(Vector3 amount)
@@ -1006,22 +1048,10 @@ namespace SlimMath
 
         public static void Translation(float x, float y, float z, out Matrix result)
         {
-            result.M11 = 1.0f;
-            result.M12 = 0.0f;
-            result.M13 = 0.0f;
-            result.M14 = 0.0f;
-            result.M21 = 0.0f;
-            result.M22 = 1.0f;
-            result.M23 = 0.0f;
-            result.M24 = 0.0f;
-            result.M31 = 0.0f;
-            result.M32 = 0.0f;
-            result.M33 = 1.0f;
-            result.M34 = 0.0f;
+            result = Matrix.Identity;
             result.M41 = x;
             result.M42 = y;
             result.M43 = z;
-            result.M44 = 1.0f;
         }
 
         public static Matrix Translation(float x, float y, float z)
@@ -1033,6 +1063,7 @@ namespace SlimMath
 
         public static void Transpose(ref Matrix matrix, out Matrix result)
         {
+            result = new Matrix();
             result.M11 = matrix.M11;
             result.M12 = matrix.M21;
             result.M13 = matrix.M31;
@@ -1156,12 +1187,12 @@ namespace SlimMath
 
         public static bool operator ==(Matrix left, Matrix right)
         {
-            return Equals(ref left, ref right);
+            return left.Equals(right);
         }
 
         public static bool operator !=(Matrix left, Matrix right)
         {
-            return !Equals(ref left, ref right);
+            return !left.Equals(right);
         }
 
         public override string ToString()
@@ -1174,20 +1205,17 @@ namespace SlimMath
                 M42.ToString(CultureInfo.CurrentCulture), M43.ToString(CultureInfo.CurrentCulture), M44.ToString(CultureInfo.CurrentCulture));
         }
 
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            throw new NotImplementedException();
+        }
+
         public override int GetHashCode()
         {
             return M11.GetHashCode() + M12.GetHashCode() + M13.GetHashCode() + M14.GetHashCode() +
                M21.GetHashCode() + M22.GetHashCode() + M23.GetHashCode() + M24.GetHashCode() +
                M31.GetHashCode() + M32.GetHashCode() + M33.GetHashCode() + M34.GetHashCode() +
                M41.GetHashCode() + M42.GetHashCode() + M43.GetHashCode() + M44.GetHashCode();
-        }
-
-        public static bool Equals(ref Matrix value1, ref Matrix value2)
-        {
-            return (value1.M11 == value2.M11 && value1.M12 == value2.M12 && value1.M13 == value2.M13 && value1.M14 == value2.M14 &&
-                 value1.M21 == value2.M21 && value1.M22 == value2.M22 && value1.M23 == value2.M23 && value1.M24 == value2.M24 &&
-                 value1.M31 == value2.M31 && value1.M32 == value2.M32 && value1.M33 == value2.M33 && value1.M34 == value2.M34 &&
-                 value1.M41 == value2.M41 && value1.M42 == value2.M42 && value1.M43 == value2.M43 && value1.M44 == value2.M44);
         }
 
         public bool Equals(Matrix value)
