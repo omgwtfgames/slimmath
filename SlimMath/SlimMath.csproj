@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Design\BaseConverter.cs" />
     <Compile Include="Design\FieldPropertyDescriptor.cs" />
+    <Compile Include="Design\QuaternionConverter.cs" />
     <Compile Include="Design\Vector2Converter.cs" />
     <Compile Include="Design\Vector3Converter.cs" />
     <Compile Include="Design\Vector4Converter.cs" />

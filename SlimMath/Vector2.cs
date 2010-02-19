@@ -72,37 +72,6 @@ namespace SlimMath
         public float Y;
 
         /// <summary>
-        /// Gets or sets the component at the specified index.
-        /// </summary>
-        /// <value>The value of the X or Y component, depending on the index.</value>
-        /// <param name="index">The index of the component to access. Use 0 for the X component and 1 for the Y component.</param>
-        /// <returns>The value of the component at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 1].</exception>
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return X;
-                    case 1: return Y;
-                }
-
-                throw new ArgumentOutOfRangeException("index", "Indices for Vector2 run from 0 to 1, inclusive.");
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: X = value; break;
-                    case 1: Y = value; break;
-                    default: throw new ArgumentOutOfRangeException("index", "Indices for Vector2 run from 0 to 1, inclusive.");
-                }
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Vector2"/> struct.
         /// </summary>
         /// <param name="x">Initial value for the X component of the vector.</param>
@@ -138,6 +107,37 @@ namespace SlimMath
 
             X = values[0];
             Y = values[1];
+        }
+
+        /// <summary>
+        /// Gets or sets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the X or Y component, depending on the index.</value>
+        /// <param name="index">The index of the component to access. Use 0 for the X component and 1 for the Y component.</param>
+        /// <returns>The value of the component at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 1].</exception>
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                }
+
+                throw new ArgumentOutOfRangeException("index", "Indices for Vector2 run from 0 to 1, inclusive.");
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case 0: X = value; break;
+                    case 1: Y = value; break;
+                    default: throw new ArgumentOutOfRangeException("index", "Indices for Vector2 run from 0 to 1, inclusive.");
+                }
+            }
         }
 
         /// <summary>
@@ -876,7 +876,7 @@ namespace SlimMath
         /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator ==(Vector2 left, Vector2 right)
         {
-            return Equals(ref left, ref right);
+            return left.Equals(right);
         }
 
         /// <summary>
@@ -887,7 +887,7 @@ namespace SlimMath
         /// <returns><c>true</c> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator !=(Vector2 left, Vector2 right)
         {
-            return !Equals(ref left, ref right);
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -967,17 +967,6 @@ namespace SlimMath
         public override int GetHashCode()
         {
             return X.GetHashCode() + Y.GetHashCode();
-        }
-
-        /// <summary>
-        /// Determines whether the specified object instances are considered equal. 
-        /// </summary>
-        /// <param name="value1">The first value to compare.</param>
-        /// <param name="value2">The second value to compare.</param>
-        /// <returns><c>true</c> if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
-        public static bool Equals(ref Vector2 value1, ref Vector2 value2)
-        {
-            return value1.Equals(value2);
         }
 
         /// <summary>

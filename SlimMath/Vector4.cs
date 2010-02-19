@@ -92,41 +92,6 @@ namespace SlimMath
         public float W;
 
         /// <summary>
-        /// Gets or sets the component at the specified index.
-        /// </summary>
-        /// <value>The value of the X, Y, Z, or W component, depending on the index.</value>
-        /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, 2 for the Z component, and 3 for the W component.</param>
-        /// <returns>The value of the component at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 3].</exception>
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return X;
-                    case 1: return Y;
-                    case 2: return Z;
-                    case 3: return W;
-                }
-
-                throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: X = value; break;
-                    case 1: Y = value; break;
-                    case 2: Z = value; break;
-                    case 3: W = value; break;
-                    default: throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
-                }
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Vector4"/> struct.
         /// </summary>
         /// <param name="x">Initial value for the X component of the vector.</param>
@@ -158,7 +123,7 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4"/> struct.
         /// </summary>
-        /// <param name="value">A vector containing the values with which to initialize the X and Y components.</param>
+        /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
         /// <param name="w">Initial value for the W component of the vector.</param>
         public Vector4(Vector3 value, float w)
         {
@@ -197,6 +162,41 @@ namespace SlimMath
             Y = values[1];
             Z = values[2];
             W = values[3];
+        }
+
+        /// <summary>
+        /// Gets or sets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the X, Y, Z, or W component, depending on the index.</value>
+        /// <param name="index">The index of the component to access. Use 0 for the X component, 1 for the Y component, 2 for the Z component, and 3 for the W component.</param>
+        /// <returns>The value of the component at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 3].</exception>
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
+                    case 3: return W;
+                }
+
+                throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case 0: X = value; break;
+                    case 1: Y = value; break;
+                    case 2: Z = value; break;
+                    case 3: W = value; break;
+                    default: throw new ArgumentOutOfRangeException("index", "Indices for Vector4 run from 0 to 3, inclusive.");
+                }
+            }
         }
 
         /// <summary>
@@ -887,6 +887,26 @@ namespace SlimMath
         public static bool operator !=(Vector4 left, Vector4 right)
         {
             return !Equals(ref left, ref right);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="SlimMath.Vector2"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Vector2(Vector4 value)
+        {
+            return new Vector2(value.X, value.Y);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="SlimMath.Vector3"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Vector3(Vector4 value)
+        {
+            return new Vector3(value.X, value.Y, value.Z);
         }
 
         /// <summary>
