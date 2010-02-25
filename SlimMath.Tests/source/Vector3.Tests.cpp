@@ -862,7 +862,7 @@ TEST(Vector3Tests, UnprojectByRef)
 	AssertEq(result1, result2);
 }
 
-TEST(Vector3Tests, Minimize)
+TEST(Vector3Tests, Min)
 {
 	Vector3 vector1(0.0f, 2.0f, 1.5f);
 	Vector3 vector2(1.0f, 2.0f, 3.0f);
@@ -870,12 +870,12 @@ TEST(Vector3Tests, Minimize)
 	D3DXVECTOR3 result1;
 	D3DXVec3Minimize(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector1), reinterpret_cast<D3DXVECTOR3*>(&vector2));
 
-	Vector3 result2 = Vector3::Minimize(vector1, vector2);
+	Vector3 result2 = Vector3::Min(vector1, vector2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector3Tests, MinimizeByRef)
+TEST(Vector3Tests, MinByRef)
 {
 	Vector3 vector1(0.0f, 2.0f, 1.5f);
 	Vector3 vector2(1.0f, 2.0f, 3.0f);
@@ -884,12 +884,12 @@ TEST(Vector3Tests, MinimizeByRef)
 	D3DXVec3Minimize(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector1), reinterpret_cast<D3DXVECTOR3*>(&vector2));
 
 	Vector3 result2;
-	Vector3::Minimize(vector1, vector2, result2);
+	Vector3::Min(vector1, vector2, result2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector3Tests, Maximize)
+TEST(Vector3Tests, Max)
 {
 	Vector3 vector1(0.0f, 2.0f, 1.5f);
 	Vector3 vector2(1.0f, 2.0f, 3.0f);
@@ -897,12 +897,12 @@ TEST(Vector3Tests, Maximize)
 	D3DXVECTOR3 result1;
 	D3DXVec3Maximize(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector1), reinterpret_cast<D3DXVECTOR3*>(&vector2));
 
-	Vector3 result2 = Vector3::Maximize(vector1, vector2);
+	Vector3 result2 = Vector3::Max(vector1, vector2);
 
 	AssertEq(result1, result2);
 }
 
-TEST(Vector3Tests, MaximizeByRef)
+TEST(Vector3Tests, MaxByRef)
 {
 	Vector3 vector1(0.0f, 2.0f, 1.5f);
 	Vector3 vector2(1.0f, 2.0f, 3.0f);
@@ -911,7 +911,7 @@ TEST(Vector3Tests, MaximizeByRef)
 	D3DXVec3Maximize(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector1), reinterpret_cast<D3DXVECTOR3*>(&vector2));
 
 	Vector3 result2;
-	Vector3::Maximize(vector1, vector2, result2);
+	Vector3::Max(vector1, vector2, result2);
 
 	AssertEq(result1, result2);
 }

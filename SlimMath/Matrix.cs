@@ -245,6 +245,10 @@ namespace SlimMath
             }
         }
 
+        /// <summary>
+        /// Calculates the determinant of the matrix.
+        /// </summary>
+        /// <returns>The determinant of the matrix.</returns>
         public float Determinant()
         {
             float temp1 = (M33 * M44) - (M34 * M43);
@@ -259,6 +263,9 @@ namespace SlimMath
                 (M14 * (((M21 * temp3) - (M22 * temp5)) + (M23 * temp6))));
         }
 
+        /// <summary>
+        /// Inverts the matrix.
+        /// </summary>
         public void Invert()
         {
             Invert(ref this, out this);
@@ -280,7 +287,12 @@ namespace SlimMath
         //}
 
 
-
+        /// <summary>
+        /// Determines the sum of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
+        /// <param name="result">When the method completes, contains the sum of the two matrices.</param>
         public static void Add(ref Matrix left, ref Matrix right, out Matrix result)
         {
             result.M11 = left.M11 + right.M11;
@@ -301,6 +313,12 @@ namespace SlimMath
             result.M44 = left.M44 + right.M44;
         }
 
+        /// <summary>
+        /// Determines the sum of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
+        /// <returns>The sum of the two matrices.</returns>
         public static Matrix Add(Matrix left, Matrix right)
         {
             Matrix result;
@@ -308,6 +326,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Determines the difference between two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to subtract.</param>
+        /// <param name="right">The second matrix to subtract.</param>
+        /// <param name="result">When the method completes, contains the difference between the two matrices.</param>
         public static void Subtract(ref Matrix left, ref Matrix right, out Matrix result)
         {
             result.M11 = left.M11 - right.M11;
@@ -328,6 +352,12 @@ namespace SlimMath
             result.M44 = left.M44 - right.M44;
         }
 
+        /// <summary>
+        /// Determines the difference between two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to subtract.</param>
+        /// <param name="right">The second matrix to subtract.</param>
+        /// <returns>The difference between the two matrices.</returns>
         public static Matrix Subtract(Matrix left, Matrix right)
         {
             Matrix result;
@@ -335,6 +365,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Scales a matrix by the given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="result">When the method completes, contains the scaled matrix.</param>
         public static void Multiply(ref Matrix left, float right, out Matrix result)
         {
             result.M11 = left.M11 * right;
@@ -355,6 +391,12 @@ namespace SlimMath
             result.M44 = left.M44 * right;
         }
 
+        /// <summary>
+        /// Scales a matrix by the given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
         public static Matrix Multiply(Matrix left, float right)
         {
             Matrix result;
@@ -362,6 +404,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Determines the product of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to multiply.</param>
+        /// <param name="right">The second matrix to multiply.</param>
+        /// <param name="result">The product of the two matrices.</param>
         public static void Multiply(ref Matrix left, ref Matrix right, out Matrix result)
         {
             result = new Matrix();
@@ -383,6 +431,12 @@ namespace SlimMath
             result.M44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
         }
 
+        /// <summary>
+        /// Determines the product of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to multiply.</param>
+        /// <param name="right">The second matrix to multiply.</param>
+        /// <returns>The product of the two matrices.</returns>
         public static Matrix Multiply(Matrix left, Matrix right)
         {
             Matrix result;
@@ -390,6 +444,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Scales a matrix by the given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="result">When the method completes, contains the scaled matrix.</param>
         public static void Divide(ref Matrix left, float right, out Matrix result)
         {
             float inv = 1.0f / right;
@@ -412,6 +472,12 @@ namespace SlimMath
             result.M44 = left.M44 * inv;
         }
 
+        /// <summary>
+        /// Scales a matrix by the given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
         public static Matrix Divide(Matrix left, float right)
         {
             Matrix result;
@@ -419,6 +485,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Determines the quotient of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to divide.</param>
+        /// <param name="right">The second matrix to divide.</param>
+        /// <param name="result">When the method completes, contains the quotient of the two matrices.</param>
         public static void Divide(ref Matrix left, ref Matrix right, out Matrix result)
         {
             result.M11 = left.M11 / right.M11;
@@ -439,6 +511,12 @@ namespace SlimMath
             result.M44 = left.M44 / right.M44;
         }
 
+        /// <summary>
+        /// Determines the quotient of two matrices.
+        /// </summary>
+        /// <param name="left">The first matrix to divide.</param>
+        /// <param name="right">The second matrix to divide.</param>
+        /// <returns>The quotient of the two matrices.</returns>
         public static Matrix Divide(Matrix left, Matrix right)
         {
             Matrix result;
@@ -446,6 +524,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Negates a matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to be negated.</param>
+        /// <param name="result">When the method completes, contains the negated matrix.</param>
         public static void Negate(ref Matrix matrix, out Matrix result)
         {
             result.M11 = -matrix.M11;
@@ -466,6 +549,11 @@ namespace SlimMath
             result.M44 = -matrix.M44;
         }
 
+        /// <summary>
+        /// Negates a matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to be negated.</param>
+        /// <returns>The negated matrix.</returns>
         public static Matrix Negate(Matrix matrix)
         {
             Matrix result;
@@ -473,6 +561,18 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Performs a linear interpolation between two matricies.
+        /// </summary>
+        /// <param name="start">Start matrix.</param>
+        /// <param name="end">End matrix.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <param name="result">When the method completes, contains the linear interpolation of the two matricies.</param>
+        /// <remarks>
+        /// This method performs the linear interpolation based on the following formula.
+        /// <code>start + (end - start) * amount</code>
+        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+        /// </remarks>
         public static void Lerp(ref Matrix start, ref Matrix end, float amount, out Matrix result)
         {
             result.M11 = start.M11 + ((end.M11 - start.M11) * amount);
@@ -493,6 +593,18 @@ namespace SlimMath
             result.M44 = start.M44 + ((end.M44 - start.M44) * amount);
         }
 
+        /// <summary>
+        /// Performs a linear interpolation between two matricies.
+        /// </summary>
+        /// <param name="start">Start matrix.</param>
+        /// <param name="end">End matrix.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <returns>The linear interpolation of the two matrices.</returns>
+        /// <remarks>
+        /// This method performs the linear interpolation based on the following formula.
+        /// <code>start + (end - start) * amount</code>
+        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+        /// </remarks>
         public static Matrix Lerp(Matrix start, Matrix end, float amount)
         {
             Matrix result;
@@ -500,6 +612,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a spherical billboard that rotates around a specified object position.
+        /// </summary>
+        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        /// <param name="cameraUpVector">The up vector of the camera.</param>
+        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
+        /// <param name="result">When the method completes, contains the created billboard matrix.</param>
         public static void Billboard(ref Vector3 objectPosition, ref Vector3 cameraPosition, ref Vector3 cameraUpVector, ref Vector3 cameraForwardVector, out Matrix result)
         {
             Vector3 crossed;
@@ -534,6 +654,14 @@ namespace SlimMath
             result.M44 = 1.0f;
         }
 
+        /// <summary>
+        /// Creates a spherical billboard that rotates around a specified object position.
+        /// </summary>
+        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        /// <param name="cameraUpVector">The up vector of the camera.</param>
+        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
+        /// <returns>The created billboard matrix.</returns>
         public static Matrix Billboard(Vector3 objectPosition, Vector3 cameraPosition, Vector3 cameraUpVector, Vector3 cameraForwardVector)
         {
             Matrix result;
@@ -541,6 +669,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Calculates the inverse of the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix whose inverse is to be calculated.</param>
+        /// <param name="result">When the method completes, contains the inverse of the specified matrix.</param>
         public static void Invert(ref Matrix matrix, out Matrix result)
         {
             float a0 = (matrix.M11 * matrix.M22) - (matrix.M12 * matrix.M21);
@@ -590,12 +723,22 @@ namespace SlimMath
             }
         }
 
+        /// <summary>
+        /// Calculates the inverse of the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix whose inverse is to be calculated.</param>
+        /// <returns>The inverse of the specified matrix.</returns>
         public static Matrix Invert(Matrix matrix)
         {
             matrix.Invert();
             return matrix;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the x-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationX(float angle, out Matrix result)
         {
             float cos = (float)Math.Cos(angle);
@@ -608,6 +751,11 @@ namespace SlimMath
             result.M33 = cos;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the x-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationX(float angle)
         {
             Matrix result;
@@ -615,6 +763,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the y-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationY(float angle, out Matrix result)
         {
             float cos = (float)Math.Cos(angle);
@@ -627,6 +780,11 @@ namespace SlimMath
             result.M33 = cos;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the y-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationY(float angle)
         {
             Matrix result;
@@ -634,6 +792,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the z-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationZ(float angle, out Matrix result)
         {
             float cos = (float)Math.Cos(angle);
@@ -646,6 +809,11 @@ namespace SlimMath
             result.M22 = cos;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around the z-axis.
+        /// </summary>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationZ(float angle)
         {
             Matrix result;
@@ -653,6 +821,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around an arbitary axis.
+        /// </summary>
+        /// <param name="axis">The axis around which to rotate.</param>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationAxis(ref Vector3 axis, float angle, out Matrix result)
         {
             if (axis.LengthSquared() != 1.0f)
@@ -682,6 +856,12 @@ namespace SlimMath
             result.M33 = zz + (cos * (1.0f - zz));
         }
 
+        /// <summary>
+        /// Creates a matrix that rotates around an arbitary axis.
+        /// </summary>
+        /// <param name="axis">The axis around which to rotate.</param>
+        /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationAxis(Vector3 axis, float angle)
         {
             Matrix result;
@@ -689,6 +869,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <param name="result">The created rotation matrix.</param>
         public static void RotationQuaternion(ref Quaternion rotation, out Matrix result)
         {
             float xx = rotation.X * rotation.X;
@@ -713,6 +898,11 @@ namespace SlimMath
             result.M33 = 1.0f - (2.0f * (yy + xx));
         }
 
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationQuaternion(Quaternion rotation)
         {
             Matrix result;
@@ -720,6 +910,13 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a rotation matrix with a specified yaw, pitch, and roll.
+        /// </summary>
+        /// <param name="yaw">Yaw around the y-axis, in radians.</param>
+        /// <param name="pitch">Pitch around the x-axis, in radians.</param>
+        /// <param name="roll">Roll around the z-axis, in radians.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationYawPitchRoll(float yaw, float pitch, float roll, out Matrix result)
         {
             Quaternion quaternion = new Quaternion();
@@ -727,6 +924,13 @@ namespace SlimMath
             RotationQuaternion(ref quaternion, out result);
         }
 
+        /// <summary>
+        /// Creates a rotation matrix with a specified yaw, pitch, and roll.
+        /// </summary>
+        /// <param name="yaw">Yaw around the y-axis, in radians.</param>
+        /// <param name="pitch">Pitch around the x-axis, in radians.</param>
+        /// <param name="roll">Roll around the z-axis, in radians.</param>
+        /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationYawPitchRoll(float yaw, float pitch, float roll)
         {
             Matrix result;
@@ -734,6 +938,13 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, look-at matrix.
+        /// </summary>
+        /// <param name="eye">The position of the viewer's eye.</param>
+        /// <param name="target">The camera look-at target.</param>
+        /// <param name="up">The camera's up vector.</param>
+        /// <param name="result">When the method completes, contains the created look-at matrix.</param>
         public static void LookAtLH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
         {
             Vector3 xaxis, yaxis, zaxis;
@@ -750,6 +961,13 @@ namespace SlimMath
             result.M43 = -Vector3.Dot(zaxis, eye);
         }
 
+        /// <summary>
+        /// Creates a left-handed, look-at matrix.
+        /// </summary>
+        /// <param name="eye">The position of the viewer's eye.</param>
+        /// <param name="target">The camera look-at target.</param>
+        /// <param name="up">The camera's up vector.</param>
+        /// <returns>The created look-at matrix.</returns>
         public static Matrix LookAtLH(Vector3 eye, Vector3 target, Vector3 up)
         {
             Matrix result;
@@ -757,6 +975,13 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, look-at matrix.
+        /// </summary>
+        /// <param name="eye">The position of the viewer's eye.</param>
+        /// <param name="target">The camera look-at target.</param>
+        /// <param name="up">The camera's up vector.</param>
+        /// <param name="result">When the method completes, contains the created look-at matrix.</param>
         public static void LookAtRH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
         {
             Vector3 negEye, negTarget;
@@ -766,6 +991,13 @@ namespace SlimMath
             LookAtLH(ref negEye, ref negTarget, ref up, out result);
         }
 
+        /// <summary>
+        /// Creates a right-handed, look-at matrix.
+        /// </summary>
+        /// <param name="eye">The position of the viewer's eye.</param>
+        /// <param name="target">The camera look-at target.</param>
+        /// <param name="up">The camera's up vector.</param>
+        /// <returns>The created look-at matrix.</returns>
         public static Matrix LookAtRH(Vector3 eye, Vector3 target, Vector3 up)
         {
             Matrix result;
@@ -773,6 +1005,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, orthographic projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void OrthoLH(float width, float height, float znear, float zfar, out Matrix result)
         {
             float halfWidth = width * 0.5f;
@@ -781,6 +1021,14 @@ namespace SlimMath
             OrthoOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a left-handed, orthographic projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix OrthoLH(float width, float height, float znear, float zfar)
         {
             Matrix result;
@@ -788,6 +1036,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, orthographic projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void OrthoRH(float width, float height, float znear, float zfar, out Matrix result)
         {
             float halfWidth = width * 0.5f;
@@ -796,6 +1052,14 @@ namespace SlimMath
             OrthoOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a right-handed, orthographic projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix OrthoRH(float width, float height, float znear, float zfar)
         {
             Matrix result;
@@ -803,6 +1067,16 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, customized orthographic projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
             float zRange = 1.0f / (zfar - znear);
@@ -816,6 +1090,16 @@ namespace SlimMath
             result.M43 = -znear * zRange;
         }
 
+        /// <summary>
+        /// Creates a left-handed, customized orthographic projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result;
@@ -823,12 +1107,32 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, customized orthographic projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
             OrthoOffCenterLH(left, right, bottom, top, znear, zfar, out result);
             result.M33 *= -1.0f;
         }
 
+        /// <summary>
+        /// Creates a right-handed, customized orthographic projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result;
@@ -836,6 +1140,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, perspective projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveLH(float width, float height, float znear, float zfar, out Matrix result)
         {
             float halfWidth = width * 0.5f;
@@ -844,6 +1156,14 @@ namespace SlimMath
             PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a left-handed, perspective projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveLH(float width, float height, float znear, float zfar)
         {
             Matrix result;
@@ -851,6 +1171,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, perspective projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveRH(float width, float height, float znear, float zfar, out Matrix result)
         {
             float halfWidth = width * 0.5f;
@@ -859,6 +1187,14 @@ namespace SlimMath
             PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a right-handed, perspective projection matrix.
+        /// </summary>
+        /// <param name="width">Width of the viewing volume.</param>
+        /// <param name="height">Height of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveRH(float width, float height, float znear, float zfar)
         {
             Matrix result;
@@ -866,6 +1202,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, perspective projection matrix based on a field of view.
+        /// </summary>
+        /// <param name="fov">Field of view in the y direction, in radians.</param>
+        /// <param name="aspect">Aspect ratio, defined as view space width divided by height.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveFovLH(float fov, float aspect, float znear, float zfar, out Matrix result)
         {
             float yScale = (float)(1.0 / Math.Tan(fov * 0.5f));
@@ -877,6 +1221,14 @@ namespace SlimMath
             PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a left-handed, perspective projection matrix based on a field of view.
+        /// </summary>
+        /// <param name="fov">Field of view in the y direction, in radians.</param>
+        /// <param name="aspect">Aspect ratio, defined as view space width divided by height.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveFovLH(float fov, float aspect, float znear, float zfar)
         {
             Matrix result;
@@ -884,6 +1236,14 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, perspective projection matrix based on a field of view.
+        /// </summary>
+        /// <param name="fov">Field of view in the y direction, in radians.</param>
+        /// <param name="aspect">Aspect ratio, defined as view space width divided by height.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveFovRH(float fov, float aspect, float znear, float zfar, out Matrix result)
         {
             float yScale = (float)(1.0 / Math.Tan(fov * 0.5f));
@@ -895,6 +1255,14 @@ namespace SlimMath
             PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
+        /// <summary>
+        /// Creates a right-handed, perspective projection matrix based on a field of view.
+        /// </summary>
+        /// <param name="fov">Field of view in the y direction, in radians.</param>
+        /// <param name="aspect">Aspect ratio, defined as view space width divided by height.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveFovRH(float fov, float aspect, float znear, float zfar)
         {
             Matrix result;
@@ -902,6 +1270,16 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a left-handed, customized perspective projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
             float zRange = zfar / (zfar - znear);
@@ -916,6 +1294,16 @@ namespace SlimMath
             result.M43 = -znear * zRange;
         }
 
+        /// <summary>
+        /// Creates a left-handed, customized perspective projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result;
@@ -923,6 +1311,16 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a right-handed, customized perspective projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <param name="result">When the method completes, contains the created projection matrix.</param>
         public static void PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
             PerspectiveOffCenterLH(left, right, bottom, top, znear, zfar, out result);
@@ -932,6 +1330,16 @@ namespace SlimMath
             result.M34 *= -1.0f;
         }
 
+        /// <summary>
+        /// Creates a right-handed, customized perspective projection matrix.
+        /// </summary>
+        /// <param name="left">Minimum x-value of the viewing volume.</param>
+        /// <param name="right">Maximum x-value of the viewing volume.</param>
+        /// <param name="bottom">Minimum y-value of the viewing volume.</param>
+        /// <param name="top">Maximum y-value of the viewing volume.</param>
+        /// <param name="znear">Minimum z-value of the viewing volume.</param>
+        /// <param name="zfar">Maximum z-value of the viewing volume.</param>
+        /// <returns>The created projection matrix.</returns>
         public static Matrix PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
         {
             Matrix result;
@@ -975,11 +1383,21 @@ namespace SlimMath
         //    return result;
         //}
 
+        /// <summary>
+        /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+        /// </summary>
+        /// <param name="scale">Scaling factor for all three axes.</param>
+        /// <param name="result">When the method completes, contains the created scaling matrix.</param>
         public static void Scaling(ref Vector3 scale, out Matrix result)
         {
             Scaling(scale.X, scale.Y, scale.Z, out result);
         }
 
+        /// <summary>
+        /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+        /// </summary>
+        /// <param name="scale">Scaling factor for all three axes.</param>
+        /// <returns>The created scaling matrix.</returns>
         public static Matrix Scaling(Vector3 scale)
         {
             Matrix result;
@@ -987,6 +1405,13 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+        /// </summary>
+        /// <param name="x">Scaling factor that is applied along the x-axis.</param>
+        /// <param name="y">Scaling factor that is applied along the y-axis.</param>
+        /// <param name="z">Scaling factor that is applied along the z-axis.</param>
+        /// <param name="result">When the method completes, contains the created scaling matrix.</param>
         public static void Scaling(float x, float y, float z, out Matrix result)
         {
             result = Matrix.Identity;
@@ -995,6 +1420,13 @@ namespace SlimMath
             result.M33 = z;
         }
 
+        /// <summary>
+        /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
+        /// </summary>
+        /// <param name="x">Scaling factor that is applied along the x-axis.</param>
+        /// <param name="y">Scaling factor that is applied along the y-axis.</param>
+        /// <param name="z">Scaling factor that is applied along the z-axis.</param>
+        /// <returns>The created scaling matrix.</returns>
         public static Matrix Scaling(float x, float y, float z)
         {
             Matrix result;
@@ -1037,11 +1469,21 @@ namespace SlimMath
         //    return result;
         //}
 
+        /// <summary>
+        /// Creates a translation matrix using the specified offsets.
+        /// </summary>
+        /// <param name="amount">The offset for all three coordinate planes.</param>
+        /// <param name="result">When the method completes, contains the created translation matrix.</param>
         public static void Translation(ref Vector3 amount, out Matrix result)
         {
             Translation(amount.X, amount.Y, amount.Z, out result);
         }
 
+        /// <summary>
+        /// Creates a translation matrix using the specified offsets.
+        /// </summary>
+        /// <param name="amount">The offset for all three coordinate planes.</param>
+        /// <returns>The created translation matrix.</returns>
         public static Matrix Translation(Vector3 amount)
         {
             Matrix result;
@@ -1049,6 +1491,13 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a translation matrix using the specified offsets.
+        /// </summary>
+        /// <param name="x">X-coordinate offset.</param>
+        /// <param name="y">Y-coordinate offset.</param>
+        /// <param name="z">Z-coordinate offset.</param>
+        /// <param name="result">When the method completes, contains the created translation matrix.</param>
         public static void Translation(float x, float y, float z, out Matrix result)
         {
             result = Matrix.Identity;
@@ -1057,6 +1506,13 @@ namespace SlimMath
             result.M43 = z;
         }
 
+        /// <summary>
+        /// Creates a translation matrix using the specified offsets.
+        /// </summary>
+        /// <param name="x">X-coordinate offset.</param>
+        /// <param name="y">Y-coordinate offset.</param>
+        /// <param name="z">Z-coordinate offset.</param>
+        /// <returns>The created translation matrix.</returns>
         public static Matrix Translation(float x, float y, float z)
         {
             Matrix result;
@@ -1064,6 +1520,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Calculates the transpose of the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix whose transpose is to be calculated.</param>
+        /// <param name="result">When the method completes, contains the transpose of the specified matrix.</param>
         public static void Transpose(ref Matrix matrix, out Matrix result)
         {
             result = new Matrix();
@@ -1085,6 +1546,11 @@ namespace SlimMath
             result.M44 = matrix.M44;
         }
 
+        /// <summary>
+        /// Calculates the transpose of the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix whose transpose is to be calculated.</param>
+        /// <returns>The transpose of the specified matrix.</returns>
         public static Matrix Transpose(Matrix matrix)
         {
             Matrix result;
@@ -1092,12 +1558,28 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a 3D affine transformation matrix.
+        /// </summary>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
         public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
             result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) *
                 Translation(rotationCenter) * Translation(translation);
         }
 
+        /// <summary>
+        /// Creates a 3D affine transformation matrix.
+        /// </summary>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation(float scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
         {
             Matrix result;
@@ -1105,12 +1587,28 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a 2D affine transformation matrix.
+        /// </summary>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
         public static void AffineTransformation2D(float scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
         {
             result = Scaling(scaling, scaling, 1.0f) * Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) *
                 Translation((Vector3)rotationCenter) * Translation((Vector3)translation);
         }
 
+        /// <summary>
+        /// Creates a 2D affine transformation matrix.
+        /// </summary>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation2D(float scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
         {
             Matrix result;
@@ -1118,6 +1616,16 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a transformation matrix.
+        /// </summary>
+        /// <param name="scalingCenter">Center point of the scaling operation.</param>
+        /// <param name="scalingRotation">Scaling rotation amount.</param>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <param name="result">When the method completes, contains the created transformation matrix.</param>
         public static void Transformation(ref Vector3 scalingCenter, ref Quaternion scalingRotation, ref Vector3 scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
             Matrix sr = RotationQuaternion(scalingRotation);
@@ -1126,6 +1634,16 @@ namespace SlimMath
                 RotationQuaternion(rotation) * Translation(rotationCenter) * Translation(translation);       
         }
 
+        /// <summary>
+        /// Creates a transformation matrix.
+        /// </summary>
+        /// <param name="scalingCenter">Center point of the scaling operation.</param>
+        /// <param name="scalingRotation">Scaling rotation amount.</param>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <returns>The created transformation matrix.</returns>
         public static Matrix Transformation(Vector3 scalingCenter, Quaternion scalingRotation, Vector3 scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
         {
             Matrix result;
@@ -1133,12 +1651,32 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Creates a 2D transformation matrix.
+        /// </summary>
+        /// <param name="scalingCenter">Center point of the scaling operation.</param>
+        /// <param name="scalingRotation">Scaling rotation amount.</param>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <param name="result">When the method completes, contains the created transformation matrix.</param>
         public static void Transformation2D(ref Vector2 scalingCenter, float scalingRotation, ref Vector2 scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
         {
             result = Translation((Vector3)(-scalingCenter)) * RotationZ(-scalingRotation) * Scaling((Vector3)scaling) * RotationZ(scalingRotation) * Translation((Vector3)scalingCenter) * 
                 Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) * Translation((Vector3)rotationCenter) * Translation((Vector3)translation);     
         }
 
+        /// <summary>
+        /// Creates a 2D transformation matrix.
+        /// </summary>
+        /// <param name="scalingCenter">Center point of the scaling operation.</param>
+        /// <param name="scalingRotation">Scaling rotation amount.</param>
+        /// <param name="scaling">Scaling factor.</param>
+        /// <param name="rotationCenter">The center of the rotation.</param>
+        /// <param name="rotation">The rotation of the transformation.</param>
+        /// <param name="translation">The translation factor of the transformation.</param>
+        /// <returns>The created transformation matrix.</returns>
         public static Matrix Transformation2D(Vector2 scalingCenter, float scalingRotation, Vector2 scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
         {
             Matrix result;
@@ -1146,6 +1684,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Subtracts two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to subtract.</param>
+        /// <param name="right">The second matrix to subtract.</param>
+        /// <returns>The difference between the two matricies.</returns>
         public static Matrix operator -(Matrix left, Matrix right)
         {
             Matrix result;
@@ -1153,6 +1697,11 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Negates a matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to negate.</param>
+        /// <returns>The negated matrix.</returns>
         public static Matrix operator -(Matrix matrix)
         {
             Matrix result;
@@ -1160,6 +1709,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Adds two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
+        /// <returns>The sum of the two matricies.</returns>
         public static Matrix operator +(Matrix left, Matrix right)
         {
             Matrix result;
@@ -1167,6 +1722,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Scales a matrix by a given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
         public static Matrix operator /(Matrix left, float right)
         {
             Matrix result;
@@ -1174,6 +1735,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Divides two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to divide.</param>
+        /// <param name="right">The second matrix to divide.</param>
+        /// <returns>The quotient of the two matricies.</returns>
         public static Matrix operator /(Matrix left, Matrix right)
         {
             Matrix result;
@@ -1181,11 +1748,25 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Scales a matrix by a given value.
+        /// </summary>
+        /// <param name="right">The matrix to scale.</param>
+        /// <param name="left">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
         public static Matrix operator *(float left, Matrix right)
         {
-            return right * left;
+            Matrix result;
+            Multiply(ref right, left, out result);
+            return result;
         }
 
+        /// <summary>
+        /// Scales a matrix by a given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
         public static Matrix operator *(Matrix left, float right)
         {
             Matrix result;
@@ -1193,6 +1774,12 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Multiplies two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to multiply.</param>
+        /// <param name="right">The second matrix to multiply.</param>
+        /// <returns>The product of the two matricies.</returns>
         public static Matrix operator *(Matrix left, Matrix right)
         {
             Matrix result;
@@ -1200,22 +1787,47 @@ namespace SlimMath
             return result;
         }
 
+        /// <summary>
+        /// Tests for equality between two objects.
+        /// </summary>
+        /// <param name="left">The first value to compare.</param>
+        /// <param name="right">The second value to compare.</param>
+        /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator ==(Matrix left, Matrix right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Tests for inequality between two objects.
+        /// </summary>
+        /// <param name="left">The first value to compare.</param>
+        /// <param name="right">The second value to compare.</param>
+        /// <returns><c>true</c> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator !=(Matrix left, Matrix right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return string.Format(CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
                 M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public string ToString(string format)
         {
             return string.Format(format, CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
@@ -1225,6 +1837,13 @@ namespace SlimMath
                 M41.ToString(format, CultureInfo.CurrentCulture), M42.ToString(format, CultureInfo.CurrentCulture), M43.ToString(format, CultureInfo.CurrentCulture), M44.ToString(format, CultureInfo.CurrentCulture));
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public string ToString(IFormatProvider formatProvider)
         {
             return string.Format(formatProvider, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
@@ -1234,6 +1853,14 @@ namespace SlimMath
                 M41.ToString(formatProvider), M42.ToString(formatProvider), M43.ToString(formatProvider), M44.ToString(formatProvider));
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return string.Format(format, formatProvider, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
@@ -1243,6 +1870,12 @@ namespace SlimMath
                 M41.ToString(format, formatProvider), M42.ToString(format, formatProvider), M43.ToString(format, formatProvider), M44.ToString(format, formatProvider));
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             return M11.GetHashCode() + M12.GetHashCode() + M13.GetHashCode() + M14.GetHashCode() +
@@ -1251,6 +1884,13 @@ namespace SlimMath
                M41.GetHashCode() + M42.GetHashCode() + M43.GetHashCode() + M44.GetHashCode();
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="Matrix"/> is equal to this instance.
+        /// </summary>
+        /// <param name="value">The <see cref="Matrix"/> to compare with this instance.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified <see cref="Matrix"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public bool Equals(Matrix value)
         {
             return (M11 == value.M11 && M12 == value.M12 && M13 == value.M13 && M14 == value.M14 &&
@@ -1259,6 +1899,13 @@ namespace SlimMath
                  M41 == value.M41 && M42 == value.M42 && M43 == value.M43 && M44 == value.M44);
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object value)
         {
             if (value == null)
