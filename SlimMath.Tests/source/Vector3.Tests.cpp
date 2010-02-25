@@ -753,9 +753,9 @@ TEST(Vector3Tests, Project)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(2);
-	Matrix matrix3 = CreateTestMatrix(3);
+	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
+	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
+	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -782,9 +782,9 @@ TEST(Vector3Tests, ProjectByRef)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(2);
-	Matrix matrix3 = CreateTestMatrix(3);
+	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
+	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
+	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -812,9 +812,9 @@ TEST(Vector3Tests, Unproject)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(2);
-	Matrix matrix3 = CreateTestMatrix(3);
+	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
+	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
+	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -841,9 +841,9 @@ TEST(Vector3Tests, UnprojectByRef)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(2);
-	Matrix matrix3 = CreateTestMatrix(3);
+	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
+	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
+	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;

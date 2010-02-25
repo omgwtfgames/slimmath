@@ -21,8 +21,6 @@
 */
 #pragma once
 
-extern const float ZeroTolerance;
-
 void AssertEq(D3DXVECTOR2 expected, SlimMath::Vector2 actual);
 void AssertEq(D3DXVECTOR3 expected, SlimMath::Vector3 actual);
 void AssertEq(D3DXVECTOR4 expected, SlimMath::Vector4 actual);

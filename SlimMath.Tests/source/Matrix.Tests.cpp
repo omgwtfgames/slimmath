@@ -174,6 +174,69 @@ TEST(MatrixTests, DoubleIndexerSetOutOfRange)
 
 // ----- METHOD TESTS ----- //
 
+TEST(MatrixTests, Invert)
+{
+	Matrix test = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixInverse(&expected, NULL, reinterpret_cast<D3DXMATRIX*>(&test));
+
+	Matrix actual = Matrix::Invert(test);
+	AssertEq(expected, actual);
+}
+
 // ----- OPERATOR TESTS ----- //
 
+TEST(MatrixTests, EqualityOperator)
+{
+	Matrix matrix1 = CreateTestMatrix(1);
+	Matrix matrix2 = CreateTestMatrix(1);
+	Matrix matrix3 = CreateTestMatrix(2);
+
+	ASSERT_TRUE(matrix1 == matrix2);
+	ASSERT_TRUE(matrix2 == matrix1);
+	ASSERT_FALSE(matrix3 == matrix1);
+}
+
+TEST(MatrixTests, InequalityOperator)
+{
+	Matrix matrix1 = CreateTestMatrix(1);
+	Matrix matrix2 = CreateTestMatrix(1);
+	Matrix matrix3 = CreateTestMatrix(2);
+
+	ASSERT_FALSE(matrix1 != matrix2);
+	ASSERT_FALSE(matrix2 != matrix1);
+	ASSERT_TRUE(matrix3 != matrix1);
+}
+
 // ----- EQUALS TESTS ----- //
+
+TEST(MatrixTests, Equals)
+{
+	Matrix matrix1 = CreateTestMatrix(1);
+	Matrix matrix2 = CreateTestMatrix(1);
+	Matrix matrix3 = CreateTestMatrix(2);
+
+	ASSERT_TRUE(matrix1.Equals(matrix2));
+	ASSERT_TRUE(matrix2.Equals(matrix1));
+	ASSERT_FALSE(matrix3.Equals(matrix1));
+}
+
+TEST(MatrixTests, EqualsObject)
+{
+	Matrix matrix1 = CreateTestMatrix(1);
+	Matrix matrix2 = CreateTestMatrix(1);
+	Matrix matrix3 = CreateTestMatrix(2);
+
+	ASSERT_TRUE(matrix1.Equals(safe_cast<Object^>(matrix2)));
+	ASSERT_TRUE(matrix2.Equals(safe_cast<Object^>(matrix1)));
+	ASSERT_FALSE(matrix3.Equals(safe_cast<Object^>(matrix1)));
+}
+
+TEST(MatrixTests, GetHashCode)
+{
+	Matrix matrix1 = CreateTestMatrix(1);
+	Matrix matrix2 = CreateTestMatrix(1);
+
+	ASSERT_EQ(matrix1.GetHashCode(), matrix2.GetHashCode());
+}

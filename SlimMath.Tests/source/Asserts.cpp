@@ -22,27 +22,25 @@
 #include "stdafx.h"
 #include "Asserts.h"
 
-const float ZeroTolerance = 1e-6f;
-
 void AssertEq(D3DXVECTOR2 expected, SlimMath::Vector2 actual)
 {
-	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
-	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
+	ASSERT_FLOAT_EQ(expected.x, actual.X);
+	ASSERT_FLOAT_EQ(expected.y, actual.Y);
 }
 
 void AssertEq(D3DXVECTOR3 expected, SlimMath::Vector3 actual)
 {
-	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
-	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
-	ASSERT_LE(abs(expected.z - actual.Z), ZeroTolerance);
+	ASSERT_FLOAT_EQ(expected.x, actual.X);
+	ASSERT_FLOAT_EQ(expected.y, actual.Y);
+	ASSERT_FLOAT_EQ(expected.z, actual.Z);
 }
 
 void AssertEq(D3DXVECTOR4 expected, SlimMath::Vector4 actual)
 {
-	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
-	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
-	ASSERT_LE(abs(expected.z - actual.Z), ZeroTolerance);
-	ASSERT_LE(abs(expected.w - actual.W), ZeroTolerance);
+	ASSERT_FLOAT_EQ(expected.x, actual.X);
+	ASSERT_FLOAT_EQ(expected.y, actual.Y);
+	ASSERT_FLOAT_EQ(expected.z, actual.Z);
+	ASSERT_FLOAT_EQ(expected.w, actual.W);
 }
 
 void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual)
@@ -50,6 +48,6 @@ void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual)
 	for (int row = 0; row < 4; row++)
 	{
 		for (int col = 0; col < 4; col++)
-			ASSERT_LE(abs(expected(row, col) - actual[row, col]), ZeroTolerance);
+			ASSERT_FLOAT_EQ(expected(row, col), (actual[row, col]));
 	}
 }
