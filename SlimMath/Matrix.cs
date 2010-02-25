@@ -28,18 +28,6 @@ using System.Globalization;
 
 namespace SlimMath
 {
-    public enum Handedness
-    {
-        Left = 1,
-        Right = -1
-    }
-
-    public enum ProjectionType
-    {
-        Orthographic,
-        Perspective
-    }
-
     /// <summary>
     /// Represents a 4x4 mathematical matrix.
     /// </summary>
@@ -285,13 +273,13 @@ namespace SlimMath
             return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
         }
 
-        
+
 
         //public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
         //{
         //}
 
-        
+
 
         public static void Add(ref Matrix left, ref Matrix right, out Matrix result)
         {
@@ -557,45 +545,48 @@ namespace SlimMath
         {
             float a0 = (matrix.M11 * matrix.M22) - (matrix.M12 * matrix.M21);
             float a1 = (matrix.M11 * matrix.M23) - (matrix.M13 * matrix.M21);
-            float a2 = (matrix.M11 * matrix.M24) - (matrix.M14 * matrix.M21);
+            float a2 = (matrix.M14 * matrix.M21) - (matrix.M11 * matrix.M24);
             float a3 = (matrix.M12 * matrix.M23) - (matrix.M13 * matrix.M22);
-            float a4 = (matrix.M12 * matrix.M24) - (matrix.M14 * matrix.M22);
+            float a4 = (matrix.M14 * matrix.M22) - (matrix.M12 * matrix.M24);
             float a5 = (matrix.M13 * matrix.M24) - (matrix.M14 * matrix.M23);
 
             float b0 = (matrix.M31 * matrix.M42) - (matrix.M32 * matrix.M41);
             float b1 = (matrix.M31 * matrix.M43) - (matrix.M33 * matrix.M41);
-            float b2 = (matrix.M31 * matrix.M44) - (matrix.M34 * matrix.M41);
+            float b2 = (matrix.M34 * matrix.M41) - (matrix.M31 * matrix.M44);
             float b3 = (matrix.M32 * matrix.M43) - (matrix.M33 * matrix.M42);
-            float b4 = (matrix.M32 * matrix.M44) - (matrix.M34 * matrix.M42);
+            float b4 = (matrix.M34 * matrix.M42) - (matrix.M32 * matrix.M44);
             float b5 = (matrix.M33 * matrix.M44) - (matrix.M34 * matrix.M43);
 
-            float det = a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
+            float d11 = matrix.M22 * b5 + matrix.M23 * b4 + matrix.M24 * b3;
+            float d12 = matrix.M21 * b5 + matrix.M23 * b2 + matrix.M24 * b1;
+            float d13 = matrix.M21 * -b4 + matrix.M22 * b2 + matrix.M24 * b0;
+            float d14 = matrix.M21 * b3 + matrix.M22 * -b1 + matrix.M23 * b0;
+
+            float d21 = matrix.M12 * b5 + matrix.M13 * b4 + matrix.M14 * b3;
+            float d22 = matrix.M11 * b5 + matrix.M13 * b2 + matrix.M14 * b1;
+            float d23 = matrix.M11 * -b4 + matrix.M12 * b2 + matrix.M14 * b0;
+            float d24 = matrix.M11 * b3 + matrix.M12 * -b1 + matrix.M13 * b0;
+
+            float d31 = matrix.M42 * a5 + matrix.M43 * a4 + matrix.M44 * a3;
+            float d32 = matrix.M41 * a5 + matrix.M43 * a2 + matrix.M44 * a1;
+            float d33 = matrix.M41 * -a4 + matrix.M42 * a2 + matrix.M44 * a0;
+            float d34 = matrix.M41 * a3 + matrix.M42 * -a1 + matrix.M43 * a0;
+
+            float d41 = matrix.M32 * a5 + matrix.M33 * a4 + matrix.M34 * a3;
+            float d42 = matrix.M31 * a5 + matrix.M33 * a2 + matrix.M34 * a1;
+            float d43 = matrix.M31 * -a4 + matrix.M32 * a2 + matrix.M34 * a0;
+            float d44 = matrix.M31 * a3 + matrix.M32 * -a1 + matrix.M33 * a0;
+
+            float det = matrix.M11 * d11 - matrix.M12 * d12 + matrix.M13 * d13 - matrix.M14 * d14;
             if (Math.Abs(det) <= Utilities.ZeroTolerance)
                 result = Matrix.Zero;
             else
             {
                 result = new Matrix();
-                result.M11 = matrix.M22 * b5 - matrix.M23 * b4 + matrix.M24 * b3;
-                result.M12 = -matrix.M12 * b5 + matrix.M13 * b4 - matrix.M14 * b3;
-                result.M13 = matrix.M42 * a5 - matrix.M43 * a4 + matrix.M44 * a3;
-                result.M14 = -matrix.M32 * a5 + matrix.M33 * a4 - matrix.M34 * a3;
-
-                result.M21 = -matrix.M21 * b5 + matrix.M23 * b2 - matrix.M24 * b1;
-                result.M22 = matrix.M11 * b5 - matrix.M13 * b2 + matrix.M14 * b1;
-                result.M23 = -matrix.M41 * a5 + matrix.M43 * a2 - matrix.M44 * a1;
-                result.M24 = matrix.M31 * a5 - matrix.M33 * a2 + matrix.M34 * a1;
-
-                result.M31 = matrix.M21 * b4 - matrix.M22 * b2 + matrix.M24 * b0;
-                result.M32 = -matrix.M11 * b4 + matrix.M12 * b2 - matrix.M14 * b0;
-                result.M33 = matrix.M41 * a4 - matrix.M42 * a2 + matrix.M44 * a0;
-                result.M34 = -matrix.M31 * a4 + matrix.M32 * a2 - matrix.M34 * a0;
-
-                result.M41 = -matrix.M21 * b3 + matrix.M22 * b1 - matrix.M23 * b0;
-                result.M42 = matrix.M11 * b3 - matrix.M12 * b1 + matrix.M13 * b0;
-                result.M43 = -matrix.M41 * a3 + matrix.M42 * a1 - matrix.M43 * a0;
-                result.M44 = matrix.M31 * a3 - matrix.M32 * a1 + matrix.M33 * a0;
-
-                result *= (1.0f / det);
+                result.M11 = +d11 * det; result.M12 = -d21 * det; result.M13 = +d31 * det; result.M14 = -d41 * det;
+                result.M21 = -d12 * det; result.M22 = +d22 * det; result.M23 = -d32 * det; result.M24 = +d42 * det;
+                result.M31 = +d13 * det; result.M32 = -d23 * det; result.M33 = +d33 * det; result.M34 = -d43 * det;
+                result.M41 = -d14 * det; result.M42 = +d24 * det; result.M43 = -d34 * det; result.M44 = +d44 * det;
             }
         }
 
@@ -743,197 +734,209 @@ namespace SlimMath
             return result;
         }
 
-        public static Matrix PerspectiveFov(Handedness handedness, float fov, float aspect, float znear, float zfar)
+        public static void LookAtLH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
         {
-            float yScale = (float)(1.0 / Math.Tan(fov / 2.0f));
-            float xScale = yScale / aspect;
+            Vector3 xaxis, yaxis, zaxis;
+            Vector3.Subtract(ref target, ref eye, out zaxis); zaxis.Normalize();
+            Vector3.Cross(ref up, ref zaxis, out xaxis); xaxis.Normalize();
+            Vector3.Cross(ref zaxis, ref xaxis, out yaxis);
 
-            float width = 2 * znear / xScale;
-            float height = 2 * znear / yScale;
-
-            return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
+            result = Matrix.Identity;
+            result.M11 = xaxis.X; result.M21 = xaxis.Y; result.M31 = xaxis.Z;
+            result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
+            result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
+            result.M41 = -Vector3.Dot(xaxis, eye);
+            result.M42 = -Vector3.Dot(yaxis, eye);
+            result.M43 = -Vector3.Dot(zaxis, eye);
         }
 
-        public static Matrix Perspective(Handedness handedness, float width, float height, float znear, float zfar)
+        public static Matrix LookAtLH(Vector3 eye, Vector3 target, Vector3 up)
         {
-            return Projection(ProjectionType.Perspective, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
-        }
-
-        public static Matrix Orthographic(Handedness handedness, float width, float height, float znear, float zfar)
-        {
-            return Projection(ProjectionType.Orthographic, handedness, -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, znear, zfar);
-        }
-
-        public static Matrix Projection(ProjectionType type, Handedness handedness, float left, float right, float bottom, float top, float znear, float zfar)
-        {
-            Matrix result = new Matrix();
-            result.M11 = 2.0f / (right - left);
-            result.M22 = 2.0f / (top - bottom);
-            result.M33 = 1.0f / (zfar - znear);
-            result.M43 = znear / (znear - zfar);
-
-            if (type == ProjectionType.Orthographic)
-            {
-                result.M41 = (left + right) / (left - right);
-                result.M42 = (top + bottom) / (bottom - top);
-                result.M44 = left;
-            }
-            else
-            {
-                result.M11 *= znear;
-                result.M22 *= znear;
-                result.M33 *= -zfar;
-                result.M43 *= zfar;
-                result.M31 = (left + right) / (left - right);
-                result.M32 = (top + bottom) / (bottom - top);
-                result.M34 = 1.0f;
-            }
-
-            if (handedness == Handedness.Right)
-            {
-                result.M31 *= -1.0f;
-                result.M32 *= -1.0f;
-                result.M33 *= -1.0f;
-                result.M34 *= -1.0f;
-            }
-
+            Matrix result;
+            LookAtLH(ref eye, ref target, ref up, out result);
             return result;
         }
 
-        //public static void LookAtLH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
-        //{
-        //}
+        public static void LookAtRH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
+        {
+            Vector3 negEye, negTarget;
+            Vector3.Negate(ref eye, out negEye);
+            Vector3.Negate(ref target, out negTarget);
 
-        //public static Matrix LookAtLH(Vector3 eye, Vector3 target, Vector3 up)
-        //{
-        //}
+            LookAtLH(ref negEye, ref negTarget, ref up, out result);
+        }
 
-        //public static void LookAtRH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
-        //{
-        //}
+        public static Matrix LookAtRH(Vector3 eye, Vector3 target, Vector3 up)
+        {
+            Matrix result;
+            LookAtRH(ref eye, ref target, ref up, out result);
+            return result;
+        }
 
-        //public static Matrix LookAtRH(Vector3 eye, Vector3 target, Vector3 up)
-        //{
-        //}
-
-        [Obsolete("OrthoLH is obsolete. Use the generic Orthographic method instead.")]
         public static void OrthoLH(float width, float height, float znear, float zfar, out Matrix result)
         {
-            result = Orthographic(Handedness.Left, width, height, znear, zfar);
+            float halfWidth = width * 0.5f;
+            float halfHeight = height * 0.5f;
+
+            OrthoOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("OrthoLH is obsolete. Use the generic Orthographic method instead.")]
         public static Matrix OrthoLH(float width, float height, float znear, float zfar)
         {
-            return Orthographic(Handedness.Left, width, height, znear, zfar);
+            Matrix result;
+            OrthoLH(width, height, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("OrthoRH is obsolete. Use the generic Orthographic method instead.")]
         public static void OrthoRH(float width, float height, float znear, float zfar, out Matrix result)
         {
-            result = Orthographic(Handedness.Right, width, height, znear, zfar);
+            float halfWidth = width * 0.5f;
+            float halfHeight = height * 0.5f;
+
+            OrthoOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("OrthoRH is obsolete. Use the generic Orthographic method instead.")]
         public static Matrix OrthoRH(float width, float height, float znear, float zfar)
         {
-            return Orthographic(Handedness.Right, width, height, znear, zfar);
+            Matrix result;
+            OrthoRH(width, height, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("OrthoOffCenterLH is obsolete. Use the generic Projection method instead.")]
         public static void OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
-            result = Projection(ProjectionType.Orthographic, Handedness.Left, left, right, bottom, top, znear, zfar);
+            float zRange = 1.0f / (zfar - znear);
+
+            result = Matrix.Identity;
+            result.M11 = 2.0f / (right - left);
+            result.M22 = 2.0f / (top - bottom);
+            result.M33 = zRange;
+            result.M41 = (left + right) / (left - right);
+            result.M42 = (top + bottom) / (bottom - top);
+            result.M43 = -znear * zRange;
         }
 
-        [Obsolete("OrthoOffCenterLH is obsolete. Use the generic Projection method instead.")]
         public static Matrix OrthoOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
         {
-            return Projection(ProjectionType.Orthographic, Handedness.Left, left, right, bottom, top, znear, zfar);
+            Matrix result;
+            OrthoOffCenterLH(left, right, bottom, top, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("OrthoOffCenterRH is obsolete. Use the generic Projection method instead.")]
         public static void OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
-            result = Projection(ProjectionType.Orthographic, Handedness.Right, left, right, bottom, top, znear, zfar);
+            OrthoOffCenterLH(left, right, bottom, top, znear, zfar, out result);
+            result.M33 *= -1.0f;
         }
 
-        [Obsolete("OrthoOffCenterRH is obsolete. Use the generic Projection method instead.")]
         public static Matrix OrthoOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
         {
-            return Projection(ProjectionType.Orthographic, Handedness.Right, left, right, bottom, top, znear, zfar);
+            Matrix result;
+            OrthoOffCenterRH(left, right, bottom, top, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveLH is obsolete. Use the generic Perspective method instead.")]
         public static void PerspectiveLH(float width, float height, float znear, float zfar, out Matrix result)
         {
-            result = Perspective(Handedness.Left, width, height, znear, zfar);
+            float halfWidth = width * 0.5f;
+            float halfHeight = height * 0.5f;
+
+            PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("PerspectiveLH is obsolete. Use the generic Perspective method instead.")]
         public static Matrix PerspectiveLH(float width, float height, float znear, float zfar)
         {
-            return Perspective(Handedness.Left, width, height, znear, zfar);
+            Matrix result;
+            PerspectiveLH(width, height, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveRH is obsolete. Use the generic Perspective method instead.")]
         public static void PerspectiveRH(float width, float height, float znear, float zfar, out Matrix result)
         {
-            result = Perspective(Handedness.Right, width, height, znear, zfar);
+            float halfWidth = width * 0.5f;
+            float halfHeight = height * 0.5f;
+
+            PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("PerspectiveRH is obsolete. Use the generic Perspective method instead.")]
         public static Matrix PerspectiveRH(float width, float height, float znear, float zfar)
         {
-            return Perspective(Handedness.Right, width, height, znear, zfar);
+            Matrix result;
+            PerspectiveRH(width, height, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveFovLH is obsolete. Use the generic PerspectiveFov method instead.")]
         public static void PerspectiveFovLH(float fov, float aspect, float znear, float zfar, out Matrix result)
         {
-            result = PerspectiveFov(Handedness.Left, fov, aspect, znear, zfar);
+            float yScale = (float)(1.0 / Math.Tan(fov * 0.5f));
+            float xScale = yScale / aspect;
+
+            float halfWidth = znear / xScale;
+            float halfHeight = znear / yScale;
+
+            PerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("PerspectiveFovLH is obsolete. Use the generic PerspectiveFov method instead.")]
         public static Matrix PerspectiveFovLH(float fov, float aspect, float znear, float zfar)
         {
-            return PerspectiveFov(Handedness.Left, fov, aspect, znear, zfar);
+            Matrix result;
+            PerspectiveFovLH(fov, aspect, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveFovRH is obsolete. Use the generic PerspectiveFov method instead.")]
         public static void PerspectiveFovRH(float fov, float aspect, float znear, float zfar, out Matrix result)
         {
-            result = PerspectiveFov(Handedness.Right, fov, aspect, znear, zfar);
+            float yScale = (float)(1.0 / Math.Tan(fov * 0.5f));
+            float xScale = yScale / aspect;
+
+            float halfWidth = znear / xScale;
+            float halfHeight = znear / yScale;
+
+            PerspectiveOffCenterRH(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out result);
         }
 
-        [Obsolete("PerspectiveFovRH is obsolete. Use the generic PerspectiveFov method instead.")]
         public static Matrix PerspectiveFovRH(float fov, float aspect, float znear, float zfar)
         {
-            return PerspectiveFov(Handedness.Right, fov, aspect, znear, zfar);
+            Matrix result;
+            PerspectiveFovRH(fov, aspect, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveOffCenterLH is obsolete. Use the generic Projection method instead.")]
         public static void PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
-            result = Projection(ProjectionType.Perspective, Handedness.Left, left, right, bottom, top, znear, zfar);
+            float zRange = zfar / (zfar - znear);
+
+            result = new Matrix();
+            result.M11 = 2.0f * znear / (right - left);
+            result.M22 = 2.0f * znear / (top - bottom);
+            result.M31 = (left + right) / (left - right);
+            result.M32 = (top + bottom) / (bottom - top);
+            result.M33 = zRange;
+            result.M34 = 1.0f;
+            result.M43 = -znear * zRange;
         }
 
-        [Obsolete("PerspectiveOffCenterLH is obsolete. Use the generic Projection method instead.")]
         public static Matrix PerspectiveOffCenterLH(float left, float right, float bottom, float top, float znear, float zfar)
         {
-            return Projection(ProjectionType.Perspective, Handedness.Left, left, right, bottom, top, znear, zfar);
+            Matrix result;
+            PerspectiveOffCenterLH(left, right, bottom, top, znear, zfar, out result);
+            return result;
         }
 
-        [Obsolete("PerspectiveOffCenterRH is obsolete. Use the generic Projection method instead.")]
         public static void PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar, out Matrix result)
         {
-            result = Projection(ProjectionType.Perspective, Handedness.Right, left, right, bottom, top, znear, zfar);
+            PerspectiveOffCenterLH(left, right, bottom, top, znear, zfar, out result);
+            result.M31 *= -1.0f;
+            result.M32 *= -1.0f;
+            result.M33 *= -1.0f;
+            result.M34 *= -1.0f;
         }
 
-        [Obsolete("PerspectiveOffCenterRH is obsolete. Use the generic Projection method instead.")]
         public static Matrix PerspectiveOffCenterRH(float left, float right, float bottom, float top, float znear, float zfar)
         {
-            return Projection(ProjectionType.Perspective, Handedness.Right, left, right, bottom, top, znear, zfar);
+            Matrix result;
+            PerspectiveOffCenterRH(left, right, bottom, top, znear, zfar, out result);
+            return result;
         }
 
         //public static void Reflection(ref Plane plane, out Matrix result)
@@ -1091,7 +1094,7 @@ namespace SlimMath
 
         public static void AffineTransformation(float scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
         {
-            result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) * 
+            result = Scaling(scaling, scaling, scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) *
                 Translation(rotationCenter) * Translation(translation);
         }
 
@@ -1104,8 +1107,8 @@ namespace SlimMath
 
         public static void AffineTransformation2D(float scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
         {
-            result = Scaling(scaling, scaling, 1.0f) * Translation(new Vector3(-rotationCenter, 0.0f)) * RotationZ(rotation) *
-                Translation(new Vector3(rotationCenter, 0.0f)) * Translation(new Vector3(translation, 0.0f));
+            result = Scaling(scaling, scaling, 1.0f) * Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) *
+                Translation((Vector3)rotationCenter) * Translation((Vector3)translation);
         }
 
         public static Matrix AffineTransformation2D(float scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
@@ -1115,21 +1118,33 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Transformation(ref Vector3 scalingCenter, ref Quaternion scalingRotation, ref Vector3 scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
-        //{
-        //}
+        public static void Transformation(ref Vector3 scalingCenter, ref Quaternion scalingRotation, ref Vector3 scaling, ref Vector3 rotationCenter, ref Quaternion rotation, ref Vector3 translation, out Matrix result)
+        {
+            Matrix sr = RotationQuaternion(scalingRotation);
 
-        //public static Matrix Transformation(Vector3 scalingCenter, Quaternion scalingRotation, Vector3 scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
-        //{
-        //}
+            result = Translation(-scalingCenter) * Transpose(sr) * Scaling(scaling) * sr * Translation(scalingCenter) * Translation(-rotationCenter) *
+                RotationQuaternion(rotation) * Translation(rotationCenter) * Translation(translation);       
+        }
 
-        //public static void Transformation2D(ref Vector2 scalingCenter, float scalingRotation, ref Vector2 scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
-        //{
-        //}
+        public static Matrix Transformation(Vector3 scalingCenter, Quaternion scalingRotation, Vector3 scaling, Vector3 rotationCenter, Quaternion rotation, Vector3 translation)
+        {
+            Matrix result;
+            Transformation(ref scalingCenter, ref scalingRotation, ref scaling, ref rotationCenter, ref rotation, ref translation, out result);
+            return result;
+        }
 
-        //public static Matrix Transformation2D(Vector2 scalingCenter, float scalingRotation, Vector2 scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
-        //{
-        //}
+        public static void Transformation2D(ref Vector2 scalingCenter, float scalingRotation, ref Vector2 scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
+        {
+            result = Translation((Vector3)(-scalingCenter)) * RotationZ(-scalingRotation) * Scaling((Vector3)scaling) * RotationZ(scalingRotation) * Translation((Vector3)scalingCenter) * 
+                Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) * Translation((Vector3)rotationCenter) * Translation((Vector3)translation);     
+        }
+
+        public static Matrix Transformation2D(Vector2 scalingCenter, float scalingRotation, Vector2 scaling, Vector2 rotationCenter, float rotation, Vector2 translation)
+        {
+            Matrix result;
+            Transformation2D(ref scalingCenter, scalingRotation, ref scaling, ref rotationCenter, rotation, ref translation, out result);
+            return result;
+        }
 
         public static Matrix operator -(Matrix left, Matrix right)
         {
@@ -1197,17 +1212,35 @@ namespace SlimMath
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "[[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]]", M11.ToString(CultureInfo.CurrentCulture),
-                M12.ToString(CultureInfo.CurrentCulture), M13.ToString(CultureInfo.CurrentCulture), M14.ToString(CultureInfo.CurrentCulture),
-                M21.ToString(CultureInfo.CurrentCulture), M22.ToString(CultureInfo.CurrentCulture), M23.ToString(CultureInfo.CurrentCulture),
-                M24.ToString(CultureInfo.CurrentCulture), M31.ToString(CultureInfo.CurrentCulture), M32.ToString(CultureInfo.CurrentCulture),
-                M33.ToString(CultureInfo.CurrentCulture), M34.ToString(CultureInfo.CurrentCulture), M41.ToString(CultureInfo.CurrentCulture),
-                M42.ToString(CultureInfo.CurrentCulture), M43.ToString(CultureInfo.CurrentCulture), M44.ToString(CultureInfo.CurrentCulture));
+            return string.Format(CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+                M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44);
+        }
+
+        public string ToString(string format)
+        {
+            return string.Format(format, CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+                M11.ToString(format, CultureInfo.CurrentCulture), M12.ToString(format, CultureInfo.CurrentCulture), M13.ToString(format, CultureInfo.CurrentCulture), M14.ToString(format, CultureInfo.CurrentCulture),
+                M21.ToString(format, CultureInfo.CurrentCulture), M22.ToString(format, CultureInfo.CurrentCulture), M23.ToString(format, CultureInfo.CurrentCulture), M24.ToString(format, CultureInfo.CurrentCulture),
+                M31.ToString(format, CultureInfo.CurrentCulture), M32.ToString(format, CultureInfo.CurrentCulture), M33.ToString(format, CultureInfo.CurrentCulture), M34.ToString(format, CultureInfo.CurrentCulture),
+                M41.ToString(format, CultureInfo.CurrentCulture), M42.ToString(format, CultureInfo.CurrentCulture), M43.ToString(format, CultureInfo.CurrentCulture), M44.ToString(format, CultureInfo.CurrentCulture));
+        }
+
+        public string ToString(IFormatProvider formatProvider)
+        {
+            return string.Format(formatProvider, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+                M11.ToString(formatProvider), M12.ToString(formatProvider), M13.ToString(formatProvider), M14.ToString(formatProvider),
+                M21.ToString(formatProvider), M22.ToString(formatProvider), M23.ToString(formatProvider), M24.ToString(formatProvider),
+                M31.ToString(formatProvider), M32.ToString(formatProvider), M33.ToString(formatProvider), M34.ToString(formatProvider),
+                M41.ToString(formatProvider), M42.ToString(formatProvider), M43.ToString(formatProvider), M44.ToString(formatProvider));
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            throw new NotImplementedException();
+            return string.Format(format, formatProvider, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
+                M11.ToString(format, formatProvider), M12.ToString(format, formatProvider), M13.ToString(format, formatProvider), M14.ToString(format, formatProvider),
+                M21.ToString(format, formatProvider), M22.ToString(format, formatProvider), M23.ToString(format, formatProvider), M24.ToString(format, formatProvider),
+                M31.ToString(format, formatProvider), M32.ToString(format, formatProvider), M33.ToString(format, formatProvider), M34.ToString(format, formatProvider),
+                M41.ToString(format, formatProvider), M42.ToString(format, formatProvider), M43.ToString(format, formatProvider), M44.ToString(format, formatProvider));
         }
 
         public override int GetHashCode()
