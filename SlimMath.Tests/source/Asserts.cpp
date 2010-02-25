@@ -22,23 +22,34 @@
 #include "stdafx.h"
 #include "Asserts.h"
 
-void AssertEq(D3DXVECTOR2 result1, SlimMath::Vector2 result2)
+const float ZeroTolerance = 1e-6f;
+
+void AssertEq(D3DXVECTOR2 expected, SlimMath::Vector2 actual)
 {
-	ASSERT_LE(abs(result1.x - result2.X), 0.000001f);
-	ASSERT_LE(abs(result1.y - result2.Y), 0.000001f);
+	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
+	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
 }
 
-void AssertEq(D3DXVECTOR3 result1, SlimMath::Vector3 result2)
+void AssertEq(D3DXVECTOR3 expected, SlimMath::Vector3 actual)
 {
-	ASSERT_LE(abs(result1.x - result2.X), 0.000001f);
-	ASSERT_LE(abs(result1.y - result2.Y), 0.000001f);
-	ASSERT_LE(abs(result1.z - result2.Z), 0.000001f);
+	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
+	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
+	ASSERT_LE(abs(expected.z - actual.Z), ZeroTolerance);
 }
 
-void AssertEq(D3DXVECTOR4 result1, SlimMath::Vector4 result2)
+void AssertEq(D3DXVECTOR4 expected, SlimMath::Vector4 actual)
 {
-	ASSERT_LE(abs(result1.x - result2.X), 0.000001f);
-	ASSERT_LE(abs(result1.y - result2.Y), 0.000001f);
-	ASSERT_LE(abs(result1.z - result2.Z), 0.000001f);
-	ASSERT_LE(abs(result1.w - result2.W), 0.000001f);
+	ASSERT_LE(abs(expected.x - actual.X), ZeroTolerance);
+	ASSERT_LE(abs(expected.y - actual.Y), ZeroTolerance);
+	ASSERT_LE(abs(expected.z - actual.Z), ZeroTolerance);
+	ASSERT_LE(abs(expected.w - actual.W), ZeroTolerance);
+}
+
+void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual)
+{
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 4; col++)
+			ASSERT_LE(abs(expected(row, col) - actual[row, col]), ZeroTolerance);
+	}
 }

@@ -806,17 +806,6 @@ TEST(Vector2Tests, InequalityOperator)
 
 // ----- EQUALS TESTS ----- //
 
-TEST(Vector2Tests, StaticEquals)
-{
-	Vector2 vector1(1.0f, 2.0f);
-	Vector2 vector2(1.0f, 2.0f);
-	Vector2 vector3(2.0f, 2.0f);
-
-	ASSERT_TRUE(Vector2::Equals(vector1, vector2));
-	ASSERT_TRUE(Vector2::Equals(vector2, vector1));
-	ASSERT_FALSE(Vector2::Equals(vector3, vector1));
-}
-
 TEST(Vector2Tests, Equals)
 {
 	Vector2 vector1(1.0f, 2.0f);

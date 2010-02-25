@@ -838,17 +838,6 @@ TEST(Vector4Tests, InequalityOperator)
 
 // ----- EQUALS TESTS ----- //
 
-TEST(Vector4Tests, StaticEquals)
-{
-	Vector4 vector1(1.0f, 2.0f, 3.0f, 4.0f);
-	Vector4 vector2(1.0f, 2.0f, 3.0f, 4.0f);
-	Vector4 vector3(2.0f, 2.0f, 2.0f, 2.0f);
-
-	ASSERT_TRUE(Vector4::Equals(vector1, vector2));
-	ASSERT_TRUE(Vector4::Equals(vector2, vector1));
-	ASSERT_FALSE(Vector4::Equals(vector3, vector1));
-}
-
 TEST(Vector4Tests, Equals)
 {
 	Vector4 vector1(1.0f, 2.0f, 3.0f, 4.0f);

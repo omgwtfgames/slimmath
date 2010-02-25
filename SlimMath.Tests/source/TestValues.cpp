@@ -26,48 +26,14 @@ using namespace SlimMath;
 
 Matrix CreateTestMatrix()
 {
-	Matrix matrix;
-	matrix.M11 = 0.25f;
-	matrix.M12 = 0.5f;
-	matrix.M13 = 0.75f;
-	matrix.M14 = 1.0f;
-	matrix.M21 = 0.25f;
-	matrix.M22 = 0.5f;
-	matrix.M23 = 0.75f;
-	matrix.M24 = 1.0f;
-	matrix.M31 = 0.25f;
-	matrix.M32 = 0.5f;
-	matrix.M33 = 0.75f;
-	matrix.M34 = 1.0f;
-	matrix.M41 = 0.25f;
-	matrix.M42 = 0.5f;
-	matrix.M43 = 0.75f;
-	matrix.M44 = 1.0f;
-
-	return matrix;
+	return CreateTestMatrix(1);
 }
 
 Matrix CreateTestMatrix(int index)
 {
-	float scale = static_cast<float>(index);
-
 	Matrix matrix;
-	matrix.M11 = scale * 0.5f;
-	matrix.M12 = scale * 0.5f;
-	matrix.M13 = scale * 0.5f;
-	matrix.M14 = 1.0f;
-	matrix.M21 = scale;
-	matrix.M22 = scale;
-	matrix.M23 = scale;
-	matrix.M24 = 0.5f;
-	matrix.M31 = scale * 3.0f;
-	matrix.M32 = scale * 2.0f;
-	matrix.M33 = scale * 2.0f;
-	matrix.M34 = 1.0f;
-	matrix.M41 = scale * 2.0f;
-	matrix.M42 = scale * 3.0f;
-	matrix.M43 = scale * 3.0f;
-	matrix.M44 = 2.5f;
+	for (int i = 0; i < 16; i++)
+		matrix[i] = static_cast<float>(i * index);
 
 	return matrix;
 }

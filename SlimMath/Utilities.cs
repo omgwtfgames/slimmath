@@ -27,7 +27,7 @@ namespace SlimMath
 {
     class Utilities
     {
-        public const float ZeroTolerance = 1e-8f;
+        public const float ZeroTolerance = 1e-6f;
 
         public static T[] Array<T>(T value, int count)
         {

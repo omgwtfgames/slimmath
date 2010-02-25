@@ -21,9 +21,12 @@
 */
 #pragma once
 
-void AssertEq(D3DXVECTOR2 result1, SlimMath::Vector2 result2);
-void AssertEq(D3DXVECTOR3 result1, SlimMath::Vector3 result2);
-void AssertEq(D3DXVECTOR4 result1, SlimMath::Vector4 result2);
+extern const float ZeroTolerance;
+
+void AssertEq(D3DXVECTOR2 expected, SlimMath::Vector2 actual);
+void AssertEq(D3DXVECTOR3 expected, SlimMath::Vector3 actual);
+void AssertEq(D3DXVECTOR4 expected, SlimMath::Vector4 actual);
+void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual);
 
 // This macro is based on the similarly-named macros from Google Test.
 // Since Google Test is a C++ library, it catches exceptions as "const T&"

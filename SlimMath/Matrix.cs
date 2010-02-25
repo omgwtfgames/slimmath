@@ -180,20 +180,14 @@ namespace SlimMath
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the matrix component, depending on the index.</value>
-        /// <param name="row">The row of the matrix to access.</param>
-        /// <param name="column">The column of the matrix to access.</param>
+        /// <param name="index">The zero-based index of the component to access.</param>
         /// <returns>The value of the component at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="row"/> or <paramref name="column"/>is out of the range [0, 3].</exception>
-        public float this[int row, int column]
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 15].</exception>
+        public float this[int index]
         {
             get
             {
-                if (row < 0 || row > 3)
-                    throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
-                if (column < 0 || column > 3)
-                    throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
-
-                switch ((row * 4) + column)
+                switch (index)
                 {
                     case 0: return M11;
                     case 1: return M12;
@@ -213,17 +207,12 @@ namespace SlimMath
                     case 15: return M44;
                 }
 
-                return 0.0f;
+                throw new ArgumentOutOfRangeException("index", "Indices for Matrix run from 0 to 15, inclusive.");
             }
 
             set
             {
-                if (row < 0 || row > 3)
-                    throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
-                if (column < 0 || column > 3)
-                    throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
-
-                switch ((row * 4) + column)
+                switch (index)
                 {
                     case 0: M11 = value; break;
                     case 1: M12 = value; break;
@@ -241,7 +230,39 @@ namespace SlimMath
                     case 13: M42 = value; break;
                     case 14: M43 = value; break;
                     case 15: M44 = value; break;
+                    default: throw new ArgumentOutOfRangeException("index", "Indices for Matrix run from 0 to 15, inclusive.");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the component at the specified index.
+        /// </summary>
+        /// <value>The value of the matrix component, depending on the index.</value>
+        /// <param name="row">The row of the matrix to access.</param>
+        /// <param name="column">The column of the matrix to access.</param>
+        /// <returns>The value of the component at the specified index.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="row"/> or <paramref name="column"/>is out of the range [0, 3].</exception>
+        public float this[int row, int column]
+        {
+            get
+            {
+                if (row < 0 || row > 3)
+                    throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
+                if (column < 0 || column > 3)
+                    throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
+
+                return this[(row * 4) + column];
+            }
+
+            set
+            {
+                if (row < 0 || row > 3)
+                    throw new ArgumentOutOfRangeException("row", "Rows and columns for matrices run from 0 to 3, inclusive.");
+                if (column < 0 || column > 3)
+                    throw new ArgumentOutOfRangeException("column", "Rows and columns for matrices run from 0 to 3, inclusive.");
+
+                this[(row * 4) + column] = value;
             }
         }
 

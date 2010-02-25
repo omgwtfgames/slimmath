@@ -873,7 +873,7 @@ namespace SlimMath
         /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator ==(Vector4 left, Vector4 right)
         {
-            return Equals(ref left, ref right);
+            return left.Equals(right);
         }
 
         /// <summary>
@@ -884,7 +884,7 @@ namespace SlimMath
         /// <returns><c>true</c> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <c>false</c>.</returns>
         public static bool operator !=(Vector4 left, Vector4 right)
         {
-            return !Equals(ref left, ref right);
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -966,17 +966,6 @@ namespace SlimMath
         public override int GetHashCode()
         {
             return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode() + W.GetHashCode();
-        }
-
-        /// <summary>
-        /// Determines whether the specified object instances are considered equal. 
-        /// </summary>
-        /// <param name="value1">The first value to compare.</param>
-        /// <param name="value2">The second value to compare.</param>
-        /// <returns><c>true</c> if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
-        public static bool Equals(ref Vector4 value1, ref Vector4 value2)
-        {
-            return value1.Equals(value2);
         }
 
         /// <summary>
