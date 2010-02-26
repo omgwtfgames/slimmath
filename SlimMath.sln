@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlimMath", "SlimMath\SlimMa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SlimMath.Tests", "SlimMath.Tests\SlimMath.Tests.vcproj", "{F1089777-7511-454E-87AB-A86B55B7E60B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlimMath.Performance", "SlimMath.Performance\SlimMath.Performance.csproj", "{B350EE53-EBF3-48F0-8409-0F690DA1D267}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,10 +18,6 @@ Global
 		{F1089777-7511-454E-87AB-A86B55B7E60B}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{F1089777-7511-454E-87AB-A86B55B7E60B}.Debug|Any CPU.Build.0 = Debug|Win32
 		{F1089777-7511-454E-87AB-A86B55B7E60B}.Release|Any CPU.ActiveCfg = Release|Win32
-		{B350EE53-EBF3-48F0-8409-0F690DA1D267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B350EE53-EBF3-48F0-8409-0F690DA1D267}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B350EE53-EBF3-48F0-8409-0F690DA1D267}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B350EE53-EBF3-48F0-8409-0F690DA1D267}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
