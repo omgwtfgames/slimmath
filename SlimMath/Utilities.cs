@@ -25,7 +25,7 @@ using System.Text;
 
 namespace SlimMath
 {
-    class Utilities
+    static class Utilities
     {
         public const float ZeroTolerance = 1e-6f;
 
