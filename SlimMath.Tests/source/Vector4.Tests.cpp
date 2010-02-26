@@ -658,7 +658,7 @@ TEST(Vector4Tests, TransformByQuatByRef)
 TEST(Vector4Tests, TransformByMatrix)
 {
 	Vector4 vector(1.0f, 2.0f, 3.0f, 4.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec4Transform(&result1, reinterpret_cast<D3DXVECTOR4*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -671,7 +671,7 @@ TEST(Vector4Tests, TransformByMatrix)
 TEST(Vector4Tests, TransformByMatrixByRef)
 {
 	Vector4 vector(1.0f, 2.0f, 3.0f, 4.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec4Transform(&result1, reinterpret_cast<D3DXVECTOR4*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));

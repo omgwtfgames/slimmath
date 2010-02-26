@@ -24,16 +24,26 @@
 
 using namespace SlimMath;
 
-Matrix CreateTestMatrix()
-{
-	return CreateTestMatrix(1);
-}
-
-Matrix CreateTestMatrix(int index)
+Matrix CreateCountedMatrix()
 {
 	Matrix matrix;
 	for (int i = 0; i < 16; i++)
-		matrix[i] = static_cast<float>(i * index);
+		matrix[i] = static_cast<float>(i);
 
 	return matrix;
+}
+
+Matrix CreateWorldMatrix()
+{
+	return Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f) * Matrix::Scaling(2.0f, 0.5f, 1.0f);
+}
+
+Matrix CreateViewMatrix()
+{
+	return Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
+}
+
+Matrix CreateProjectionMatrix()
+{
+	return Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
 }

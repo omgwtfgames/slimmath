@@ -72,7 +72,7 @@ TEST(MatrixTests, Identity)
 TEST(MatrixTests, IsIdentity)
 {
 	Matrix testSuccess = Matrix::Identity;
-	Matrix testFailure = CreateTestMatrix();
+	Matrix testFailure = CreateCountedMatrix();
 
 	ASSERT_TRUE(testSuccess.IsIdentity);
 	ASSERT_FALSE(testFailure.IsIdentity);
@@ -80,7 +80,7 @@ TEST(MatrixTests, IsIdentity)
 
 TEST(MatrixTests, SingleIndexerGet)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 	float v;
 	
 	for (int i = 0; i < 16; i++)
@@ -92,7 +92,7 @@ TEST(MatrixTests, SingleIndexerGet)
 
 TEST(MatrixTests, SingleIndexerGetOutOfRange)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 	float v;
 
 	ASSERT_MANAGED_THROW(v = matrix[-1], ArgumentOutOfRangeException);
@@ -101,7 +101,7 @@ TEST(MatrixTests, SingleIndexerGetOutOfRange)
 
 TEST(MatrixTests, SingleIndexerSet)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 	
 	for (int i = 0; i < 16; i++)
 	{
@@ -112,7 +112,7 @@ TEST(MatrixTests, SingleIndexerSet)
 
 TEST(MatrixTests, SingleIndexerSetOutOfRange)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 
 	ASSERT_MANAGED_THROW(matrix[-1] = 5.0f, ArgumentOutOfRangeException);
 	ASSERT_MANAGED_THROW(matrix[16] = 5.0f, ArgumentOutOfRangeException);
@@ -120,7 +120,7 @@ TEST(MatrixTests, SingleIndexerSetOutOfRange)
 
 TEST(MatrixTests, DoubleIndexerGet)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 	float v;
 
 	for (int row = 0; row < 4; row++)
@@ -135,7 +135,7 @@ TEST(MatrixTests, DoubleIndexerGet)
 
 TEST(MatrixTests, DoubleIndexerGetOutOfRange)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 	float v;
 
 	ASSERT_MANAGED_THROW((v = matrix[-1, 0]), ArgumentOutOfRangeException);
@@ -148,7 +148,7 @@ TEST(MatrixTests, DoubleIndexerGetOutOfRange)
 
 TEST(MatrixTests, DoubleIndexerSet)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 
 	for (int row = 0; row < 4; row++)
 	{
@@ -162,7 +162,7 @@ TEST(MatrixTests, DoubleIndexerSet)
 
 TEST(MatrixTests, DoubleIndexerSetOutOfRange)
 {
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateCountedMatrix();
 
 	ASSERT_MANAGED_THROW((matrix[-1, 0] = 5.0f), ArgumentOutOfRangeException);
 	ASSERT_MANAGED_THROW((matrix[4, 0] = 5.0f), ArgumentOutOfRangeException);
@@ -174,14 +174,480 @@ TEST(MatrixTests, DoubleIndexerSetOutOfRange)
 
 // ----- METHOD TESTS ----- //
 
-TEST(MatrixTests, Invert)
+TEST(MatrixTests, Determinant)
+{
+	Matrix test = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+
+	ASSERT_FLOAT_EQ(D3DXMatrixDeterminant(reinterpret_cast<D3DXMATRIX*>(&test)), test.Determinant());
+}
+
+TEST(MatrixTests, InvertInstance)
 {
 	Matrix test = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
 
 	D3DXMATRIX expected;
 	D3DXMatrixInverse(&expected, NULL, reinterpret_cast<D3DXMATRIX*>(&test));
 
+	test.Invert();
+	AssertEq(expected, test);
+}
+
+TEST(MatrixTests, ToArray)
+{
+	Matrix test = CreateCountedMatrix();
+	array<float>^ values = test.ToArray();
+
+	for (int i = 0; i < 16; i++)
+		ASSERT_FLOAT_EQ(static_cast<float>(i), values[i]);
+}
+
+TEST(MatrixTests, Multiply)
+{
+	Matrix left = CreateWorldMatrix();
+	Matrix right = CreateViewMatrix();
+
+	D3DXMATRIX expected;
+	D3DXMatrixMultiply(&expected, reinterpret_cast<D3DXMATRIX*>(&left), reinterpret_cast<D3DXMATRIX*>(&right));
+
+	Matrix actual = Matrix::Multiply(left, right);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, MultiplyByRef)
+{
+	Matrix left = CreateWorldMatrix();
+	Matrix right = CreateViewMatrix();
+
+	D3DXMATRIX expected;
+	D3DXMatrixMultiply(&expected, reinterpret_cast<D3DXMATRIX*>(&left), reinterpret_cast<D3DXMATRIX*>(&right));
+
+	Matrix actual;
+	Matrix::Multiply(left, right, actual);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, Invert)
+{
+	Matrix test = CreateWorldMatrix();
+
+	D3DXMATRIX expected;
+	D3DXMatrixInverse(&expected, NULL, reinterpret_cast<D3DXMATRIX*>(&test));
+
 	Matrix actual = Matrix::Invert(test);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, InvertByRef)
+{
+	Matrix test = CreateWorldMatrix();
+
+	D3DXMATRIX expected;
+	D3DXMatrixInverse(&expected, NULL, reinterpret_cast<D3DXMATRIX*>(&test));
+
+	Matrix actual;
+	Matrix::Invert(test, actual);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationX)
+{
+	Matrix actual = Matrix::RotationX(1.5f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationX(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationXByRef)
+{
+	Matrix actual;
+	Matrix::RotationX(1.5f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationX(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationY)
+{
+	Matrix actual = Matrix::RotationY(1.5f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationY(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationYByRef)
+{
+	Matrix actual;
+	Matrix::RotationY(1.5f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationY(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationZ)
+{
+	Matrix actual = Matrix::RotationZ(1.5f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationZ(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationZByRef)
+{
+	Matrix actual;
+	Matrix::RotationZ(1.5f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationZ(&expected, 1.5f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationAxis)
+{
+	Vector3 axis(1.5f, 2.0f, 3.0f);
+	Matrix actual = Matrix::RotationAxis(axis, 1.5f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationAxis(&expected, reinterpret_cast<D3DXVECTOR3*>(&axis), 1.5f);
+
+	AssertEq(expected, actual, 1e-6f);
+}
+
+TEST(MatrixTests, RotationAxisByRef)
+{
+	Vector3 axis(1.5f, 2.0f, 3.0f);
+	Matrix actual;
+	Matrix::RotationAxis(axis, 1.5f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationAxis(&expected, reinterpret_cast<D3DXVECTOR3*>(&axis), 1.5f);
+
+	AssertEq(expected, actual, 1e-6f);
+}
+
+TEST(MatrixTests, RotationQuaternion)
+{
+	Quaternion rotation(1.5f, 2.0f, 3.0f, 4.0f);
+	Matrix actual = Matrix::RotationQuaternion(rotation);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationQuaternion(&expected, reinterpret_cast<D3DXQUATERNION*>(&rotation));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationQuaternionByRef)
+{
+	Quaternion rotation(1.5f, 2.0f, 3.0f, 4.0f);
+	Matrix actual;
+	Matrix::RotationQuaternion(rotation, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationQuaternion(&expected, reinterpret_cast<D3DXQUATERNION*>(&rotation));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, RotationYawPitchRoll)
+{
+	Matrix actual = Matrix::RotationYawPitchRoll(1.5f, 2.0f, 3.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationYawPitchRoll(&expected, 1.5f, 2.0f, 3.0f);
+
+	AssertEq(expected, actual, 1e-6f);
+}
+
+TEST(MatrixTests, RotationYawPitchRollByRef)
+{
+	Matrix actual;
+	Matrix::RotationYawPitchRoll(1.5f, 2.0f, 3.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixRotationYawPitchRoll(&expected, 1.5f, 2.0f, 3.0f);
+
+	AssertEq(expected, actual, 1e-6f);
+}
+
+TEST(MatrixTests, LookAtLH)
+{
+	Vector3 target(1.0f, 2.0f, 3.0f);
+	Vector3 eye(1.5, 2.5f, 3.5f);
+	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	Matrix actual = Matrix::LookAtLH(eye, target, up);
+
+	D3DXMATRIX expected;
+	D3DXMatrixLookAtLH(&expected, reinterpret_cast<D3DXVECTOR3*>(&eye), reinterpret_cast<D3DXVECTOR3*>(&target), reinterpret_cast<D3DXVECTOR3*>(&up));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, LookAtLHByRef)
+{
+	Vector3 target(1.0f, 2.0f, 3.0f);
+	Vector3 eye(1.5, 2.5f, 3.5f);
+	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	Matrix actual;
+	Matrix::LookAtLH(eye, target, up, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixLookAtLH(&expected, reinterpret_cast<D3DXVECTOR3*>(&eye), reinterpret_cast<D3DXVECTOR3*>(&target), reinterpret_cast<D3DXVECTOR3*>(&up));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, LookAtRH)
+{
+	Vector3 target(1.0f, 2.0f, 3.0f);
+	Vector3 eye(1.5, 2.5f, 3.5f);
+	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	Matrix actual = Matrix::LookAtRH(eye, target, up);
+
+	D3DXMATRIX expected;
+	D3DXMatrixLookAtRH(&expected, reinterpret_cast<D3DXVECTOR3*>(&eye), reinterpret_cast<D3DXVECTOR3*>(&target), reinterpret_cast<D3DXVECTOR3*>(&up));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, LookAtRHByRef)
+{
+	Vector3 target(1.0f, 2.0f, 3.0f);
+	Vector3 eye(1.5, 2.5f, 3.5f);
+	Vector3 up(0.0f, 1.0f, 0.0f);
+
+	Matrix actual;
+	Matrix::LookAtRH(eye, target, up, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixLookAtRH(&expected, reinterpret_cast<D3DXVECTOR3*>(&eye), reinterpret_cast<D3DXVECTOR3*>(&target), reinterpret_cast<D3DXVECTOR3*>(&up));
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoLH)
+{
+	Matrix actual = Matrix::OrthoLH(10.0f, 2.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoLH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoLHByRef)
+{
+	Matrix actual;
+	Matrix::OrthoLH(10.0f, 2.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoLH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoRH)
+{
+	Matrix actual = Matrix::OrthoRH(10.0f, 2.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoRH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoRHByRef)
+{
+	Matrix actual;
+	Matrix::OrthoRH(10.0f, 2.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoRH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoOffCenterLH)
+{
+	Matrix actual = Matrix::OrthoOffCenterLH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoOffCenterLH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoOffCenterLHByRef)
+{
+	Matrix actual;
+	Matrix::OrthoOffCenterLH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoOffCenterLH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoOffCenterRH)
+{
+	Matrix actual = Matrix::OrthoOffCenterRH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoOffCenterRH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, OrthoOffCenterRHByRef)
+{
+	Matrix actual;
+	Matrix::OrthoOffCenterRH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixOrthoOffCenterRH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveLH)
+{
+	Matrix actual = Matrix::PerspectiveLH(10.0f, 2.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveLH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveLHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveLH(10.0f, 2.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveLH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveRH)
+{
+	Matrix actual = Matrix::PerspectiveRH(10.0f, 2.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveRH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveRHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveRH(10.0f, 2.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveRH(&expected, 10.0f, 2.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveOffCenterLH)
+{
+	Matrix actual = Matrix::PerspectiveOffCenterLH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveOffCenterLH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveOffCenterLHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveOffCenterLH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveOffCenterLH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveOffCenterRH)
+{
+	Matrix actual = Matrix::PerspectiveOffCenterRH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveOffCenterRH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveOffCenterRHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveOffCenterRH(-10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveOffCenterRH(&expected, -10.0f, 2.0f, -1.0f, 10.0f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveFovLH)
+{
+	Matrix actual = Matrix::PerspectiveFovLH(2.0f, 1.333f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveFovLH(&expected, 2.0f, 1.333f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveFovLHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveFovLH(2.0f, 1.333f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveFovLH(&expected, 2.0f, 1.333f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveFovRH)
+{
+	Matrix actual = Matrix::PerspectiveFovRH(2.0f, 1.333f, 1.5f, 100.0f);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveFovRH(&expected, 2.0f, 1.333f, 1.5f, 100.0f);
+
+	AssertEq(expected, actual);
+}
+
+TEST(MatrixTests, PerspectiveFovRHByRef)
+{
+	Matrix actual;
+	Matrix::PerspectiveFovRH(2.0f, 1.333f, 1.5f, 100.0f, actual);
+
+	D3DXMATRIX expected;
+	D3DXMatrixPerspectiveFovRH(&expected, 2.0f, 1.333f, 1.5f, 100.0f);
+
 	AssertEq(expected, actual);
 }
 
@@ -189,9 +655,9 @@ TEST(MatrixTests, Invert)
 
 TEST(MatrixTests, EqualityOperator)
 {
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(1);
-	Matrix matrix3 = CreateTestMatrix(2);
+	Matrix matrix1 = CreateCountedMatrix();
+	Matrix matrix2 = CreateCountedMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	ASSERT_TRUE(matrix1 == matrix2);
 	ASSERT_TRUE(matrix2 == matrix1);
@@ -200,9 +666,9 @@ TEST(MatrixTests, EqualityOperator)
 
 TEST(MatrixTests, InequalityOperator)
 {
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(1);
-	Matrix matrix3 = CreateTestMatrix(2);
+	Matrix matrix1 = CreateCountedMatrix();
+	Matrix matrix2 = CreateCountedMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	ASSERT_FALSE(matrix1 != matrix2);
 	ASSERT_FALSE(matrix2 != matrix1);
@@ -213,9 +679,9 @@ TEST(MatrixTests, InequalityOperator)
 
 TEST(MatrixTests, Equals)
 {
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(1);
-	Matrix matrix3 = CreateTestMatrix(2);
+	Matrix matrix1 = CreateCountedMatrix();
+	Matrix matrix2 = CreateCountedMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	ASSERT_TRUE(matrix1.Equals(matrix2));
 	ASSERT_TRUE(matrix2.Equals(matrix1));
@@ -224,9 +690,9 @@ TEST(MatrixTests, Equals)
 
 TEST(MatrixTests, EqualsObject)
 {
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(1);
-	Matrix matrix3 = CreateTestMatrix(2);
+	Matrix matrix1 = CreateCountedMatrix();
+	Matrix matrix2 = CreateCountedMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	ASSERT_TRUE(matrix1.Equals(safe_cast<Object^>(matrix2)));
 	ASSERT_TRUE(matrix2.Equals(safe_cast<Object^>(matrix1)));
@@ -235,8 +701,8 @@ TEST(MatrixTests, EqualsObject)
 
 TEST(MatrixTests, GetHashCode)
 {
-	Matrix matrix1 = CreateTestMatrix(1);
-	Matrix matrix2 = CreateTestMatrix(1);
+	Matrix matrix1 = CreateCountedMatrix();
+	Matrix matrix2 = CreateCountedMatrix();
 
 	ASSERT_EQ(matrix1.GetHashCode(), matrix2.GetHashCode());
 }

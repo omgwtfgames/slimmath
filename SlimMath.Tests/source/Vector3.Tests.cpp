@@ -666,7 +666,7 @@ TEST(Vector3Tests, TransformByQuatByRef)
 TEST(Vector3Tests, TransformByMatrix)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec3Transform(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -679,7 +679,7 @@ TEST(Vector3Tests, TransformByMatrix)
 TEST(Vector3Tests, TransformByMatrixByRef)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec3Transform(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -693,7 +693,7 @@ TEST(Vector3Tests, TransformByMatrixByRef)
 TEST(Vector3Tests, TransformCoordinate)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR3 result1;
 	D3DXVec3TransformCoord(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -706,7 +706,7 @@ TEST(Vector3Tests, TransformCoordinate)
 TEST(Vector3Tests, TransformCoordinateByRef)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR3 result1;
 	D3DXVec3TransformCoord(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -720,7 +720,7 @@ TEST(Vector3Tests, TransformCoordinateByRef)
 TEST(Vector3Tests, TransformNormal)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR3 result1;
 	D3DXVec3TransformNormal(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -733,7 +733,7 @@ TEST(Vector3Tests, TransformNormal)
 TEST(Vector3Tests, TransformNormalByRef)
 {
 	Vector3 vector(1.0f, 2.0f, 3.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR3 result1;
 	D3DXVec3TransformNormal(&result1, reinterpret_cast<D3DXVECTOR3*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -753,9 +753,9 @@ TEST(Vector3Tests, Project)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
-	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
-	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+	Matrix matrix1 = CreateProjectionMatrix();
+	Matrix matrix2 = CreateViewMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -782,9 +782,9 @@ TEST(Vector3Tests, ProjectByRef)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
-	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
-	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+	Matrix matrix1 = CreateProjectionMatrix();
+	Matrix matrix2 = CreateViewMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -812,9 +812,9 @@ TEST(Vector3Tests, Unproject)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
-	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
-	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+	Matrix matrix1 = CreateProjectionMatrix();
+	Matrix matrix2 = CreateViewMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;
@@ -841,9 +841,9 @@ TEST(Vector3Tests, UnprojectByRef)
 	float height = 200.0f;
 	float minZ = 0.5f;
 	float maxZ = 100.0f;
-	Matrix matrix1 = Matrix::PerspectiveFovLH(1.0f, 1.333f, 1.0f, 100.0f);
-	Matrix matrix2 = Matrix::LookAtLH(Vector3::UnitX, Vector3::Zero, Vector3::UnitY);
-	Matrix matrix3 = Matrix::RotationX(1.0f) * Matrix::Translation(1.0f, 2.0f, 3.0f);
+	Matrix matrix1 = CreateProjectionMatrix();
+	Matrix matrix2 = CreateViewMatrix();
+	Matrix matrix3 = CreateWorldMatrix();
 
 	D3DVIEWPORT9 viewport;
 	viewport.X = (DWORD)x;

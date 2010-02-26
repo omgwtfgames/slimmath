@@ -21,5 +21,7 @@
 */
 #pragma once
 
-SlimMath::Matrix CreateTestMatrix();
-SlimMath::Matrix CreateTestMatrix(int index);
+SlimMath::Matrix CreateCountedMatrix();
+SlimMath::Matrix CreateWorldMatrix();
+SlimMath::Matrix CreateViewMatrix();
+SlimMath::Matrix CreateProjectionMatrix();

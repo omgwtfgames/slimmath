@@ -1005,11 +1005,18 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the created look-at matrix.</param>
         public static void LookAtRH(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Matrix result)
         {
-            Vector3 negEye, negTarget;
-            Vector3.Negate(ref eye, out negEye);
-            Vector3.Negate(ref target, out negTarget);
+            Vector3 xaxis, yaxis, zaxis;
+            Vector3.Subtract(ref eye, ref target, out zaxis); zaxis.Normalize();
+            Vector3.Cross(ref up, ref zaxis, out xaxis); xaxis.Normalize();
+            Vector3.Cross(ref zaxis, ref xaxis, out yaxis);
 
-            LookAtLH(ref negEye, ref negTarget, ref up, out result);
+            result = Matrix.Identity;
+            result.M11 = xaxis.X; result.M21 = xaxis.Y; result.M31 = xaxis.Z;
+            result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
+            result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
+            result.M41 = -Vector3.Dot(xaxis, eye);
+            result.M42 = -Vector3.Dot(yaxis, eye);
+            result.M43 = -Vector3.Dot(zaxis, eye);
         }
 
         /// <summary>

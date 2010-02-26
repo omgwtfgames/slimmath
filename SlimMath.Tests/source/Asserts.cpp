@@ -48,6 +48,19 @@ void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual)
 	for (int row = 0; row < 4; row++)
 	{
 		for (int col = 0; col < 4; col++)
+		{
+			SCOPED_TRACE(row);
+			SCOPED_TRACE(col);
 			ASSERT_FLOAT_EQ(expected(row, col), (actual[row, col]));
+		}
+	}
+}
+
+void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual, float precision)
+{
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 4; col++)
+			ASSERT_NEAR(expected(row, col), (actual[row, col]), precision);
 	}
 }

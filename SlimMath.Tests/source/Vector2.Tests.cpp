@@ -574,7 +574,7 @@ TEST(Vector2Tests, TransformByQuatByRef)
 TEST(Vector2Tests, TransformByMatrix)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec2Transform(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -587,7 +587,7 @@ TEST(Vector2Tests, TransformByMatrix)
 TEST(Vector2Tests, TransformByMatrixByRef)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR4 result1;
 	D3DXVec2Transform(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -601,7 +601,7 @@ TEST(Vector2Tests, TransformByMatrixByRef)
 TEST(Vector2Tests, TransformCoordinate)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR2 result1;
 	D3DXVec2TransformCoord(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -614,7 +614,7 @@ TEST(Vector2Tests, TransformCoordinate)
 TEST(Vector2Tests, TransformCoordinateByRef)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR2 result1;
 	D3DXVec2TransformCoord(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -628,7 +628,7 @@ TEST(Vector2Tests, TransformCoordinateByRef)
 TEST(Vector2Tests, TransformNormal)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR2 result1;
 	D3DXVec2TransformNormal(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
@@ -641,7 +641,7 @@ TEST(Vector2Tests, TransformNormal)
 TEST(Vector2Tests, TransformNormalByRef)
 {
 	Vector2 vector(1.0f, 2.0f);
-	Matrix matrix = CreateTestMatrix();
+	Matrix matrix = CreateWorldMatrix();
 
 	D3DXVECTOR2 result1;
 	D3DXVec2TransformNormal(&result1, reinterpret_cast<D3DXVECTOR2*>(&vector), reinterpret_cast<D3DXMATRIX*>(&matrix));
