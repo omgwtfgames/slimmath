@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\Quaternion.Tests.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\Vector2.Tests.cpp"
 				>
 			</File>

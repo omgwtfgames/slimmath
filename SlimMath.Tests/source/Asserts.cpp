@@ -64,3 +64,11 @@ void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual, float precision)
 			ASSERT_NEAR(expected(row, col), (actual[row, col]), precision);
 	}
 }
+
+void AssertEq(D3DXQUATERNION expected, SlimMath::Quaternion actual)
+{
+	ASSERT_FLOAT_EQ(expected.x, actual.X);
+	ASSERT_FLOAT_EQ(expected.y, actual.Y);
+	ASSERT_FLOAT_EQ(expected.z, actual.Z);
+	ASSERT_FLOAT_EQ(expected.w, actual.W);
+}

@@ -26,6 +26,7 @@ void AssertEq(D3DXVECTOR3 expected, SlimMath::Vector3 actual);
 void AssertEq(D3DXVECTOR4 expected, SlimMath::Vector4 actual);
 void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual);
 void AssertEq(D3DXMATRIX expected, SlimMath::Matrix actual, float precision);
+void AssertEq(D3DXQUATERNION expected, SlimMath::Quaternion actual);
 
 // This macro is based on the similarly-named macros from Google Test.
 // Since Google Test is a C++ library, it catches exceptions as "const T&"
