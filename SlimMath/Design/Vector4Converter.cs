@@ -37,7 +37,7 @@ namespace SlimMath.Design
         /// </summary>
         public Vector4Converter()
         {
-            Type type = typeof(Vector4);
+            var type = typeof(Vector4);
             Properties = new PropertyDescriptorCollection(new[] 
             { 
                 new FieldPropertyDescriptor(type.GetField("X")), 
@@ -70,16 +70,17 @@ namespace SlimMath.Design
 
             if (value is Vector4)
             {
-                Vector4 vector = (Vector4)value;
+                var vector = (Vector4)value;
 
                 if (destinationType == typeof(string))
                     return ConvertFromValues(context, culture, vector.ToArray());
-                else if (destinationType == typeof(InstanceDescriptor))
-                {
-                    var constructor = typeof(Vector4).GetConstructor(Utilities.Array(typeof(float), 4));
-                    if (constructor != null)
-                        return new InstanceDescriptor(constructor, vector.ToArray());
-                }
+            	
+				if (destinationType == typeof(InstanceDescriptor))
+            	{
+            		var constructor = typeof(Vector4).GetConstructor(Utilities.Array(typeof(float), 4));
+            		if (constructor != null)
+            			return new InstanceDescriptor(constructor, vector.ToArray());
+            	}
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -100,10 +101,7 @@ namespace SlimMath.Design
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             var values = ConvertToValues<float>(context, culture, value);
-            if (values != null)
-                return new Vector4(values);
-
-            return base.ConvertFrom(context, culture, value);
+            return values != null ? new Vector4(values) : base.ConvertFrom(context, culture, value);
         }
 
         /// <summary>
