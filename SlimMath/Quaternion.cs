@@ -416,10 +416,10 @@ namespace SlimMath
             float rz = right.Z;
             float rw = right.W;
 
-            result.X = (lx * rw) + (rx * lw) + (ly * rz) - (lz * ry);
-            result.Y = (ly * rw) + (ry * lw) + (lz * rx) - (lx * rz);
-            result.Z = (lz * rw) + (rz * lw) + (lx * ry) - (ly * rx);
-            result.W = (lw * rw) - ((lx * rx) + (ly * ry) + (lz * rz));
+            result.X = (rx * lw + lx * rw + ry * lz) - (rz * ly);
+            result.Y = (ry * lw + ly * rw + rz * lx) - (rx * lz);
+            result.Z = (rz * lw + lz * rw + rx * ly) - (ry * lx);
+            result.W = (rw * lw) - (rx * lx + ry * ly + rz * lz);
         }
 
         /// <summary>

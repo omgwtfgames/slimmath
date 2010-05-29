@@ -38,7 +38,7 @@ TEST(QuaternionTests, MultiplyByRef)
 	D3DXQuaternionMultiply(&expected, reinterpret_cast<D3DXQUATERNION*>(&value1), reinterpret_cast<D3DXQUATERNION*>(&value2));
 
 	Quaternion actual;
-	Quaternion::Multiply(value2, value1, actual);
+	Quaternion::Multiply(value1, value2, actual);
 
 	AssertEq(expected, actual);
 }

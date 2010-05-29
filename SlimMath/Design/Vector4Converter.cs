@@ -74,13 +74,13 @@ namespace SlimMath.Design
 
                 if (destinationType == typeof(string))
                     return ConvertFromValues(context, culture, vector.ToArray());
-            	
-				if (destinationType == typeof(InstanceDescriptor))
-            	{
-            		var constructor = typeof(Vector4).GetConstructor(Utilities.Array(typeof(float), 4));
-            		if (constructor != null)
-            			return new InstanceDescriptor(constructor, vector.ToArray());
-            	}
+
+                if (destinationType == typeof(InstanceDescriptor))
+                {
+                    var constructor = typeof(Vector4).GetConstructor(Utilities.Array(typeof(float), 4));
+                    if (constructor != null)
+                        return new InstanceDescriptor(constructor, vector.ToArray());
+                }
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
