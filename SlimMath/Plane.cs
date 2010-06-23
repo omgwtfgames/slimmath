@@ -36,12 +36,12 @@ namespace SlimMath
         /// <summary>
         /// The normal vector of the plane.
         /// </summary>
-        Vector3 Normal;
+        public Vector3 Normal;
 
         /// <summary>
         /// The distance of the plane along its normal from the origin.
         /// </summary>
-        float D;
+        public float D;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.

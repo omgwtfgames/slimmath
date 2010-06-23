@@ -1427,41 +1427,51 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Reflection(ref Plane plane, out Matrix result)
-        //{
-        //    plane.Normalize();
+        /// <summary>
+        /// Builds a matrix that can be used to reflect vectors about a plane.
+        /// </summary>
+        /// <param name="plane">The plane for which the reflection occurs.</param>
+        /// <param name="result">When the method completes, contains the reflection matrix.</param>
+        public static void Reflection(ref Plane plane, out Matrix result)
+        {
+            plane.Normalize();
 
-        //    float x = plane.Normal.X;
-        //    float y = plane.Normal.Y;
-        //    float z = plane.Normal.Z;
-        //    float x2 = -2.0f * x;
-        //    float y2 = -2.0f * y;
-        //    float z2 = -2.0f * z;
+            float x = plane.Normal.X;
+            float y = plane.Normal.Y;
+            float z = plane.Normal.Z;
+            float x2 = -2.0f * x;
+            float y2 = -2.0f * y;
+            float z2 = -2.0f * z;
 
-        //    result.M11 = (x2 * x) + 1.0f;
-        //    result.M12 = y2 * x;
-        //    result.M13 = z2 * x;
-        //    result.M14 = 0.0f;
-        //    result.M21 = x2 * y;
-        //    result.M22 = (y2 * y) + 1.0f;
-        //    result.M23 = z2 * y;
-        //    result.M24 = 0.0f;
-        //    result.M31 = x2 * z;
-        //    result.M32 = y2 * z;
-        //    result.M33 = (z2 * z) + 1.0f;
-        //    result.M34 = 0.0f;
-        //    result.M41 = x2 * plane.D;
-        //    result.M42 = y2 * plane.D;
-        //    result.M43 = z2 * plane.D;
-        //    result.M44 = 1.0f;
-        //}
+            result.M11 = (x2 * x) + 1.0f;
+            result.M12 = y2 * x;
+            result.M13 = z2 * x;
+            result.M14 = 0.0f;
+            result.M21 = x2 * y;
+            result.M22 = (y2 * y) + 1.0f;
+            result.M23 = z2 * y;
+            result.M24 = 0.0f;
+            result.M31 = x2 * z;
+            result.M32 = y2 * z;
+            result.M33 = (z2 * z) + 1.0f;
+            result.M34 = 0.0f;
+            result.M41 = x2 * plane.D;
+            result.M42 = y2 * plane.D;
+            result.M43 = z2 * plane.D;
+            result.M44 = 1.0f;
+        }
 
-        //public static Matrix Reflection(Plane plane)
-        //{
-        //    Matrix result;
-        //    Reflection(ref plane, out result);
-        //    return result;
-        //}
+        /// <summary>
+        /// Builds a matrix that can be used to reflect vectors about a plane.
+        /// </summary>
+        /// <param name="plane">The plane for which the reflection occurs.</param>
+        /// <returns>The reflection matrix.</returns>
+        public static Matrix Reflection(Plane plane)
+        {
+            Matrix result;
+            Reflection(ref plane, out result);
+            return result;
+        }
 
         /// <summary>
         /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
@@ -1514,40 +1524,52 @@ namespace SlimMath
             return result;
         }
 
-        //public static void Shadow(ref Vector4 light, ref Plane plane, out Matrix result)
-        //{
-        //    plane.Normalize();
-
-        //    float dot = ((plane.Normal.X * light.X) + (plane.Normal.Y * light.Y)) + (plane.Normal.Z * light.Z);
-        //    float x = -plane.Normal.X;
-        //    float y = -plane.Normal.Y;
-        //    float z = -plane.Normal.Z;
-        //    float d = -plane.D;
-
-        //    result.M11 = (x * light.X) + dot;
-        //    result.M21 = y * light.X;
-        //    result.M31 = z * light.X;
-        //    result.M41 = d * light.X;
-        //    result.M12 = x * light.Y;
-        //    result.M22 = (y * light.Y) + dot;
-        //    result.M32 = z * light.Y;
-        //    result.M42 = d * light.Y;
-        //    result.M13 = x * light.Z;
-        //    result.M23 = y * light.Z;
-        //    result.M33 = (z * light.Z) + dot;
-        //    result.M43 = d * light.Z;
-        //    result.M14 = 0.0f;
-        //    result.M24 = 0.0f;
-        //    result.M34 = 0.0f;
-        //    result.M44 = dot;
-        //}
-
-        //public static Matrix Shadow(Vector4 light, Plane plane)
-        //{
-        //    Matrix result;
-        //    Shadow(ref light, ref plane, out result);
-        //    return result;
-        //}
+        /// <summary>
+        /// Creates a matrix that flattens geometry into a shadow.
+        /// </summary>
+        /// <param name="light">The light direction.</param>
+        /// <param name="plane">The plane onto which to project the geometry as a shadow.</param>
+        /// <param name="result">When the method completes, contains the shadow matrix.</param>
+        public static void Shadow(ref Vector4 light, ref Plane plane, out Matrix result)
+        {
+            plane.Normalize();
+        
+            float dot = ((plane.Normal.X * light.X) + (plane.Normal.Y * light.Y)) + (plane.Normal.Z * light.Z);
+            float x = -plane.Normal.X;
+            float y = -plane.Normal.Y;
+            float z = -plane.Normal.Z;
+            float d = -plane.D;
+        
+            result.M11 = (x * light.X) + dot;
+            result.M21 = y * light.X;
+            result.M31 = z * light.X;
+            result.M41 = d * light.X;
+            result.M12 = x * light.Y;
+            result.M22 = (y * light.Y) + dot;
+            result.M32 = z * light.Y;
+            result.M42 = d * light.Y;
+            result.M13 = x * light.Z;
+            result.M23 = y * light.Z;
+            result.M33 = (z * light.Z) + dot;
+            result.M43 = d * light.Z;
+            result.M14 = 0.0f;
+            result.M24 = 0.0f;
+            result.M34 = 0.0f;
+            result.M44 = dot;
+        }
+        
+        /// <summary>
+        /// Creates a matrix that flattens geometry into a shadow.
+        /// </summary>
+        /// <param name="light">The light direction.</param>
+        /// <param name="plane">The plane onto which to project the geometry as a shadow.</param>
+        /// <returns>The shadow matrix.</returns>
+        public static Matrix Shadow(Vector4 light, Plane plane)
+        {
+            Matrix result;
+            Shadow(ref light, ref plane, out result);
+            return result;
+        }
 
         /// <summary>
         /// Creates a translation matrix using the specified offsets.
