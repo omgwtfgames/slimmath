@@ -82,6 +82,17 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector3"/> struct.
         /// </summary>
+        /// <param name="value">The value that will be assigned to all components.</param>
+        public Vector3(float value)
+        {
+            X = value;
+            Y = value;
+            Z = value;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector3"/> struct.
+        /// </summary>
         /// <param name="x">Initial value for the X component of the vector.</param>
         /// <param name="y">Initial value for the Y component of the vector.</param>
         /// <param name="z">Initial value for the Z component of the vector.</param>
@@ -102,17 +113,6 @@ namespace SlimMath
             X = value.X;
             Y = value.Y;
             Z = z;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector3"/> struct.
-        /// </summary>
-        /// <param name="value">The value that will be assigned to all components.</param>
-        public Vector3(float value)
-        {
-            X = value;
-            Y = value;
-            Z = value;
         }
 
         /// <summary>
@@ -491,9 +491,24 @@ namespace SlimMath
         /// </summary>
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector.</param>
+        /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
+        /// <remarks>
+        /// <see cref="Vector3.DistanceSquared(ref Vector3, ref Vector3, out float)"/> may be preferred when only the relative distance is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public static void Distance(ref Vector3 value1, ref Vector3 value2, out float result)
+        {
+            result = (float)Math.Sqrt((value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z));
+        }
+
+        /// <summary>
+        /// Calculates the distance between two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
         /// <returns>The distance between the two vectors.</returns>
         /// <remarks>
-        /// <see cref="Vector3.DistanceSquared"/> may be preferred when only the relative distance is needed
+        /// <see cref="Vector3.DistanceSquared(Vector3, Vector3)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
         public static float Distance(Vector3 value1, Vector3 value2)
@@ -503,6 +518,24 @@ namespace SlimMath
             float z = value1.Z - value2.Z;
 
             return (float)Math.Sqrt((x * x) + (y * y) + (z * z));
+        }
+
+        /// <summary>
+        /// Calculates the squared distance between two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
+        /// <param name="result">When the method completes, contains the squared distance between the two vectors.</param>
+        /// <remarks>Distance squared is the value before taking the square root. 
+        /// Distance squared can often be used in place of distance if relative comparisons are being made. 
+        /// For example, consider three points A, B, and C. To determine whether B or C is further from A, 
+        /// compare the distance between A and B to the distance between A and C. Calculating the two distances 
+        /// involves two square roots, which are computationally expensive. However, using distance squared 
+        /// provides the same information and avoids calculating two square roots.
+        /// </remarks>
+        public static void DistanceSquared(ref Vector3 value1, ref Vector3 value2, out float result)
+        {
+            result = (value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z);
         }
 
         /// <summary>
@@ -525,6 +558,17 @@ namespace SlimMath
             float z = value1.Z - value2.Z;
 
             return (x * x) + (y * y) + (z * z);
+        }
+
+        /// <summary>
+        /// Calculates the dot product of two vectors.
+        /// </summary>
+        /// <param name="left">First source vector.</param>
+        /// <param name="right">Second source vector.</param>
+        /// <param name="result">When the method completes, contains the dot product of the two vectors.</param>
+        public static void Dot(ref Vector3 left, ref Vector3 right, out float result)
+        {
+            result = (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z);
         }
 
         /// <summary>
@@ -674,8 +718,7 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the normalized vector.</param>
         public static void Normalize(ref Vector3 vector, out Vector3 result)
         {
-            Vector3 temp = vector;
-            result = temp;
+            result = vector;
             result.Normalize();
         }
 
@@ -726,6 +769,50 @@ namespace SlimMath
         {
             Vector3 result;
             Project(ref vector, x, y, width, height, minZ, maxZ, ref worldViewProjection, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Projects a 3D vector from screen space into object space. 
+        /// </summary>
+        /// <param name="vector">The vector to project.</param>
+        /// <param name="x">The X position of the viewport.</param>
+        /// <param name="y">The Y position of the viewport.</param>
+        /// <param name="width">The width of the viewport.</param>
+        /// <param name="height">The height of the viewport.</param>
+        /// <param name="minZ">The minimum depth of the viewport.</param>
+        /// <param name="maxZ">The maximum depth of the viewport.</param>
+        /// <param name="worldViewProjection">The combined world-view-projection matrix.</param>
+        /// <param name="result">When the method completes, contains the vector in object space.</param>
+        public static void Unproject(ref Vector3 vector, float x, float y, float width, float height, float minZ, float maxZ, ref Matrix worldViewProjection, out Vector3 result)
+        {
+            Vector3 v = new Vector3();
+            Matrix matrix = new Matrix();
+            Matrix.Invert(ref worldViewProjection, out matrix);
+
+            v.X = (((vector.X - x) / width) * 2.0f) - 1.0f;
+            v.Y = -((((vector.Y - y) / height) * 2.0f) - 1.0f);
+            v.Z = (vector.Z - minZ) / (maxZ - minZ);
+
+            TransformCoordinate(ref v, ref matrix, out result);
+        }
+
+        /// <summary>
+        /// Projects a 3D vector from screen space into object space. 
+        /// </summary>
+        /// <param name="vector">The vector to project.</param>
+        /// <param name="x">The X position of the viewport.</param>
+        /// <param name="y">The Y position of the viewport.</param>
+        /// <param name="width">The width of the viewport.</param>
+        /// <param name="height">The height of the viewport.</param>
+        /// <param name="minZ">The minimum depth of the viewport.</param>
+        /// <param name="maxZ">The maximum depth of the viewport.</param>
+        /// <param name="worldViewProjection">The combined world-view-projection matrix.</param>
+        /// <returns>The vector in object space.</returns>
+        public static Vector3 Unproject(Vector3 vector, float x, float y, float width, float height, float minZ, float maxZ, Matrix worldViewProjection)
+        {
+            Vector3 result;
+            Unproject(ref vector, x, y, width, height, minZ, maxZ, ref worldViewProjection, out result);
             return result;
         }
 
@@ -918,50 +1005,6 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Projects a 3D vector from screen space into object space. 
-        /// </summary>
-        /// <param name="vector">The vector to project.</param>
-        /// <param name="x">The X position of the viewport.</param>
-        /// <param name="y">The Y position of the viewport.</param>
-        /// <param name="width">The width of the viewport.</param>
-        /// <param name="height">The height of the viewport.</param>
-        /// <param name="minZ">The minimum depth of the viewport.</param>
-        /// <param name="maxZ">The maximum depth of the viewport.</param>
-        /// <param name="worldViewProjection">The combined world-view-projection matrix.</param>
-        /// <param name="result">When the method completes, contains the vector in object space.</param>
-        public static void Unproject(ref Vector3 vector, float x, float y, float width, float height, float minZ, float maxZ, ref Matrix worldViewProjection, out Vector3 result)
-        {
-            Vector3 v = new Vector3();
-            Matrix matrix = new Matrix();
-            Matrix.Invert(ref worldViewProjection, out matrix);
-
-            v.X = (((vector.X - x) / width) * 2.0f) - 1.0f;
-            v.Y = -((((vector.Y - y) / height) * 2.0f) - 1.0f);
-            v.Z = (vector.Z - minZ) / (maxZ - minZ);
-
-            TransformCoordinate(ref v, ref matrix, out result);
-        }
-
-        /// <summary>
-        /// Projects a 3D vector from screen space into object space. 
-        /// </summary>
-        /// <param name="vector">The vector to project.</param>
-        /// <param name="x">The X position of the viewport.</param>
-        /// <param name="y">The Y position of the viewport.</param>
-        /// <param name="width">The width of the viewport.</param>
-        /// <param name="height">The height of the viewport.</param>
-        /// <param name="minZ">The minimum depth of the viewport.</param>
-        /// <param name="maxZ">The maximum depth of the viewport.</param>
-        /// <param name="worldViewProjection">The combined world-view-projection matrix.</param>
-        /// <returns>The vector in object space.</returns>
-        public static Vector3 Unproject(Vector3 vector, float x, float y, float width, float height, float minZ, float maxZ, Matrix worldViewProjection)
-        {
-            Vector3 result;
-            Unproject(ref vector, x, y, width, height, minZ, maxZ, ref worldViewProjection, out result);
-            return result;
-        }
-
-        /// <summary>
         /// Adds two vectors.
         /// </summary>
         /// <param name="left">The first vector to add.</param>
@@ -973,13 +1016,13 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Reverses the direction of a given vector.
+        /// Assert a vector (return it unchanged).
         /// </summary>
-        /// <param name="value">The vector to negate.</param>
-        /// <returns>A vector facing in the opposite direction.</returns>
-        public static Vector3 operator -(Vector3 value)
+        /// <param name="value">The vector to assert (unchange).</param>
+        /// <returns>The asserted (unchanged) vector.</returns>
+        public static Vector3 operator +(Vector3 value)
         {
-            return new Vector3(-value.X, -value.Y, -value.Z);
+            return value;
         }
 
         /// <summary>
@@ -991,6 +1034,16 @@ namespace SlimMath
         public static Vector3 operator -(Vector3 left, Vector3 right)
         {
             return new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+        }
+
+        /// <summary>
+        /// Reverses the direction of a given vector.
+        /// </summary>
+        /// <param name="value">The vector to negate.</param>
+        /// <returns>A vector facing in the opposite direction.</returns>
+        public static Vector3 operator -(Vector3 value)
+        {
+            return new Vector3(-value.X, -value.Y, -value.Z);
         }
 
         /// <summary>
@@ -1158,5 +1211,27 @@ namespace SlimMath
 
             return Equals((Vector3)value);
         }
+
+#if SlimDX1xInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector3"/> to <see cref="SlimDX.Vector3"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator SlimDX.Vector3(Vector3 value)
+        {
+            return new SlimDX.Vector3(value.X, value.Y, value.Z);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimDX.Vector3"/> to <see cref="SlimMath.Vector3"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Vector3(SlimDX.Vector3 value)
+        {
+            return new Vector3(value.X, value.Y, value.Z);
+        }
+#endif
     }
 }

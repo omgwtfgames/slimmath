@@ -523,6 +523,17 @@ namespace SlimMath
         /// </summary>
         /// <param name="left">First source quaternion.</param>
         /// <param name="right">Second source quaternion.</param>
+        /// <param name="result">When the method completes, contains the dot product of the two quaternions.</param>
+        public static void Dot(ref Quaternion left, ref Quaternion right, out float result)
+        {
+            result = (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
+        }
+
+        /// <summary>
+        /// Calculates the dot product of two quaternions.
+        /// </summary>
+        /// <param name="left">First source quaternion.</param>
+        /// <param name="right">Second source quaternion.</param>
         /// <returns>The dot product of the two quaternions.</returns>
         public static float Dot(Quaternion left, Quaternion right)
         {
@@ -946,6 +957,44 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Adds two quaternions.
+        /// </summary>
+        /// <param name="left">The first quaternion to add.</param>
+        /// <param name="right">The second quaternion to add.</param>
+        /// <returns>The sum of the two quaternions.</returns>
+        public static Quaternion operator +(Quaternion left, Quaternion right)
+        {
+            Quaternion result;
+            Add(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Subtracts two quaternions.
+        /// </summary>
+        /// <param name="left">The first quaternion to subtract.</param>
+        /// <param name="right">The second quaternion to subtract.</param>
+        /// <returns>The difference of the two quaternions.</returns>
+        public static Quaternion operator -(Quaternion left, Quaternion right)
+        {
+            Quaternion result;
+            Subtract(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Reverses the direction of a given quaternion.
+        /// </summary>
+        /// <param name="quaternion">The quaternion to negate.</param>
+        /// <returns>A quaternion facing in the opposite direction.</returns>
+        public static Quaternion operator -(Quaternion quaternion)
+        {
+            Quaternion result;
+            Negate(ref quaternion, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
         /// <param name="quaternion">The quaternion to scale.</param>
@@ -981,44 +1030,6 @@ namespace SlimMath
         {
             Quaternion result;
             Multiply(ref left, ref right, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Adds two quaternions.
-        /// </summary>
-        /// <param name="left">The first quaternion to add.</param>
-        /// <param name="right">The second quaternion to add.</param>
-        /// <returns>The sum of the two quaternions.</returns>
-        public static Quaternion operator +(Quaternion left, Quaternion right)
-        {
-            Quaternion result;
-            Add(ref left, ref right, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Reverses the direction of a given quaternion.
-        /// </summary>
-        /// <param name="quaternion">The quaternion to negate.</param>
-        /// <returns>A quaternion facing in the opposite direction.</returns>
-        public static Quaternion operator -(Quaternion quaternion)
-        {
-            Quaternion result;
-            Negate(ref quaternion, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Subtracts two quaternions.
-        /// </summary>
-        /// <param name="left">The first quaternion to subtract.</param>
-        /// <param name="right">The second quaternion to subtract.</param>
-        /// <returns>The difference of the two quaternions.</returns>
-        public static Quaternion operator -(Quaternion left, Quaternion right)
-        {
-            Quaternion result;
-            Subtract(ref left, ref right, out result);
             return result;
         }
 
@@ -1134,5 +1145,27 @@ namespace SlimMath
 
             return Equals((Quaternion)value);
         }
+
+#if SlimDX1xInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Quaternion"/> to <see cref="SlimDX.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator SlimDX.Quaternion(Quaternion value)
+        {
+            return new SlimDX.Quaternion(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimDX.Quaternion"/> to <see cref="SlimMath.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Quaternion(SlimDX.Quaternion value)
+        {
+            return new Quaternion(value.X, value.Y, value.Z, value.W);
+        }
+#endif
     }
 }

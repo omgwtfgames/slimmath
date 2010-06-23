@@ -92,6 +92,18 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4"/> struct.
         /// </summary>
+        /// <param name="value">The value that will be assigned to all components.</param>
+        public Vector4(float value)
+        {
+            X = value;
+            Y = value;
+            Z = value;
+            W = value;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector4"/> struct.
+        /// </summary>
         /// <param name="x">Initial value for the X component of the vector.</param>
         /// <param name="y">Initial value for the Y component of the vector.</param>
         /// <param name="z">Initial value for the Z component of the vector.</param>
@@ -129,18 +141,6 @@ namespace SlimMath
             Y = value.Y;
             Z = value.Z;
             W = w;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector4"/> struct.
-        /// </summary>
-        /// <param name="value">The value that will be assigned to all components.</param>
-        public Vector4(float value)
-        {
-            X = value;
-            Y = value;
-            Z = value;
-            W = value;
         }
 
         /// <summary>
@@ -494,9 +494,24 @@ namespace SlimMath
         /// </summary>
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector.</param>
+        /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
+        /// <remarks>
+        /// <see cref="Vector4.DistanceSquared(ref Vector4, ref Vector4, out float)"/> may be preferred when only the relative distance is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public static void Distance(ref Vector4 value1, ref Vector4 value2, out float result)
+        {
+            result = (float)Math.Sqrt((value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z) + (value1.W * value2.W));
+        }
+
+        /// <summary>
+        /// Calculates the distance between two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
         /// <returns>The distance between the two vectors.</returns>
         /// <remarks>
-        /// <see cref="Vector4.DistanceSquared"/> may be preferred when only the relative distance is needed
+        /// <see cref="Vector4.DistanceSquared(Vector4, Vector4)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
         public static float Distance(Vector4 value1, Vector4 value2)
@@ -507,6 +522,24 @@ namespace SlimMath
             float w = value1.W - value2.W;
 
             return (float)Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
+        }
+
+        /// <summary>
+        /// Calculates the squared distance between two vectors.
+        /// </summary>
+        /// <param name="value1">The first vector.</param>
+        /// <param name="value2">The second vector.</param>
+        /// <param name="result">When the method completes, contains the squared distance between the two vectors.</param>
+        /// <remarks>Distance squared is the value before taking the square root. 
+        /// Distance squared can often be used in place of distance if relative comparisons are being made. 
+        /// For example, consider three points A, B, and C. To determine whether B or C is further from A, 
+        /// compare the distance between A and B to the distance between A and C. Calculating the two distances 
+        /// involves two square roots, which are computationally expensive. However, using distance squared 
+        /// provides the same information and avoids calculating two square roots.
+        /// </remarks>
+        public static void DistanceSquared(ref Vector4 value1, ref Vector4 value2, out float result)
+        {
+            result = (value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z) + (value1.W * value2.W);
         }
 
         /// <summary>
@@ -530,6 +563,17 @@ namespace SlimMath
             float w = value1.W - value2.W;
 
             return (x * x) + (y * y) + (z * z) + (w * w);
+        }
+
+        /// <summary>
+        /// Calculates the dot product of two vectors.
+        /// </summary>
+        /// <param name="left">First source vector</param>
+        /// <param name="right">Second source vector.</param>
+        /// <param name="result">When the method completes, contains the dot product of the two vectors.</param>
+        public static void Dot(ref Vector4 left, ref Vector4 right, out float result)
+        {
+            result = (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
         }
 
         /// <summary>
@@ -812,13 +856,13 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Reverses the direction of a given vector.
+        /// Assert a vector (return it unchanged).
         /// </summary>
-        /// <param name="value">The vector to negate.</param>
-        /// <returns>A vector facing in the opposite direction.</returns>
-        public static Vector4 operator -(Vector4 value)
+        /// <param name="value">The vector to assert (unchange).</param>
+        /// <returns>The asserted (unchanged) vector.</returns>
+        public static Vector4 operator +(Vector4 value)
         {
-            return new Vector4(-value.X, -value.Y, -value.Z, -value.W);
+            return value;
         }
 
         /// <summary>
@@ -830,6 +874,16 @@ namespace SlimMath
         public static Vector4 operator -(Vector4 left, Vector4 right)
         {
             return new Vector4(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
+        }
+
+        /// <summary>
+        /// Reverses the direction of a given vector.
+        /// </summary>
+        /// <param name="value">The vector to negate.</param>
+        /// <returns>A vector facing in the opposite direction.</returns>
+        public static Vector4 operator -(Vector4 value)
+        {
+            return new Vector4(-value.X, -value.Y, -value.Z, -value.W);
         }
 
         /// <summary>
@@ -997,5 +1051,27 @@ namespace SlimMath
 
             return Equals((Vector4)value);
         }
+
+#if SlimDX1xInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="SlimDX.Vector4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator SlimDX.Vector4(Vector4 value)
+        {
+            return new SlimDX.Vector4(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimDX.Vector4"/> to <see cref="SlimMath.Vector4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Vector4(SlimDX.Vector4 value)
+        {
+            return new Vector4(value.X, value.Y, value.Z, value.W);
+        }
+#endif
     }
 }

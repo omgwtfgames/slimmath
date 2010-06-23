@@ -87,7 +87,7 @@ namespace SlimMath
         public float M23;
 
         /// <summary>
-        /// Value at row 3 column 4 of the matrix. 
+        /// Value at row 2 column 4 of the matrix. 
         /// </summary>
         public float M24;
 
@@ -648,7 +648,7 @@ namespace SlimMath
             Vector3 difference = objectPosition - cameraPosition;
 
             float lengthSq = difference.LengthSquared();
-            if (lengthSq < 0.0001f)
+            if (lengthSq < Utilities.ZeroTolerance)
                 difference = -cameraForwardVector;
             else
                 difference *= (float)(1.0 / Math.Sqrt(lengthSq));
@@ -732,8 +732,11 @@ namespace SlimMath
             float d44 = matrix.M31 * a3 + matrix.M32 * -a1 + matrix.M33 * a0;
 
             float det = matrix.M11 * d11 - matrix.M12 * d12 + matrix.M13 * d13 - matrix.M14 * d14;
+
             if (Math.Abs(det) <= Utilities.ZeroTolerance)
+            {
                 result = Matrix.Zero;
+            }
             else
             {
                 result = new Matrix();
@@ -977,9 +980,14 @@ namespace SlimMath
             result.M11 = xaxis.X; result.M21 = xaxis.Y; result.M31 = xaxis.Z;
             result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
             result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
-            result.M41 = -Vector3.Dot(xaxis, eye);
-            result.M42 = -Vector3.Dot(yaxis, eye);
-            result.M43 = -Vector3.Dot(zaxis, eye);
+
+            Vector3.Dot(ref xaxis, ref eye, out result.M41);
+            Vector3.Dot(ref yaxis, ref eye, out result.M42);
+            Vector3.Dot(ref zaxis, ref eye, out result.M43);
+
+            result.M41 = -result.M41;
+            result.M42 = -result.M42;
+            result.M43 = -result.M43;
         }
 
         /// <summary>
@@ -1014,9 +1022,14 @@ namespace SlimMath
             result.M11 = xaxis.X; result.M21 = xaxis.Y; result.M31 = xaxis.Z;
             result.M12 = yaxis.X; result.M22 = yaxis.Y; result.M32 = yaxis.Z;
             result.M13 = zaxis.X; result.M23 = zaxis.Y; result.M33 = zaxis.Z;
-            result.M41 = -Vector3.Dot(xaxis, eye);
-            result.M42 = -Vector3.Dot(yaxis, eye);
-            result.M43 = -Vector3.Dot(zaxis, eye);
+
+            Vector3.Dot(ref xaxis, ref eye, out result.M41);
+            Vector3.Dot(ref yaxis, ref eye, out result.M42);
+            Vector3.Dot(ref zaxis, ref eye, out result.M43);
+
+            result.M41 = -result.M41;
+            result.M42 = -result.M42;
+            result.M43 = -result.M43;
         }
 
         /// <summary>
@@ -1713,6 +1726,29 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Adds two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to add.</param>
+        /// <param name="right">The second matrix to add.</param>
+        /// <returns>The sum of the two matricies.</returns>
+        public static Matrix operator +(Matrix left, Matrix right)
+        {
+            Matrix result;
+            Add(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Assert a matrix (return it unchanged).
+        /// </summary>
+        /// <param name="value">The matrix to assert (unchange).</param>
+        /// <returns>The asserted (unchanged) matrix.</returns>
+        public static Matrix operator +(Matrix value)
+        {
+            return value;
+        }
+
+        /// <summary>
         /// Subtracts two matricies.
         /// </summary>
         /// <param name="left">The first matrix to subtract.</param>
@@ -1728,51 +1764,12 @@ namespace SlimMath
         /// <summary>
         /// Negates a matrix.
         /// </summary>
-        /// <param name="matrix">The matrix to negate.</param>
+        /// <param name="value">The matrix to negate.</param>
         /// <returns>The negated matrix.</returns>
-        public static Matrix operator -(Matrix matrix)
+        public static Matrix operator -(Matrix value)
         {
             Matrix result;
-            Negate(ref matrix, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Adds two matricies.
-        /// </summary>
-        /// <param name="left">The first matrix to add.</param>
-        /// <param name="right">The second matrix to add.</param>
-        /// <returns>The sum of the two matricies.</returns>
-        public static Matrix operator +(Matrix left, Matrix right)
-        {
-            Matrix result;
-            Add(ref left, ref right, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Scales a matrix by a given value.
-        /// </summary>
-        /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
-        /// <returns>The scaled matrix.</returns>
-        public static Matrix operator /(Matrix left, float right)
-        {
-            Matrix result;
-            Divide(ref left, right, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Divides two matricies.
-        /// </summary>
-        /// <param name="left">The first matrix to divide.</param>
-        /// <param name="right">The second matrix to divide.</param>
-        /// <returns>The quotient of the two matricies.</returns>
-        public static Matrix operator /(Matrix left, Matrix right)
-        {
-            Matrix result;
-            Divide(ref left, ref right, out result);
+            Negate(ref value, out result);
             return result;
         }
 
@@ -1812,6 +1809,32 @@ namespace SlimMath
         {
             Matrix result;
             Multiply(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Scales a matrix by a given value.
+        /// </summary>
+        /// <param name="left">The matrix to scale.</param>
+        /// <param name="right">The amount by which to scale.</param>
+        /// <returns>The scaled matrix.</returns>
+        public static Matrix operator /(Matrix left, float right)
+        {
+            Matrix result;
+            Divide(ref left, right, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Divides two matricies.
+        /// </summary>
+        /// <param name="left">The first matrix to divide.</param>
+        /// <param name="right">The second matrix to divide.</param>
+        /// <returns>The quotient of the two matricies.</returns>
+        public static Matrix operator /(Matrix left, Matrix right)
+        {
+            Matrix result;
+            Divide(ref left, ref right, out result);
             return result;
         }
 
@@ -1917,7 +1940,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="Matrix"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="Matrix"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="Matrix"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Matrix value)
         {
@@ -1932,7 +1955,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object value)
         {
@@ -1944,5 +1967,39 @@ namespace SlimMath
 
             return Equals((Matrix)value);
         }
+
+#if SlimDX1xInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Matrix"/> to <see cref="SlimDX.Matrix"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator SlimDX.Matrix(Matrix value)
+        {
+            return new SlimDX.Matrix()
+            {
+                M11 = value.M11, M12 = value.M12, M13 = value.M13, M14 = value.M14,
+                M21 = value.M21, M22 = value.M22, M23 = value.M23, M24 = value.M24,
+                M31 = value.M31, M32 = value.M32, M33 = value.M33, M34 = value.M34,
+                M41 = value.M41, M42 = value.M42, M43 = value.M43, M44 = value.M44
+            };
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimDX.Matrix"/> to <see cref="SlimMath.Matrix"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Matrix(SlimDX.Matrix value)
+        {
+            return new Matrix()
+            {
+                M11 = value.M11, M12 = value.M12, M13 = value.M13, M14 = value.M14,
+                M21 = value.M21, M22 = value.M22, M23 = value.M23, M24 = value.M24,
+                M31 = value.M31, M32 = value.M32, M33 = value.M33, M34 = value.M34,
+                M41 = value.M41, M42 = value.M42, M43 = value.M43, M44 = value.M44
+            };
+        }
+#endif
     }
 }
