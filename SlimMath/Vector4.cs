@@ -119,6 +119,19 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4"/> struct.
         /// </summary>
+        /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
+        /// <param name="w">Initial value for the W component of the vector.</param>
+        public Vector4(Vector3 value, float w)
+        {
+            X = value.X;
+            Y = value.Y;
+            Z = value.Z;
+            W = w;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector4"/> struct.
+        /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the X and Y components.</param>
         /// <param name="z">Initial value for the Z component of the vector.</param>
         /// <param name="w">Initial value for the W component of the vector.</param>
@@ -127,19 +140,6 @@ namespace SlimMath
             X = value.X;
             Y = value.Y;
             Z = z;
-            W = w;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector4"/> struct.
-        /// </summary>
-        /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
-        /// <param name="w">Initial value for the W component of the vector.</param>
-        public Vector4(Vector3 value, float w)
-        {
-            X = value.X;
-            Y = value.Y;
-            Z = value.Z;
             W = w;
         }
 
@@ -412,42 +412,6 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a Catmull-Rom interpolation using the specified positions.
-        /// </summary>
-        /// <param name="value1">The first position in the interpolation.</param>
-        /// <param name="value2">The second position in the interpolation.</param>
-        /// <param name="value3">The third position in the interpolation.</param>
-        /// <param name="value4">The fourth position in the interpolation.</param>
-        /// <param name="amount">Weighting factor.</param>
-        /// <param name="result">When the method completes, contains the result of the Catmull-Rom interpolation.</param>
-        public static void CatmullRom(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, ref Vector4 value4, float amount, out Vector4 result)
-        {
-            float squared = amount * amount;
-            float cubed = amount * squared;
-
-            result.X = 0.5f * ((((2.0f * value2.X) + ((-value1.X + value3.X) * amount)) + (((((2.0f * value1.X) - (5.0f * value2.X)) + (4.0f * value3.X)) - value4.X) * squared)) + ((((-value1.X + (3.0f * value2.X)) - (3.0f * value3.X)) + value4.X) * cubed));
-            result.Y = 0.5f * ((((2.0f * value2.Y) + ((-value1.Y + value3.Y) * amount)) + (((((2.0f * value1.Y) - (5.0f * value2.Y)) + (4.0f * value3.Y)) - value4.Y) * squared)) + ((((-value1.Y + (3.0f * value2.Y)) - (3.0f * value3.Y)) + value4.Y) * cubed));
-            result.Z = 0.5f * ((((2.0f * value2.Z) + ((-value1.Z + value3.Z) * amount)) + (((((2.0f * value1.Z) - (5.0f * value2.Z)) + (4.0f * value3.Z)) - value4.Z) * squared)) + ((((-value1.Z + (3.0f * value2.Z)) - (3.0f * value3.Z)) + value4.Z) * cubed));
-            result.W = 0.5f * ((((2.0f * value2.W) + ((-value1.W + value3.W) * amount)) + (((((2.0f * value1.W) - (5.0f * value2.W)) + (4.0f * value3.W)) - value4.W) * squared)) + ((((-value1.W + (3.0f * value2.W)) - (3.0f * value3.W)) + value4.W) * cubed));
-        }
-
-        /// <summary>
-        /// Performs a Catmull-Rom interpolation using the specified positions.
-        /// </summary>
-        /// <param name="value1">The first position in the interpolation.</param>
-        /// <param name="value2">The second position in the interpolation.</param>
-        /// <param name="value3">The third position in the interpolation.</param>
-        /// <param name="value4">The fourth position in the interpolation.</param>
-        /// <param name="amount">Weighting factor.</param>
-        /// <returns>A vector that is the result of the Catmull-Rom interpolation.</returns>
-        public static Vector4 CatmullRom(Vector4 value1, Vector4 value2, Vector4 value3, Vector4 value4, float amount)
-        {
-            Vector4 result;
-            CatmullRom(ref value1, ref value2, ref value3, ref value4, amount, out result);
-            return result;
-        }
-
-        /// <summary>
         /// Restricts a value to be within a specified range.
         /// </summary>
         /// <param name="value">The value to clamp.</param>
@@ -588,6 +552,100 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Converts the vector into a unit vector.
+        /// </summary>
+        /// <param name="vector">The vector to normalize.</param>
+        /// <param name="result">When the method completes, contains the normalized vector.</param>
+        public static void Normalize(ref Vector4 vector, out Vector4 result)
+        {
+            Vector4 temp = vector;
+            result = temp;
+            result.Normalize();
+        }
+
+        /// <summary>
+        /// Converts the vector into a unit vector.
+        /// </summary>
+        /// <param name="vector">The vector to normalize.</param>
+        /// <returns>The normalized vector.</returns>
+        public static Vector4 Normalize(Vector4 vector)
+        {
+            vector.Normalize();
+            return vector;
+        }
+
+        /// <summary>
+        /// Performs a linear interpolation between two vectors.
+        /// </summary>
+        /// <param name="start">Start vector.</param>
+        /// <param name="end">End vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <param name="result">When the method completes, contains the linear interpolation of the two vectors.</param>
+        /// <remarks>
+        /// This method performs the linear interpolation based on the following formula.
+        /// <code>start + (end - start) * amount</code>
+        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+        /// </remarks>
+        public static void Lerp(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
+        {
+            result.X = start.X + ((end.X - start.X) * amount);
+            result.Y = start.Y + ((end.Y - start.Y) * amount);
+            result.Z = start.Z + ((end.Z - start.Z) * amount);
+            result.W = start.W + ((end.W - start.W) * amount);
+        }
+
+        /// <summary>
+        /// Performs a linear interpolation between two vectors.
+        /// </summary>
+        /// <param name="start">Start vector.</param>
+        /// <param name="end">End vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <returns>The linear interpolation of the two vectors.</returns>
+        /// <remarks>
+        /// This method performs the linear interpolation based on the following formula.
+        /// <code>start + (end - start) * amount</code>
+        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+        /// </remarks>
+        public static Vector4 Lerp(Vector4 start, Vector4 end, float amount)
+        {
+            Vector4 result;
+            Lerp(ref start, ref end, amount, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Performs a cubic interpolation between two vectors.
+        /// </summary>
+        /// <param name="start">Start vector.</param>
+        /// <param name="end">End vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <param name="result">When the method completes, contains the cubic interpolation of the two vectors.</param>
+        public static void SmoothStep(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
+        {
+            amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
+            amount = (amount * amount) * (3.0f - (2.0f * amount));
+
+            result.X = start.X + ((end.X - start.X) * amount);
+            result.Y = start.Y + ((end.Y - start.Y) * amount);
+            result.Z = start.Z + ((end.Z - start.Z) * amount);
+            result.W = start.W + ((end.W - start.W) * amount);
+        }
+
+        /// <summary>
+        /// Performs a cubic interpolation between two vectors.
+        /// </summary>
+        /// <param name="start">Start vector.</param>
+        /// <param name="end">End vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <returns>The cubic interpolation of the two vectors.</returns>
+        public static Vector4 SmoothStep(Vector4 start, Vector4 end, float amount)
+        {
+            Vector4 result;
+            SmoothStep(ref start, ref end, amount, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Performs a Hermite spline interpolation.
         /// </summary>
         /// <param name="value1">First source position vector.</param>
@@ -628,41 +686,38 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a linear interpolation between two vectors.
+        /// Performs a Catmull-Rom interpolation using the specified positions.
         /// </summary>
-        /// <param name="start">Start vector.</param>
-        /// <param name="end">End vector.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-        /// <param name="result">When the method completes, contains the linear interpolation of the two vectors.</param>
-        /// <remarks>
-        /// This method performs the linear interpolation based on the following formula.
-        /// <code>start + (end - start) * amount</code>
-        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
-        /// </remarks>
-        public static void Lerp(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
+        /// <param name="value1">The first position in the interpolation.</param>
+        /// <param name="value2">The second position in the interpolation.</param>
+        /// <param name="value3">The third position in the interpolation.</param>
+        /// <param name="value4">The fourth position in the interpolation.</param>
+        /// <param name="amount">Weighting factor.</param>
+        /// <param name="result">When the method completes, contains the result of the Catmull-Rom interpolation.</param>
+        public static void CatmullRom(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, ref Vector4 value4, float amount, out Vector4 result)
         {
-            result.X = start.X + ((end.X - start.X) * amount);
-            result.Y = start.Y + ((end.Y - start.Y) * amount);
-            result.Z = start.Z + ((end.Z - start.Z) * amount);
-            result.W = start.W + ((end.W - start.W) * amount);
+            float squared = amount * amount;
+            float cubed = amount * squared;
+
+            result.X = 0.5f * ((((2.0f * value2.X) + ((-value1.X + value3.X) * amount)) + (((((2.0f * value1.X) - (5.0f * value2.X)) + (4.0f * value3.X)) - value4.X) * squared)) + ((((-value1.X + (3.0f * value2.X)) - (3.0f * value3.X)) + value4.X) * cubed));
+            result.Y = 0.5f * ((((2.0f * value2.Y) + ((-value1.Y + value3.Y) * amount)) + (((((2.0f * value1.Y) - (5.0f * value2.Y)) + (4.0f * value3.Y)) - value4.Y) * squared)) + ((((-value1.Y + (3.0f * value2.Y)) - (3.0f * value3.Y)) + value4.Y) * cubed));
+            result.Z = 0.5f * ((((2.0f * value2.Z) + ((-value1.Z + value3.Z) * amount)) + (((((2.0f * value1.Z) - (5.0f * value2.Z)) + (4.0f * value3.Z)) - value4.Z) * squared)) + ((((-value1.Z + (3.0f * value2.Z)) - (3.0f * value3.Z)) + value4.Z) * cubed));
+            result.W = 0.5f * ((((2.0f * value2.W) + ((-value1.W + value3.W) * amount)) + (((((2.0f * value1.W) - (5.0f * value2.W)) + (4.0f * value3.W)) - value4.W) * squared)) + ((((-value1.W + (3.0f * value2.W)) - (3.0f * value3.W)) + value4.W) * cubed));
         }
 
         /// <summary>
-        /// Performs a linear interpolation between two vectors.
+        /// Performs a Catmull-Rom interpolation using the specified positions.
         /// </summary>
-        /// <param name="start">Start vector.</param>
-        /// <param name="end">End vector.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-        /// <returns>The linear interpolation of the two vectors.</returns>
-        /// <remarks>
-        /// This method performs the linear interpolation based on the following formula.
-        /// <code>start + (end - start) * amount</code>
-        /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
-        /// </remarks>
-        public static Vector4 Lerp(Vector4 start, Vector4 end, float amount)
+        /// <param name="value1">The first position in the interpolation.</param>
+        /// <param name="value2">The second position in the interpolation.</param>
+        /// <param name="value3">The third position in the interpolation.</param>
+        /// <param name="value4">The fourth position in the interpolation.</param>
+        /// <param name="amount">Weighting factor.</param>
+        /// <returns>A vector that is the result of the Catmull-Rom interpolation.</returns>
+        public static Vector4 CatmullRom(Vector4 value1, Vector4 value2, Vector4 value3, Vector4 value4, float amount)
         {
             Vector4 result;
-            Lerp(ref start, ref end, amount, out result);
+            CatmullRom(ref value1, ref value2, ref value3, ref value4, amount, out result);
             return result;
         }
 
@@ -721,61 +776,6 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Converts the vector into a unit vector.
-        /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
-        /// <param name="result">When the method completes, contains the normalized vector.</param>
-        public static void Normalize(ref Vector4 vector, out Vector4 result)
-        {
-            Vector4 temp = vector;
-            result = temp;
-            result.Normalize();
-        }
-
-        /// <summary>
-        /// Converts the vector into a unit vector.
-        /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
-        /// <returns>The normalized vector.</returns>
-        public static Vector4 Normalize(Vector4 vector)
-        {
-            vector.Normalize();
-            return vector;
-        }
-
-        /// <summary>
-        /// Performs a cubic interpolation between two vectors.
-        /// </summary>
-        /// <param name="start">Start vector.</param>
-        /// <param name="end">End vector.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-        /// <param name="result">When the method completes, contains the cubic interpolation of the two vectors.</param>
-        public static void SmoothStep(ref Vector4 start, ref Vector4 end, float amount, out Vector4 result)
-        {
-            amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
-            amount = (amount * amount) * (3.0f - (2.0f * amount));
-
-            result.X = start.X + ((end.X - start.X) * amount);
-            result.Y = start.Y + ((end.Y - start.Y) * amount);
-            result.Z = start.Z + ((end.Z - start.Z) * amount);
-            result.W = start.W + ((end.W - start.W) * amount);
-        }
-
-        /// <summary>
-        /// Performs a cubic interpolation between two vectors.
-        /// </summary>
-        /// <param name="start">Start vector.</param>
-        /// <param name="end">End vector.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-        /// <returns>The cubic interpolation of the two vectors.</returns>
-        public static Vector4 SmoothStep(Vector4 start, Vector4 end, float amount)
-        {
-            Vector4 result;
-            SmoothStep(ref start, ref end, amount, out result);
-            return result;
-        }
-
-        /// <summary>
         /// Transforms a 4D vector by the given <see cref="Quaternion"/> rotation.
         /// </summary>
         /// <param name="vector">The vector to rotate.</param>
@@ -817,6 +817,44 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Transforms an array of vectors by the given <see cref="Quaternion"/> rotation.
+        /// </summary>
+        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="rotation">The <see cref="Quaternion"/> rotation to apply.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
+        public static void Transform(Vector4[] vectors, ref Quaternion rotation)
+        {
+            if (vectors == null)
+                throw new ArgumentNullException("vectors");
+
+            float x = rotation.X + rotation.X;
+            float y = rotation.Y + rotation.Y;
+            float z = rotation.Z + rotation.Z;
+            float wx = rotation.W * x;
+            float wy = rotation.W * y;
+            float wz = rotation.W * z;
+            float xx = rotation.X * x;
+            float xy = rotation.X * y;
+            float xz = rotation.X * z;
+            float yy = rotation.Y * y;
+            float yz = rotation.Y * z;
+            float zz = rotation.Z * z;
+
+            for (int i = 0; i < vectors.Length; ++i)
+            {
+                /*
+                 * Note:
+                 * Factor common arithmetic out of loop.
+                */
+                vectors[i] = new Vector4(
+                    ((vectors[i].X * ((1.0f - yy) - zz)) + (vectors[i].Y * (xy - wz))) + (vectors[i].Z * (xz + wy)),
+                    ((vectors[i].X * (xy + wz)) + (vectors[i].Y * ((1.0f - xx) - zz))) + (vectors[i].Z * (yz - wx)),
+                    ((vectors[i].X * (xz - wy)) + (vectors[i].Y * (yz + wx))) + (vectors[i].Z * ((1.0f - xx) - yy)),
+                    vectors[i].W);
+            }
+        }
+
+        /// <summary>
         /// Transforms a 4D vector by the given <see cref="Matrix"/>.
         /// </summary>
         /// <param name="vector">The source vector.</param>
@@ -842,6 +880,27 @@ namespace SlimMath
             Vector4 result;
             Transform(ref vector, ref transform, out result);
             return result;
+        }
+
+        /// <summary>
+        /// Transforms an array of 4D vectors by the given <see cref="Matrix"/>.
+        /// </summary>
+        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
+        public static void Transform(Vector4[] vectors, ref Matrix transform)
+        {
+            if (vectors == null)
+                throw new ArgumentNullException("vectors");
+
+            for (int i = 0; i < vectors.Length; ++i)
+            {
+                vectors[i] = new Vector4(
+                    (vectors[i].X * transform.M11) + (vectors[i].Y * transform.M21) + (vectors[i].Z * transform.M31) + (vectors[i].W * transform.M41),
+                    (vectors[i].X * transform.M12) + (vectors[i].Y * transform.M22) + (vectors[i].Z * transform.M32) + (vectors[i].W * transform.M42),
+                    (vectors[i].X * transform.M13) + (vectors[i].Y * transform.M23) + (vectors[i].Z * transform.M33) + (vectors[i].W * transform.M43),
+                    (vectors[i].X * transform.M14) + (vectors[i].Y * transform.M24) + (vectors[i].Z * transform.M34) + (vectors[i].W * transform.M44));
+            }
         }
 
         /// <summary>
@@ -1027,7 +1086,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="Vector4"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="Vector4"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="Vector4"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Vector4 value)
         {
@@ -1039,7 +1098,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object value)
         {

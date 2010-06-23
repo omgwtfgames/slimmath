@@ -52,84 +52,126 @@ namespace SlimMath
         public static readonly Matrix Identity = new Matrix() { M11 = 1.0f, M22 = 1.0f, M33 = 1.0f, M44 = 1.0f };
 
         /// <summary>
-        /// Value at row 1 column 1 of the matrix. 
+        /// Value at row 1 column 1 of the matrix.
         /// </summary>
         public float M11;
 
         /// <summary>
-        /// Value at row 1 column 2 of the matrix. 
+        /// Value at row 1 column 2 of the matrix.
         /// </summary>
         public float M12;
 
         /// <summary>
-        /// Value at row 1 column 3 of the matrix. 
+        /// Value at row 1 column 3 of the matrix.
         /// </summary>
         public float M13;
 
         /// <summary>
-        /// Value at row 1 column 4 of the matrix. 
+        /// Value at row 1 column 4 of the matrix.
         /// </summary>
         public float M14;
 
         /// <summary>
-        /// Value at row 2 column 1 of the matrix. 
+        /// Value at row 2 column 1 of the matrix.
         /// </summary>
         public float M21;
 
         /// <summary>
-        /// Value at row 2 column 2 of the matrix. 
+        /// Value at row 2 column 2 of the matrix.
         /// </summary>
         public float M22;
 
         /// <summary>
-        /// Value at row 2 column 3 of the matrix. 
+        /// Value at row 2 column 3 of the matrix.
         /// </summary>
         public float M23;
 
         /// <summary>
-        /// Value at row 2 column 4 of the matrix. 
+        /// Value at row 2 column 4 of the matrix.
         /// </summary>
         public float M24;
 
         /// <summary>
-        /// Value at row 3 column 1 of the matrix. 
+        /// Value at row 3 column 1 of the matrix.
         /// </summary>
         public float M31;
 
         /// <summary>
-        /// Value at row 3 column 2 of the matrix. 
+        /// Value at row 3 column 2 of the matrix.
         /// </summary>
         public float M32;
 
         /// <summary>
-        /// Value at row 3 column 3 of the matrix. 
+        /// Value at row 3 column 3 of the matrix.
         /// </summary>
         public float M33;
 
         /// <summary>
-        /// Value at row 3 column 4 of the matrix. 
+        /// Value at row 3 column 4 of the matrix.
         /// </summary>
         public float M34;
 
         /// <summary>
-        /// Value at row 4 column 1 of the matrix. 
+        /// Value at row 4 column 1 of the matrix.
         /// </summary>
         public float M41;
 
         /// <summary>
-        /// Value at row 4 column 2 of the matrix. 
+        /// Value at row 4 column 2 of the matrix.
         /// </summary>
         public float M42;
 
         /// <summary>
-        /// Value at row 4 column 3 of the matrix. 
+        /// Value at row 4 column 3 of the matrix.
         /// </summary>
         public float M43;
 
         /// <summary>
-        /// Value at row 4 column 4 of the matrix. 
+        /// Value at row 4 column 4 of the matrix.
         /// </summary>
         public float M44;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// </summary>
+        /// <param name="value">The value that will be assigned to all components.</param>
+        public Matrix(float value)
+        {
+            M11 = M12 = M13 = M14 =
+            M21 = M22 = M23 = M24 =
+            M31 = M32 = M33 = M34 =
+            M41 = M42 = M43 = M44 = value;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// </summary>
+        /// <param name="M11">The value to assign at row 1 column 1 of the matrix.</param>
+        /// <param name="M12">The value to assign at row 1 column 2 of the matrix.</param>
+        /// <param name="M13">The value to assign at row 1 column 3 of the matrix.</param>
+        /// <param name="M14">The value to assign at row 1 column 4 of the matrix.</param>
+        /// <param name="M21">The value to assign at row 2 column 1 of the matrix.</param>
+        /// <param name="M22">The value to assign at row 2 column 2 of the matrix.</param>
+        /// <param name="M23">The value to assign at row 2 column 3 of the matrix.</param>
+        /// <param name="M24">The value to assign at row 2 column 4 of the matrix.</param>
+        /// <param name="M31">The value to assign at row 3 column 1 of the matrix.</param>
+        /// <param name="M32">The value to assign at row 3 column 2 of the matrix.</param>
+        /// <param name="M33">The value to assign at row 3 column 3 of the matrix.</param>
+        /// <param name="M34">The value to assign at row 3 column 4 of the matrix.</param>
+        /// <param name="M41">The value to assign at row 4 column 1 of the matrix.</param>
+        /// <param name="M42">The value to assign at row 4 column 2 of the matrix.</param>
+        /// <param name="M43">The value to assign at row 4 column 3 of the matrix.</param>
+        /// <param name="M44">The value to assign at row 4 column 4 of the matrix.</param>
+        public Matrix(float M11, float M12, float M13, float M14,
+            float M21, float M22, float M23, float M24,
+            float M31, float M32, float M33, float M34,
+            float M41, float M42, float M43, float M44)
+        {
+            this.M11 = M11; this.M12 = M12; this.M13 = M13; this.M14 = M14;
+            this.M21 = M21; this.M22 = M22; this.M23 = M23; this.M24 = M24;
+            this.M31 = M31; this.M32 = M32; this.M33 = M33; this.M34 = M34;
+            this.M41 = M41; this.M42 = M42; this.M43 = M43; this.M44 = M44;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Matrix"/> struct.
@@ -716,6 +758,13 @@ namespace SlimMath
             float d13 = matrix.M21 * -b4 + matrix.M22 * b2 + matrix.M24 * b0;
             float d14 = matrix.M21 * b3 + matrix.M22 * -b1 + matrix.M23 * b0;
 
+            float det = matrix.M11 * d11 - matrix.M12 * d12 + matrix.M13 * d13 - matrix.M14 * d14;
+            if (Math.Abs(det) <= Utilities.ZeroTolerance)
+            {
+                result = Matrix.Zero;
+                return;
+            }
+
             float d21 = matrix.M12 * b5 + matrix.M13 * b4 + matrix.M14 * b3;
             float d22 = matrix.M11 * b5 + matrix.M13 * b2 + matrix.M14 * b1;
             float d23 = matrix.M11 * -b4 + matrix.M12 * b2 + matrix.M14 * b0;
@@ -731,20 +780,10 @@ namespace SlimMath
             float d43 = matrix.M31 * -a4 + matrix.M32 * a2 + matrix.M34 * a0;
             float d44 = matrix.M31 * a3 + matrix.M32 * -a1 + matrix.M33 * a0;
 
-            float det = matrix.M11 * d11 - matrix.M12 * d12 + matrix.M13 * d13 - matrix.M14 * d14;
-
-            if (Math.Abs(det) <= Utilities.ZeroTolerance)
-            {
-                result = Matrix.Zero;
-            }
-            else
-            {
-                result = new Matrix();
-                result.M11 = +d11 * det; result.M12 = -d21 * det; result.M13 = +d31 * det; result.M14 = -d41 * det;
-                result.M21 = -d12 * det; result.M22 = +d22 * det; result.M23 = -d32 * det; result.M24 = +d42 * det;
-                result.M31 = +d13 * det; result.M32 = -d23 * det; result.M33 = +d33 * det; result.M34 = -d43 * det;
-                result.M41 = -d14 * det; result.M42 = +d24 * det; result.M43 = -d34 * det; result.M44 = +d44 * det;
-            }
+            result.M11 = +d11 * det; result.M12 = -d21 * det; result.M13 = +d31 * det; result.M14 = -d41 * det;
+            result.M21 = -d12 * det; result.M22 = +d22 * det; result.M23 = -d32 * det; result.M24 = +d42 * det;
+            result.M31 = +d13 * det; result.M32 = -d23 * det; result.M33 = +d33 * det; result.M34 = -d43 * det;
+            result.M41 = -d14 * det; result.M42 = +d24 * det; result.M43 = -d34 * det; result.M44 = +d44 * det;
         }
 
         /// <summary>
