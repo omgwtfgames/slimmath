@@ -1000,11 +1000,7 @@ namespace SlimMath
 
             for (int i = 0; i < vectors.Length; ++i)
             {
-                results[i] = new Vector4(
-                    (vectors[i].X * transform.M11) + (vectors[i].Y * transform.M21) + (vectors[i].Z * transform.M31) + transform.M41,
-                    (vectors[i].X * transform.M12) + (vectors[i].Y * transform.M22) + (vectors[i].Z * transform.M32) + transform.M42,
-                    (vectors[i].X * transform.M13) + (vectors[i].Y * transform.M23) + (vectors[i].Z * transform.M33) + transform.M43,
-                    (vectors[i].X * transform.M14) + (vectors[i].Y * transform.M24) + (vectors[i].Z * transform.M34) + transform.M44);
+                Transform(ref vectors[i], ref transform, out results[i]);
             }
 
             return results;
@@ -1022,7 +1018,7 @@ namespace SlimMath
             vector.X = (coordinate.X * transform.M11) + (coordinate.Y * transform.M21) + (coordinate.Z * transform.M31) + transform.M41;
             vector.Y = (coordinate.X * transform.M12) + (coordinate.Y * transform.M22) + (coordinate.Z * transform.M32) + transform.M42;
             vector.Z = (coordinate.X * transform.M13) + (coordinate.Y * transform.M23) + (coordinate.Z * transform.M33) + transform.M43;
-            vector.W = 1 / ((coordinate.X * transform.M14) + (coordinate.Y * transform.M24) + (coordinate.Z * transform.M34) + transform.M44);
+            vector.W = 1f / ((coordinate.X * transform.M14) + (coordinate.Y * transform.M24) + (coordinate.Z * transform.M34) + transform.M44);
 
             result = new Vector3(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W);
         }
@@ -1053,13 +1049,7 @@ namespace SlimMath
 
             for (int i = 0; i < coordinates.Length; ++i)
             {
-                Vector4 vector = new Vector4();
-                vector.X = (coordinates[i].X * transform.M11) + (coordinates[i].Y * transform.M21) + (coordinates[i].Z * transform.M31) + transform.M41;
-                vector.Y = (coordinates[i].X * transform.M12) + (coordinates[i].Y * transform.M22) + (coordinates[i].Z * transform.M32) + transform.M42;
-                vector.Z = (coordinates[i].X * transform.M13) + (coordinates[i].Y * transform.M23) + (coordinates[i].Z * transform.M33) + transform.M43;
-                vector.W = 1 / ((coordinates[i].X * transform.M14) + (coordinates[i].Y * transform.M24) + (coordinates[i].Z * transform.M34) + transform.M44);
-
-                coordinates[i] = new Vector3(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W);
+                TransformCoordinate(ref coordinates[i], ref transform, out coordinates[i]);
             }
         }
 
@@ -1103,10 +1093,7 @@ namespace SlimMath
 
             for (int i = 0; i < normals.Length; ++i)
             {
-                normals[i] = new Vector3(
-                    (normals[i].X * transform.M11) + (normals[i].Y * transform.M21) + (normals[i].Z * transform.M31),
-                    (normals[i].X * transform.M12) + (normals[i].Y * transform.M22) + (normals[i].Z * transform.M32),
-                    (normals[i].X * transform.M13) + (normals[i].Y * transform.M23) + (normals[i].Z * transform.M33));
+                TransformNormal(ref normals[i], ref transform, out normals[i]);
             }
         }
 

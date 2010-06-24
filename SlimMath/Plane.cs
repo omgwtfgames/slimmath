@@ -462,15 +462,7 @@ namespace SlimMath
 
             for (int i = 0; i < planes.Length; ++i)
             {
-                float x = planes[i].Normal.X;
-                float y = planes[i].Normal.Y;
-                float z = planes[i].Normal.Z;
-                float d = planes[i].D;
-
-                planes[i].Normal.X = (((x * transformation.M11) + (y * transformation.M12)) + (z * transformation.M13)) + (d * transformation.M14);
-                planes[i].Normal.Y = (((x * transformation.M21) + (y * transformation.M22)) + (z * transformation.M23)) + (d * transformation.M24);
-                planes[i].Normal.Z = (((x * transformation.M31) + (y * transformation.M32)) + (z * transformation.M33)) + (d * transformation.M34);
-                planes[i].D = (((x * transformation.M41) + (y * transformation.M42)) + (z * transformation.M43)) + (d * transformation.M44);
+                Transform(ref planes[i], ref transformation, out planes[i]);
             }
         }
 

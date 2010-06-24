@@ -27,11 +27,11 @@ using System.ComponentModel;
 namespace SlimMath
 {
     /// <summary>
-    /// Represents a color in the form of argb.
+    /// Represents a color in the form of rgb.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Color4 : IEquatable<Color4>, IFormattable
+    public struct Color3 : IEquatable<Color3>, IFormattable
     {
         /// <summary>
         /// The red component of the color.
@@ -49,121 +49,97 @@ namespace SlimMath
         public float Blue;
 
         /// <summary>
-        /// The alpha component of the color.
-        /// </summary>
-        public float Alpha;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="Color3"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
-        public Color4(float value)
+        public Color3(float value)
         {
-            Alpha = Red = Green = Blue = value;
+            Red = Green = Blue = value;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="Color3"/> struct.
         /// </summary>
-        /// <param name="alpha">The alpha component of the color.</param>
         /// <param name="red">The red component of the color.</param>
         /// <param name="green">The green component of the color.</param>
         /// <param name="blue">The blue component of the color.</param>
-        public Color4(float alpha, float red, float green, float blue)
+        public Color3(float red, float green, float blue)
         {
-            Alpha = alpha;
             Red = red;
             Green = green;
             Blue = blue;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="Color3"/> struct.
         /// </summary>
-        /// <param name="value">The red, green, blue, and alpha components of the color.</param>
-        public Color4(Vector4 value)
+        /// <param name="value">The red, green, and blue components of the color.</param>
+        public Color3(Vector3 value)
         {
             Red = value.X;
             Green = value.Y;
             Blue = value.Z;
-            Alpha = value.W;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="Color3"/> struct.
         /// </summary>
-        /// <param name="value">The red, green, and blue compoennts of the color.</param>
-        /// <param name="alpha">The alpha component of the color.</param>
-        public Color4(Vector3 value, float alpha)
+        /// <param name="rgb">A packed integer containing all three color components.
+        /// The alpha component is ignored.</param>
+        public Color3(int rgb)
         {
-            Red = value.X;
-            Green = value.Y;
-            Blue = value.Z;
-            Alpha = alpha;
+            Red = ((rgb >> 16) & 255) / 255.0f;
+            Green = ((rgb >> 8) & 255) / 255.0f;
+            Blue = (rgb & 255) / 255.0f;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="Color3"/> struct.
         /// </summary>
-        /// <param name="argb">A packed integer containing all four color components.</param>
-        public Color4(int argb)
-        {
-            Alpha = ((argb >> 24) & 255) / 255.0f;
-            Red = ((argb >> 16) & 255) / 255.0f;
-            Green = ((argb >> 8) & 255) / 255.0f;
-            Blue = (argb & 255) / 255.0f;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
-        /// </summary>
-        /// <param name="values">The values to assign to the alpha, red, green, and blue components of the color. This must be an array with four elements.</param>
+        /// <param name="values">The values to assign to the red, green, and blue components of the color. This must be an array with three elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> contains more or less than four elements.</exception>
-        public Color4(float[] values)
+        public Color3(float[] values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
-            if (values.Length != 4)
-                throw new ArgumentOutOfRangeException("values", "There must be four and only four input values for Color4.");
+            if (values.Length != 3)
+                throw new ArgumentOutOfRangeException("values", "There must be three and only three input values for Color3.");
 
-            Alpha = values[0];
-            Red = values[1];
-            Green = values[2];
-            Blue = values[3];
+            Red = values[0];
+            Green = values[1];
+            Blue = values[2];
         }
 
         /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
-        /// <value>The value of the alpha, red, green, or blue component, depending on the index.</value>
-        /// <param name="index">The index of the component to access. Use 0 for the alpha component, 1 for the red component, 2 for the green component, and 3 for the blue component.</param>
+        /// <value>The value of the red, green, or blue component, depending on the index.</value>
+        /// <param name="index">The index of the component to access. Use 0 for the red component, 1 for the green component, and 2 for the blue component.</param>
         /// <returns>The value of the component at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 3].</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="index"/> is out of the range [0, 2].</exception>
         public float this[int index]
         {
             get
             {
                 switch (index)
                 {
-                    case 0: return Alpha;
-                    case 1: return Red;
-                    case 2: return Green;
-                    case 3: return Blue;
+                    case 0: return Red;
+                    case 1: return Green;
+                    case 2: return Blue;
                 }
 
-                throw new ArgumentOutOfRangeException("index", "Indices for Color4 run from 0 to 3, inclusive.");
+                throw new ArgumentOutOfRangeException("index", "Indices for Color3 run from 0 to 2, inclusive.");
             }
 
             set
             {
                 switch (index)
                 {
-                    case 0: Alpha = value; break;
-                    case 1: Red = value; break;
-                    case 2: Green = value; break;
-                    case 3: Blue = value; break;
-                    default: throw new ArgumentOutOfRangeException("index", "Indices for Color4 run from 0 to 3, inclusive.");
+                    case 0: Red = value; break;
+                    case 1: Green = value; break;
+                    case 2: Blue = value; break;
+                    default: throw new ArgumentOutOfRangeException("index", "Indices for Color3 run from 0 to 2, inclusive.");
                 }
             }
         }
@@ -171,10 +147,11 @@ namespace SlimMath
         /// <summary>
         /// Converts the color into a packed integer.
         /// </summary>
-        /// <returns>A packed integer containing all four color components.</returns>
-        public int ToArgb()
+        /// <returns>A packed integer containing all three color components.
+        /// The alpha channel is set to 255.</returns>
+        public int ToRgb()
         {
-            uint a = (uint)(Alpha * 255.0f);
+            uint a = 255;
             uint r = (uint)(Red * 255.0f);
             uint g = (uint)(Green * 255.0f);
             uint b = (uint)(Blue * 255.0f);
@@ -197,21 +174,12 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Converts the color into a four component vector.
-        /// </summary>
-        /// <returns>A four component vector containing all four color components.</returns>
-        public Vector4 ToVector4()
-        {
-            return new Vector4(Red, Green, Blue, Alpha);
-        }
-
-        /// <summary>
         /// Creates an array containing the elements of the color.
         /// </summary>
-        /// <returns>A four-element array containing the components of the color.</returns>
+        /// <returns>A three-element array containing the components of the color.</returns>
         public float[] ToArray()
         {
-            return new float[] { Alpha, Red, Green, Blue };
+            return new float[] { Red, Green, Blue };
         }
 
         /// <summary>
@@ -220,9 +188,8 @@ namespace SlimMath
         /// <param name="left">The first color to add.</param>
         /// <param name="right">The second color to add.</param>
         /// <param name="result">When the method completes, completes the sum of the two colors.</param>
-        public static void Add(ref Color4 left, ref Color4 right, out Color4 result)
+        public static void Add(ref Color3 left, ref Color3 right, out Color3 result)
         {
-            result.Alpha = left.Alpha + right.Alpha;
             result.Red = left.Red + right.Red;
             result.Green = left.Green + right.Green;
             result.Blue = left.Blue + right.Blue;
@@ -234,9 +201,9 @@ namespace SlimMath
         /// <param name="left">The first color to add.</param>
         /// <param name="right">The second color to add.</param>
         /// <returns>The sum of the two colors.</returns>
-        public static Color4 Add(Color4 left, Color4 right)
+        public static Color3 Add(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha + right.Alpha, left.Red + right.Red, left.Green + right.Green, left.Blue + right.Blue);
+            return new Color3(left.Red + right.Red, left.Green + right.Green, left.Blue + right.Blue);
         }
 
         /// <summary>
@@ -245,9 +212,8 @@ namespace SlimMath
         /// <param name="left">The first color to subtract.</param>
         /// <param name="right">The second color to subtract.</param>
         /// <param name="result">WHen the method completes, contains the difference of the two colors.</param>
-        public static void Subtract(ref Color4 left, ref Color4 right, out Color4 result)
+        public static void Subtract(ref Color3 left, ref Color3 right, out Color3 result)
         {
-            result.Alpha = left.Alpha - right.Alpha;
             result.Red = left.Red - right.Red;
             result.Green = left.Green - right.Green;
             result.Blue = left.Blue - right.Blue;
@@ -259,9 +225,9 @@ namespace SlimMath
         /// <param name="left">The first color to subtract.</param>
         /// <param name="right">The second color to subtract</param>
         /// <returns>The difference of the two colors.</returns>
-        public static Color4 Subtract(Color4 left, Color4 right)
+        public static Color3 Subtract(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha - right.Alpha, left.Red - right.Red, left.Green - right.Green, left.Blue - right.Blue);
+            return new Color3(left.Red - right.Red, left.Green - right.Green, left.Blue - right.Blue);
         }
 
         /// <summary>
@@ -270,9 +236,8 @@ namespace SlimMath
         /// <param name="left">The first color to modulate.</param>
         /// <param name="right">The second color to modulate.</param>
         /// <param name="result">When the method completes, contains the modulated color.</param>
-        public static void Modulate(ref Color4 left, ref Color4 right, out Color4 result)
+        public static void Modulate(ref Color3 left, ref Color3 right, out Color3 result)
         {
-            result.Alpha = left.Alpha * right.Alpha;
             result.Red = left.Red * right.Red;
             result.Green = left.Green * right.Green;
             result.Blue = left.Blue * right.Blue;
@@ -284,9 +249,9 @@ namespace SlimMath
         /// <param name="left">The first color to modulate.</param>
         /// <param name="right">The second color to modulate.</param>
         /// <returns>The modulated color.</returns>
-        public static Color4 Modulate(Color4 left, Color4 right)
+        public static Color3 Modulate(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha * right.Alpha, left.Red * right.Red, left.Green * right.Green, left.Blue * right.Blue);
+            return new Color3(left.Red * right.Red, left.Green * right.Green, left.Blue * right.Blue);
         }
 
         /// <summary>
@@ -295,9 +260,8 @@ namespace SlimMath
         /// <param name="value">The color to scale.</param>
         /// <param name="scale">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled color.</param>
-        public static void Scale(ref Color4 value, float scale, out Color4 result)
+        public static void Scale(ref Color3 value, float scale, out Color3 result)
         {
-            result.Alpha = value.Alpha * scale;
             result.Red = value.Red * scale;
             result.Green = value.Green * scale;
             result.Blue = value.Blue * scale;
@@ -309,9 +273,9 @@ namespace SlimMath
         /// <param name="value">The color to scale.</param>
         /// <param name="scale">The amount by which to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color4 Scale(Color4 value, float scale)
+        public static Color3 Scale(Color3 value, float scale)
         {
-            return new Color4(value.Alpha * scale, value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
         }
 
         /// <summary>
@@ -319,9 +283,8 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The color to negate.</param>
         /// <param name="result">When the method completes, contains the negated color.</param>
-        public static void Negate(ref Color4 value, out Color4 result)
+        public static void Negate(ref Color3 value, out Color3 result)
         {
-            result.Alpha = 1.0f - value.Alpha;
             result.Red = 1.0f - value.Red;
             result.Green = 1.0f - value.Green;
             result.Blue = 1.0f - value.Blue;
@@ -332,9 +295,9 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The color to negate.</param>
         /// <returns>The negated color.</returns>
-        public static Color4 Negate(Color4 value)
+        public static Color3 Negate(Color3 value)
         {
-            return new Color4(1.0f - value.Alpha, 1.0f - value.Red, 1.0f - value.Green, 1.0f - value.Blue);
+            return new Color3(1.0f - value.Red, 1.0f - value.Green, 1.0f - value.Blue);
         }
 
         /// <summary>
@@ -344,12 +307,8 @@ namespace SlimMath
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="result">When the method completes, contains the clamped value.</param>
-        public static void Clamp(ref Color4 value, ref Color4 min, ref Color4 max, out Color4 result)
+        public static void Clamp(ref Color3 value, ref Color3 min, ref Color3 max, out Color3 result)
         {
-            float alpha = value.Alpha;
-            alpha = (alpha > max.Alpha) ? max.Alpha : alpha;
-            alpha = (alpha < min.Alpha) ? min.Alpha : alpha;
-
             float red = value.Red;
             red = (red > max.Red) ? max.Red : red;
             red = (red < min.Red) ? min.Red : red;
@@ -362,7 +321,7 @@ namespace SlimMath
             blue = (blue > max.Blue) ? max.Blue : blue;
             blue = (blue < min.Blue) ? min.Blue : blue;
 
-            result = new Color4(alpha, red, green, blue);
+            result = new Color3(red, green, blue);
         }
 
         /// <summary>
@@ -372,9 +331,9 @@ namespace SlimMath
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <returns>The clamped value.</returns>
-        public static Color4 Clamp(Color4 value, Color4 min, Color4 max)
+        public static Color3 Clamp(Color3 value, Color3 min, Color3 max)
         {
-            Color4 result;
+            Color3 result;
             Clamp(ref value, ref min, ref max, out result);
             return result;
         }
@@ -391,9 +350,8 @@ namespace SlimMath
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static void Lerp(ref Color4 start, ref Color4 end, float amount, out Color4 result)
+        public static void Lerp(ref Color3 start, ref Color3 end, float amount, out Color3 result)
         {
-            result.Alpha = start.Alpha + amount * (end.Alpha - start.Alpha);
             result.Red = start.Red + amount * (end.Red - start.Red);
             result.Green = start.Green + amount * (end.Green - start.Green);
             result.Blue = start.Blue + amount * (end.Blue - start.Blue);
@@ -411,10 +369,9 @@ namespace SlimMath
         /// <code>start + (end - start) * amount</code>
         /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
         /// </remarks>
-        public static Color4 Lerp(Color4 start, Color4 end, float amount)
+        public static Color3 Lerp(Color3 start, Color3 end, float amount)
         {
-            return new Color4(
-                start.Alpha + amount * (end.Alpha - start.Alpha),
+            return new Color3(
                 start.Red + amount * (end.Red - start.Red),
                 start.Green + amount * (end.Green - start.Green),
                 start.Blue + amount * (end.Blue - start.Blue));
@@ -427,12 +384,11 @@ namespace SlimMath
         /// <param name="end">End color.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <param name="result">When the method completes, contains the cubic interpolation of the two colors.</param>
-        public static void SmoothStep(ref Color4 start, ref Color4 end, float amount, out Color4 result)
+        public static void SmoothStep(ref Color3 start, ref Color3 end, float amount, out Color3 result)
         {
             amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
             amount = (amount * amount) * (3.0f - (2.0f * amount));
 
-            result.Alpha = start.Alpha + ((end.Alpha - start.Alpha) * amount);
             result.Red = start.Red + ((end.Red - start.Red) * amount);
             result.Green = start.Green + ((end.Green - start.Green) * amount);
             result.Blue = start.Blue + ((end.Blue - start.Blue) * amount);
@@ -445,13 +401,12 @@ namespace SlimMath
         /// <param name="end">End color.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
         /// <returns>The cubic interpolation of the two colors.</returns>
-        public static Color4 SmoothStep(Color4 start, Color4 end, float amount)
+        public static Color3 SmoothStep(Color3 start, Color3 end, float amount)
         {
             amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
             amount = (amount * amount) * (3.0f - (2.0f * amount));
 
-            return new Color4(
-                start.Alpha + ((end.Alpha - start.Alpha) * amount),
+            return new Color3(
                 start.Red + ((end.Red - start.Red) * amount),
                 start.Green + ((end.Green - start.Green) * amount),
                 start.Blue + ((end.Blue - start.Blue) * amount));
@@ -463,9 +418,8 @@ namespace SlimMath
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <param name="result">When the method completes, contains an new color composed of the largest components of the source colorss.</param>
-        public static void Max(ref Color4 left, ref Color4 right, out Color4 result)
+        public static void Max(ref Color3 left, ref Color3 right, out Color3 result)
         {
-            result.Alpha = (left.Alpha > right.Alpha) ? left.Alpha : right.Alpha;
             result.Red = (left.Red > right.Red) ? left.Red : right.Red;
             result.Green = (left.Green > right.Green) ? left.Green : right.Green;
             result.Blue = (left.Blue > right.Blue) ? left.Blue : right.Blue;
@@ -477,9 +431,9 @@ namespace SlimMath
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <returns>A color containing the largest components of the source colors.</returns>
-        public static Color4 Max(Color4 left, Color4 right)
+        public static Color3 Max(Color3 left, Color3 right)
         {
-            Color4 result;
+            Color3 result;
             Max(ref left, ref right, out result);
             return result;
         }
@@ -490,9 +444,8 @@ namespace SlimMath
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <param name="result">When the method completes, contains an new color composed of the smallest components of the source colors.</param>
-        public static void Min(ref Color4 left, ref Color4 right, out Color4 result)
+        public static void Min(ref Color3 left, ref Color3 right, out Color3 result)
         {
-            result.Alpha = (left.Alpha < right.Alpha) ? left.Alpha : right.Alpha;
             result.Red = (left.Red < right.Red) ? left.Red : right.Red;
             result.Green = (left.Green < right.Green) ? left.Green : right.Green;
             result.Blue = (left.Blue < right.Blue) ? left.Blue : right.Blue;
@@ -504,9 +457,9 @@ namespace SlimMath
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <returns>A color containing the smallest components of the source colors.</returns>
-        public static Color4 Min(Color4 left, Color4 right)
+        public static Color3 Min(Color3 left, Color3 right)
         {
-            Color4 result;
+            Color3 result;
             Min(ref left, ref right, out result);
             return result;
         }
@@ -517,9 +470,8 @@ namespace SlimMath
         /// <param name="value">The color whose contrast is to be adjusted.</param>
         /// <param name="contrast">The amount by which to adjust the contrast.</param>
         /// <param name="result">When the method completes, contains the adjusted color.</param>
-        public static void AdjustContrast(ref Color4 value, float contrast, out Color4 result)
+        public static void AdjustContrast(ref Color3 value, float contrast, out Color3 result)
         {
-            result.Alpha = value.Alpha;
             result.Red = 0.5f + contrast * (value.Red - 0.5f);
             result.Green = 0.5f + contrast * (value.Green - 0.5f);
             result.Blue = 0.5f + contrast * (value.Blue - 0.5f);
@@ -531,10 +483,9 @@ namespace SlimMath
         /// <param name="value">The color whose contrast is to be adjusted.</param>
         /// <param name="contrast">The amount by which to adjust the contrast.</param>
         /// <returns>The adjusted color.</returns>
-        public static Color4 AdjustContrast(Color4 value, float contrast)
+        public static Color3 AdjustContrast(Color3 value, float contrast)
         {
-            return new Color4(
-                value.Alpha,
+            return new Color3(
                 0.5f + contrast * (value.Red - 0.5f),
                 0.5f + contrast * (value.Green - 0.5f),
                 0.5f + contrast * (value.Blue - 0.5f));
@@ -546,11 +497,10 @@ namespace SlimMath
         /// <param name="value">The color whose saturation is to be adjusted.</param>
         /// <param name="saturation">The amount by which to adjust the saturation.</param>
         /// <param name="result">When the method completes, contains the adjusted color.</param>
-        public static void AdjustSaturation(ref Color4 value, float saturation, out Color4 result)
+        public static void AdjustSaturation(ref Color3 value, float saturation, out Color3 result)
         {
             float grey = value.Red * 0.2125f + value.Green * 0.7154f + value.Blue * 0.0721f;
 
-            result.Alpha = value.Alpha;
             result.Red = grey + saturation * (value.Red - grey);
             result.Green = grey + saturation * (value.Green - grey);
             result.Blue = grey + saturation * (value.Blue - grey);
@@ -562,12 +512,11 @@ namespace SlimMath
         /// <param name="value">The color whose saturation is to be adjusted.</param>
         /// <param name="saturation">The amount by which to adjust the saturation.</param>
         /// <returns>The adjusted color.</returns>
-        public static Color4 AdjustSaturation(Color4 value, float saturation)
+        public static Color3 AdjustSaturation(Color3 value, float saturation)
         {
             float grey = value.Red * 0.2125f + value.Green * 0.7154f + value.Blue * 0.0721f;
 
-            return new Color4(
-                value.Alpha,
+            return new Color3(
                 grey + saturation * (value.Red - grey),
                 grey + saturation * (value.Green - grey),
                 grey + saturation * (value.Blue - grey));
@@ -579,9 +528,9 @@ namespace SlimMath
         /// <param name="left">The first color to add.</param>
         /// <param name="right">The second color to add.</param>
         /// <returns>The sum of the two colors.</returns>
-        public static Color4 operator +(Color4 left, Color4 right)
+        public static Color3 operator +(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha + right.Alpha, left.Red + right.Red, left.Green + right.Green, left.Blue + right.Blue);
+            return new Color3(left.Red + right.Red, left.Green + right.Green, left.Blue + right.Blue);
         }
 
         /// <summary>
@@ -589,7 +538,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The color to assert (unchange).</param>
         /// <returns>The asserted (unchanged) color.</returns>
-        public static Color4 operator +(Color4 value)
+        public static Color3 operator +(Color3 value)
         {
             return value;
         }
@@ -600,9 +549,9 @@ namespace SlimMath
         /// <param name="left">The first color to subtract.</param>
         /// <param name="right">The second color to subtract.</param>
         /// <returns>The difference of the two colors.</returns>
-        public static Color4 operator -(Color4 left, Color4 right)
+        public static Color3 operator -(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha - right.Alpha, left.Red - right.Red, left.Green - right.Green, left.Blue - right.Blue);
+            return new Color3(left.Red - right.Red, left.Green - right.Green, left.Blue - right.Blue);
         }
 
         /// <summary>
@@ -610,9 +559,9 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The color to negate.</param>
         /// <returns>A negated color.</returns>
-        public static Color4 operator -(Color4 value)
+        public static Color3 operator -(Color3 value)
         {
-            return new Color4(-value.Alpha, -value.Red, -value.Green, -value.Blue);
+            return new Color3(-value.Red, -value.Green, -value.Blue);
         }
 
         /// <summary>
@@ -621,9 +570,9 @@ namespace SlimMath
         /// <param name="scale">The factor by which to scale the color.</param>
         /// <param name="value">The color to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color4 operator *(float scale, Color4 value)
+        public static Color3 operator *(float scale, Color3 value)
         {
-            return new Color4(value.Alpha * scale, value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
         }
 
         /// <summary>
@@ -632,9 +581,9 @@ namespace SlimMath
         /// <param name="value">The factor by which to scale the color.</param>
         /// <param name="scale">The color to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color4 operator *(Color4 value, float scale)
+        public static Color3 operator *(Color3 value, float scale)
         {
-            return new Color4(value.Alpha * scale, value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
         }
 
         /// <summary>
@@ -643,9 +592,9 @@ namespace SlimMath
         /// <param name="left">The first color to modulate.</param>
         /// <param name="right">The second color to modulate.</param>
         /// <returns>The modulated color.</returns>
-        public static Color4 operator *(Color4 left, Color4 right)
+        public static Color3 operator *(Color3 left, Color3 right)
         {
-            return new Color4(left.Alpha * right.Alpha, left.Red * right.Red, left.Green * right.Green, left.Blue * right.Blue);
+            return new Color3(left.Red * right.Red, left.Green * right.Green, left.Blue * right.Blue);
         }
 
         /// <summary>
@@ -654,7 +603,7 @@ namespace SlimMath
         /// <param name="left">The first value to compare.</param>
         /// <param name="right">The second value to compare.</param>
         /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
-        public static bool operator ==(Color4 left, Color4 right)
+        public static bool operator ==(Color3 left, Color3 right)
         {
             return left.Equals(right);
         }
@@ -665,69 +614,49 @@ namespace SlimMath
         /// <param name="left">The first value to compare.</param>
         /// <param name="right">The second value to compare.</param>
         /// <returns><c>true</c> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <c>false</c>.</returns>
-        public static bool operator !=(Color4 left, Color4 right)
+        public static bool operator !=(Color3 left, Color3 right)
         {
             return !left.Equals(right);
         }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="SlimMath.Color4"/> to <see cref="SlimMath.Color3"/>.
+        /// Performs an explicit conversion from <see cref="SlimMath.Color3"/> to <see cref="SlimMath.Color4"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator Color3(Color4 value)
+        public static explicit operator Color4(Color3 value)
         {
-            return new Color3(value.Red, value.Green, value.Blue);
+            return new Color4(1.0f, value.Red, value.Green, value.Blue);
         }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="SlimMath.Color4"/> to <see cref="SlimMath.Vector3"/>.
+        /// Performs an explicit conversion from <see cref="SlimMath.Color3"/> to <see cref="SlimMath.Vector3"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator Vector3(Color4 value)
+        public static explicit operator Vector3(Color3 value)
         {
             return new Vector3(value.Red, value.Green, value.Blue);
         }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="SlimMath.Color4"/> to <see cref="SlimMath.Vector4"/>.
+        /// Performs an explicit conversion from <see cref="SlimMath.Vector3"/> to <see cref="SlimMath.Color3"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator Vector4(Color4 value)
+        public static explicit operator Color3(Vector3 value)
         {
-            return new Vector4(value.Red, value.Green, value.Blue, value.Alpha);
+            return new Color3(value.X, value.Y, value.Z);
         }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="SlimMath.Vector3"/> to <see cref="SlimMath.Color4"/>.
+        /// Performs an explicit conversion from <see cref="System.Int32"/> to <see cref="SlimMath.Color3"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static explicit operator Color4(Vector3 value)
+        public static explicit operator Color3(int value)
         {
-            return new Color4(value.X, value.Y, value.Z, 1.0f);
-        }
-
-        /// <summary>
-        /// Performs an explicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="SlimMath.Color4"/>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static explicit operator Color4(Vector4 value)
-        {
-            return new Color4(value.X, value.Y, value.Z, value.W);
-        }
-
-        /// <summary>
-        /// Performs an explicit conversion from <see cref="System.Int32"/> to <see cref="SlimMath.Color4"/>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static explicit operator Color4(int value)
-        {
-            return new Color4(value);
+            return new Color3(value);
         }
 
         /// <summary>
@@ -738,7 +667,7 @@ namespace SlimMath
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "Alpha:{0} Red:{1} Green:{2} Blue:{3}", Alpha, Red, Green, Blue);
+            return string.Format(CultureInfo.CurrentCulture, "Red:{1} Green:{2} Blue:{3}", Red, Green, Blue);
         }
 
         /// <summary>
@@ -750,8 +679,8 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
-            return string.Format(CultureInfo.CurrentCulture, "Alpha:{0} Red:{1} Green:{2} Blue:{3}", Alpha.ToString(format, CultureInfo.CurrentCulture),
-                Red.ToString(format, CultureInfo.CurrentCulture), Green.ToString(format, CultureInfo.CurrentCulture), Blue.ToString(format, CultureInfo.CurrentCulture));
+            return string.Format(CultureInfo.CurrentCulture, "Red:{1} Green:{2} Blue:{3}", Red.ToString(format, CultureInfo.CurrentCulture),
+                Green.ToString(format, CultureInfo.CurrentCulture), Blue.ToString(format, CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -763,7 +692,7 @@ namespace SlimMath
         /// </returns>
         public string ToString(IFormatProvider formatProvider)
         {
-            return string.Format(formatProvider, "Alpha:{0} Red:{1} Green:{2} Blue:{3}", Alpha, Red, Green, Blue);
+            return string.Format(formatProvider, "Red:{1} Green:{2} Blue:{3}", Red, Green, Blue);
         }
 
         /// <summary>
@@ -776,8 +705,8 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return string.Format(formatProvider, "Alpha:{0} Red:{1} Green:{2} Blue:{3}", Alpha.ToString(format, formatProvider),
-                Red.ToString(format, formatProvider), Green.ToString(format, formatProvider), Blue.ToString(format, formatProvider));
+            return string.Format(formatProvider, "Red:{1} Green:{2} Blue:{3}",Red.ToString(format, formatProvider),
+                Green.ToString(format, formatProvider), Blue.ToString(format, formatProvider));
         }
 
         /// <summary>
@@ -788,19 +717,19 @@ namespace SlimMath
         /// </returns>
         public override int GetHashCode()
         {
-            return Alpha.GetHashCode() + Red.GetHashCode() + Green.GetHashCode() + Blue.GetHashCode();
+            return Red.GetHashCode() + Green.GetHashCode() + Blue.GetHashCode();
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Color4"/> is equal to this instance.
+        /// Determines whether the specified <see cref="Color3"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Color4"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="Color3"/> to compare with this instance.</param>
         /// <returns>
-        /// <c>true</c> if the specified <see cref="Color4"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="Color3"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Color4 value)
+        public bool Equals(Color3 value)
         {
-            return Alpha == value.Alpha && Red == value.Red && Green == value.Green && Blue == value.Blue;
+            return Red == value.Red && Green == value.Green && Blue == value.Blue;
         }
 
         /// <summary>
@@ -818,28 +747,28 @@ namespace SlimMath
             if (value.GetType() != GetType())
                 return false;
 
-            return Equals((Color4)value);
+            return Equals((Color3)value);
         }
 
 #if SlimDX1xInterop
         /// <summary>
-        /// Performs an implicit conversion from <see cref="SlimMath.Color4"/> to <see cref="SlimDX.Color4"/>.
+        /// Performs an implicit conversion from <see cref="SlimMath.Color3"/> to <see cref="SlimDX.Color3"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator SlimDX.Color4(Color4 value)
+        public static implicit operator SlimDX.Color3(Color3 value)
         {
-            return new SlimDX.Color4(value.X, value.Y, value.Z, value.W);
+            return new SlimDX.Color3(value.X, value.Y, value.Z, value.W);
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="SlimDX.Color4"/> to <see cref="SlimMath.Color4"/>.
+        /// Performs an implicit conversion from <see cref="SlimDX.Color3"/> to <see cref="SlimMath.Color3"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Color4(SlimDX.Color4 value)
+        public static implicit operator Color3(SlimDX.Color3 value)
         {
-            return new Color4(value.X, value.Y, value.Z, value.W);
+            return new Color3(value.X, value.Y, value.Z, value.W);
         }
 #endif
     }

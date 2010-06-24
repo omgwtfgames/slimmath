@@ -895,11 +895,7 @@ namespace SlimMath
 
             for (int i = 0; i < vectors.Length; ++i)
             {
-                vectors[i] = new Vector4(
-                    (vectors[i].X * transform.M11) + (vectors[i].Y * transform.M21) + (vectors[i].Z * transform.M31) + (vectors[i].W * transform.M41),
-                    (vectors[i].X * transform.M12) + (vectors[i].Y * transform.M22) + (vectors[i].Z * transform.M32) + (vectors[i].W * transform.M42),
-                    (vectors[i].X * transform.M13) + (vectors[i].Y * transform.M23) + (vectors[i].Z * transform.M33) + (vectors[i].W * transform.M43),
-                    (vectors[i].X * transform.M14) + (vectors[i].Y * transform.M24) + (vectors[i].Z * transform.M34) + (vectors[i].W * transform.M44));
+                Transform(ref vectors[i], ref transform, out vectors[i]);
             }
         }
 

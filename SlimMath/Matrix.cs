@@ -343,12 +343,21 @@ namespace SlimMath
             return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
         }
 
-
-
-        //public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
-        //{
-        //}
-
+        /*
+        /// <summary>
+        /// Decomposes a matrix into a scale, rotation, and translation.
+        /// </summary>
+        /// <param name="scale">The scaling component of the decomposed matrix.</param>
+        /// <param name="rotation">The rotation component of the decomposed matrix.</param>
+        /// <param name="translation">The translation component of the decomposed matrix.</param>
+        /// <returns>Returns whether the decomposition was successful or now.</returns>
+        public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
+        {
+            translation.X = this.M41;
+            translation.Y = this.M42;
+            translation.Z = this.M43;
+        }
+        */
 
         /// <summary>
         /// Determines the sum of two matrices.
@@ -672,6 +681,50 @@ namespace SlimMath
         {
             Matrix result;
             Lerp(ref start, ref end, amount, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Performs a cubic interpolation between two matricies.
+        /// </summary>
+        /// <param name="start">Start matrix.</param>
+        /// <param name="end">End matrix.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <param name="result">When the method completes, contains the cubic interpolation of the two matrices.</param>
+        public static void SmoothStep(ref Matrix start, ref Matrix end, float amount, out Matrix result)
+        {
+            amount = (amount > 1.0f) ? 1.0f : ((amount < 0.0f) ? 0.0f : amount);
+            amount = (amount * amount) * (3.0f - (2.0f * amount));
+
+            result.M11 = start.M11 + ((end.M11 - start.M11) * amount);
+            result.M12 = start.M12 + ((end.M12 - start.M12) * amount);
+            result.M13 = start.M13 + ((end.M13 - start.M13) * amount);
+            result.M14 = start.M14 + ((end.M14 - start.M14) * amount);
+            result.M21 = start.M21 + ((end.M21 - start.M21) * amount);
+            result.M22 = start.M22 + ((end.M22 - start.M22) * amount);
+            result.M23 = start.M23 + ((end.M23 - start.M23) * amount);
+            result.M24 = start.M24 + ((end.M24 - start.M24) * amount);
+            result.M31 = start.M31 + ((end.M31 - start.M31) * amount);
+            result.M32 = start.M32 + ((end.M32 - start.M32) * amount);
+            result.M33 = start.M33 + ((end.M33 - start.M33) * amount);
+            result.M34 = start.M34 + ((end.M34 - start.M34) * amount);
+            result.M41 = start.M41 + ((end.M41 - start.M41) * amount);
+            result.M42 = start.M42 + ((end.M42 - start.M42) * amount);
+            result.M43 = start.M43 + ((end.M43 - start.M43) * amount);
+            result.M44 = start.M44 + ((end.M44 - start.M44) * amount);
+        }
+
+        /// <summary>
+        /// Performs a cubic interpolation between two matrices.
+        /// </summary>
+        /// <param name="start">Start matrix.</param>
+        /// <param name="end">End matrix.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+        /// <returns>The cubic interpolation of the two matrices.</returns>
+        public static Matrix SmoothStep(Matrix start, Matrix end, float amount)
+        {
+            Matrix result;
+            SmoothStep(ref start, ref end, amount, out result);
             return result;
         }
 
@@ -1629,23 +1682,25 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the transpose of the specified matrix.</param>
         public static void Transpose(ref Matrix matrix, out Matrix result)
         {
-            result = new Matrix();
-            result.M11 = matrix.M11;
-            result.M12 = matrix.M21;
-            result.M13 = matrix.M31;
-            result.M14 = matrix.M41;
-            result.M21 = matrix.M12;
-            result.M22 = matrix.M22;
-            result.M23 = matrix.M32;
-            result.M24 = matrix.M42;
-            result.M31 = matrix.M13;
-            result.M32 = matrix.M23;
-            result.M33 = matrix.M33;
-            result.M34 = matrix.M43;
-            result.M41 = matrix.M14;
-            result.M42 = matrix.M24;
-            result.M43 = matrix.M34;
-            result.M44 = matrix.M44;
+            Matrix temp = new Matrix();
+            temp.M11 = matrix.M11;
+            temp.M12 = matrix.M21;
+            temp.M13 = matrix.M31;
+            temp.M14 = matrix.M41;
+            temp.M21 = matrix.M12;
+            temp.M22 = matrix.M22;
+            temp.M23 = matrix.M32;
+            temp.M24 = matrix.M42;
+            temp.M31 = matrix.M13;
+            temp.M32 = matrix.M23;
+            temp.M33 = matrix.M33;
+            temp.M34 = matrix.M43;
+            temp.M41 = matrix.M14;
+            temp.M42 = matrix.M24;
+            temp.M43 = matrix.M34;
+            temp.M44 = matrix.M44;
+
+            result = temp;
         }
 
         /// <summary>

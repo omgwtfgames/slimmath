@@ -582,8 +582,7 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the conjugated and renormalized quaternion.</param>
         public static void Invert(ref Quaternion quaternion, out Quaternion result)
         {
-            Quaternion temp = quaternion;
-            result = temp;
+            result = quaternion;
             result.Invert();
         }
 
@@ -670,7 +669,9 @@ namespace SlimMath
                 result.Z = quaternion.Z * coeff;
             }
             else
+            {
                 result = quaternion;
+            }
 
             result.W = 0.0f;
         }
