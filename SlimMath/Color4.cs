@@ -54,7 +54,7 @@ namespace SlimMath
         public float Alpha;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
         public Color4(float value)
@@ -63,7 +63,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="alpha">The alpha component of the color.</param>
         /// <param name="red">The red component of the color.</param>
@@ -78,7 +78,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="value">The red, green, blue, and alpha components of the color.</param>
         public Color4(Vector4 value)
@@ -90,7 +90,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="value">The red, green, and blue compoennts of the color.</param>
         /// <param name="alpha">The alpha component of the color.</param>
@@ -103,7 +103,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="argb">A packed integer containing all four color components.</param>
         public Color4(int argb)
@@ -115,7 +115,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color4"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color4"/> struct.
         /// </summary>
         /// <param name="values">The values to assign to the alpha, red, green, and blue components of the color. This must be an array with four elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
@@ -792,11 +792,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Color4"/> is equal to this instance.
+        /// Determines whether the specified <see cref="SlimMath.Color4"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Color4"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="SlimMath.Color4"/> to compare with this instance.</param>
         /// <returns>
-        /// <c>true</c> if the specified <see cref="Color4"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="SlimMath.Color4"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Color4 value)
         {
@@ -829,7 +829,7 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator SlimDX.Color4(Color4 value)
         {
-            return new SlimDX.Color4(value.X, value.Y, value.Z, value.W);
+            return new SlimDX.Color4(value.Alpha, value.Red, value.Green, value.Blue);
         }
 
         /// <summary>
@@ -839,7 +839,7 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Color4(SlimDX.Color4 value)
         {
-            return new Color4(value.X, value.Y, value.Z, value.W);
+            return new Color4(value.Alpha, value.Red, value.Green, value.Blue);
         }
 #endif
     }

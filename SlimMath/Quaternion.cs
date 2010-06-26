@@ -37,22 +37,22 @@ namespace SlimMath
     public struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
         /// <summary>
-        /// The size of the <see cref="Quaternion"/> type, in bytes.
+        /// The size of the <see cref="SlimMath.Quaternion"/> type, in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Quaternion));
 
         /// <summary>
-        /// A <see cref="Quaternion"/> with all of its components set to zero.
+        /// A <see cref="SlimMath.Quaternion"/> with all of its components set to zero.
         /// </summary>
         public static readonly Quaternion Zero = new Quaternion();
 
         /// <summary>
-        /// A <see cref="Quaternion"/> with all of its components set to one.
+        /// A <see cref="SlimMath.Quaternion"/> with all of its components set to one.
         /// </summary>
         public static readonly Quaternion One = new Quaternion(1.0f, 1.0f, 1.0f, 1.0f);
 
         /// <summary>
-        /// The identity <see cref="Quaternion"/> (0, 0, 0, 1).
+        /// The identity <see cref="SlimMath.Quaternion"/> (0, 0, 0, 1).
         /// </summary>
         public static readonly Quaternion Identity = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -77,7 +77,7 @@ namespace SlimMath
         public float W;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
         public Quaternion(float value)
@@ -89,7 +89,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the components.</param>
         public Quaternion(Vector4 value)
@@ -101,7 +101,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the X, Y, and Z components.</param>
         /// <param name="w">Initial value for the W component of the quaternion.</param>
@@ -114,7 +114,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="value">A vector containing the values with which to initialize the X and Y components.</param>
         /// <param name="z">Initial value for the Z component of the quaternion.</param>
@@ -128,7 +128,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="x">Initial value for the X component of the quaternion.</param>
         /// <param name="y">Initial value for the Y component of the quaternion.</param>
@@ -143,7 +143,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Quaternion"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Quaternion"/> struct.
         /// </summary>
         /// <param name="values">The values to assign to the X, Y, Z, and W components of the quaternion. This must be an array with four elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
@@ -272,7 +272,7 @@ namespace SlimMath
         /// </summary>
         /// <returns>The length of the quaternion.</returns>
         /// <remarks>
-        /// <see cref="Quaternion.LengthSquared"/> may be preferred when only the relative length is needed
+        /// <see cref="SlimMath.Quaternion.LengthSquared"/> may be preferred when only the relative length is needed
         /// and speed is of the essence.
         /// </remarks>
         public float Length()
@@ -285,7 +285,7 @@ namespace SlimMath
         /// </summary>
         /// <returns>The squared length of the quaternion.</returns>
         /// <remarks>
-        /// This method may be preferred to <see cref="Quaternion.Length"/> when only a relative length is needed
+        /// This method may be preferred to <see cref="SlimMath.Quaternion.Length"/> when only a relative length is needed
         /// and speed is of the essence.
         /// </remarks>
         public float LengthSquared()
@@ -461,14 +461,14 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Returns a <see cref="Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
+        /// Returns a <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="source1">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="source2">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="source3">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="source1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="source2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="source3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
         /// <param name="weight1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="source2"/>).</param>
         /// <param name="weight2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="source3"/>).</param>
-        /// <param name="result">When the method completes, contains a new <see cref="Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</param>
+        /// <param name="result">When the method completes, contains a new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</param>
         public static void Barycentric(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, float weight1, float weight2, out Quaternion result)
         {
             Quaternion start, end;
@@ -478,14 +478,14 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Returns a <see cref="Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
+        /// Returns a <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="source1">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="source2">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="source3">A <see cref="Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="source1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="source2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="source3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
         /// <param name="weight1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="source2"/>).</param>
         /// <param name="weight2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="source3"/>).</param>
-        /// <returns>A new <see cref="Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</returns>
+        /// <returns>A new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</returns>
         public static Quaternion Barycentric(Quaternion source1, Quaternion source2, Quaternion source3, float weight1, float weight2)
         {
             Quaternion result;
@@ -1118,11 +1118,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Quaternion"/> is equal to this instance.
+        /// Determines whether the specified <see cref="SlimMath.Quaternion"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Quaternion"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="SlimMath.Quaternion"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="Quaternion"/> is equal to this instance; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the specified <see cref="SlimMath.Quaternion"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Quaternion value)
         {

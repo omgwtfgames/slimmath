@@ -37,17 +37,17 @@ namespace SlimMath
     public struct Matrix : IEquatable<Matrix>, IFormattable
     {
         /// <summary>
-        /// The size of the <see cref="Matrix"/> type, in bytes.
+        /// The size of the <see cref="SlimMath.Matrix"/> type, in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Matrix));
 
         /// <summary>
-        /// A <see cref="Matrix"/> with all of its components set to zero.
+        /// A <see cref="SlimMath.Matrix"/> with all of its components set to zero.
         /// </summary>
         public static readonly Matrix Zero = new Matrix();
 
         /// <summary>
-        /// The identity <see cref="Matrix"/>.
+        /// The identity <see cref="SlimMath.Matrix"/>.
         /// </summary>
         public static readonly Matrix Identity = new Matrix() { M11 = 1.0f, M22 = 1.0f, M33 = 1.0f, M44 = 1.0f };
 
@@ -132,7 +132,7 @@ namespace SlimMath
         public float M44;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Matrix"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
         public Matrix(float value)
@@ -144,7 +144,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Matrix"/> struct.
         /// </summary>
         /// <param name="M11">The value to assign at row 1 column 1 of the matrix.</param>
         /// <param name="M12">The value to assign at row 1 column 2 of the matrix.</param>
@@ -174,7 +174,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Matrix"/> struct.
         /// </summary>
         /// <param name="values">The values to assign to the components of the matrix. This must be an array with sixteen elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
@@ -2052,11 +2052,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Matrix"/> is equal to this instance.
+        /// Determines whether the specified <see cref="SlimMath.Matrix"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Matrix"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="SlimMath.Matrix"/> to compare with this instance.</param>
         /// <returns>
-        /// <c>true</c> if the specified <see cref="Matrix"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="SlimMath.Matrix"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Matrix value)
         {

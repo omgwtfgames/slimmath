@@ -35,27 +35,27 @@ namespace SlimMath
     public struct Vector2 : IEquatable<Vector2>, IFormattable
     {
         /// <summary>
-        /// The size of the <see cref="Vector2"/> type, in bytes.
+        /// The size of the <see cref="SlimMath.Vector2"/> type, in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Vector2));
 
         /// <summary>
-        /// A <see cref="Vector2"/> with all of its components set to zero.
+        /// A <see cref="SlimMath.Vector2"/> with all of its components set to zero.
         /// </summary>
         public static readonly Vector2 Zero = new Vector2();
 
         /// <summary>
-        /// The X unit <see cref="Vector2"/> (1, 0).
+        /// The X unit <see cref="SlimMath.Vector2"/> (1, 0).
         /// </summary>
         public static readonly Vector2 UnitX = new Vector2(1.0f, 0.0f);
 
         /// <summary>
-        /// The Y unit <see cref="Vector2"/> (0, 1).
+        /// The Y unit <see cref="SlimMath.Vector2"/> (0, 1).
         /// </summary>
         public static readonly Vector2 UnitY = new Vector2(0.0f, 1.0f);
 
         /// <summary>
-        /// A <see cref="Vector2"/> with all of its components set to one.
+        /// A <see cref="SlimMath.Vector2"/> with all of its components set to one.
         /// </summary>
         public static readonly Vector2 One = new Vector2(1.0f, 1.0f);
 
@@ -70,7 +70,7 @@ namespace SlimMath
         public float Y;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Vector2"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
         public Vector2(float value)
@@ -80,7 +80,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Vector2"/> struct.
         /// </summary>
         /// <param name="x">Initial value for the X component of the vector.</param>
         /// <param name="y">Initial value for the Y component of the vector.</param>
@@ -91,7 +91,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Vector2"/> struct.
         /// </summary>
         /// <param name="values">The values to assign to the X and Y components of the vector. This must be an array with two elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
@@ -143,7 +143,7 @@ namespace SlimMath
         /// </summary>
         /// <returns>The length of the vector.</returns>
         /// <remarks>
-        /// <see cref="Vector2.LengthSquared"/> may be preferred when only the relative length is needed
+        /// <see cref="SlimMath.Vector2.LengthSquared"/> may be preferred when only the relative length is needed
         /// and speed is of the essence.
         /// </remarks>
         public float Length()
@@ -156,7 +156,7 @@ namespace SlimMath
         /// </summary>
         /// <returns>The squared length of the vector.</returns>
         /// <remarks>
-        /// This method may be preferred to <see cref="Vector2.Length"/> when only a relative length is needed
+        /// This method may be preferred to <see cref="SlimMath.Vector2.Length"/> when only a relative length is needed
         /// and speed is of the essence.
         /// </remarks>
         public float LengthSquared()
@@ -318,11 +318,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Returns a <see cref="Vector2"/> containing the 2D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
+        /// Returns a <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="value1">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="value2">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="value3">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="value1">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="value2">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="value3">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 3 of the triangle.</param>
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <param name="result">When the method completes, contains the 2D Cartesian coordinates of the specified point.</param>
@@ -333,14 +333,14 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Returns a <see cref="Vector2"/> containing the 2D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
+        /// Returns a <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="value1">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="value2">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="value3">A <see cref="Vector2"/> containing the 2D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="value1">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="value2">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="value3">A <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of vertex 3 of the triangle.</param>
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
-        /// <returns>A new <see cref="Vector2"/> containing the 2D Cartesian coordinates of the specified point.</returns>
+        /// <returns>A new <see cref="SlimMath.Vector2"/> containing the 2D Cartesian coordinates of the specified point.</returns>
         public static Vector2 Barycentric(Vector2 value1, Vector2 value2, Vector2 value3, float amount1, float amount2)
         {
             Vector2 result;
@@ -389,7 +389,7 @@ namespace SlimMath
         /// <param name="value2">The second vector.</param>
         /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
         /// <remarks>
-        /// <see cref="Vector2.DistanceSquared(ref Vector2, ref Vector2, out float)"/> may be preferred when only the relative distance is needed
+        /// <see cref="SlimMath.Vector2.DistanceSquared(ref Vector2, ref Vector2, out float)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
         public static void Distance(ref Vector2 value1, ref Vector2 value2, out float result)
@@ -404,7 +404,7 @@ namespace SlimMath
         /// <param name="value2">The second vector.</param>
         /// <returns>The distance between the two vectors.</returns>
         /// <remarks>
-        /// <see cref="Vector2.DistanceSquared(Vector2, Vector2)"/> may be preferred when only the relative distance is needed
+        /// <see cref="SlimMath.Vector2.DistanceSquared(Vector2, Vector2)"/> may be preferred when only the relative distance is needed
         /// and speed is of the essence.
         /// </remarks>
         public static float Distance(Vector2 value1, Vector2 value2)
@@ -724,11 +724,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms a 2D vector by the given <see cref="Quaternion"/> rotation.
+        /// Transforms a 2D vector by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
         /// <param name="vector">The vector to rotate.</param>
-        /// <param name="rotation">The <see cref="Quaternion"/> rotation to apply.</param>
-        /// <param name="result">When the method completes, contains the transformed <see cref="Vector4"/>.</param>
+        /// <param name="rotation">The <see cref="SlimMath.Quaternion"/> rotation to apply.</param>
+        /// <param name="result">When the method completes, contains the transformed <see cref="SlimMath.Vector4"/>.</param>
         public static void Transform(ref Vector2 vector, ref Quaternion rotation, out Vector2 result)
         {
             float x = rotation.X + rotation.X;
@@ -748,11 +748,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms a 2D vector by the given <see cref="Quaternion"/> rotation.
+        /// Transforms a 2D vector by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
         /// <param name="vector">The vector to rotate.</param>
-        /// <param name="rotation">The <see cref="Quaternion"/> rotation to apply.</param>
-        /// <returns>The transformed <see cref="Vector4"/>.</returns>
+        /// <param name="rotation">The <see cref="SlimMath.Quaternion"/> rotation to apply.</param>
+        /// <returns>The transformed <see cref="SlimMath.Vector4"/>.</returns>
         public static Vector2 Transform(Vector2 vector, Quaternion rotation)
         {
             Vector2 result;
@@ -761,10 +761,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms an array of vectors by the given <see cref="Quaternion"/> rotation.
+        /// Transforms an array of vectors by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
         /// <param name="vectors">The array of vectors to transform.</param>
-        /// <param name="rotation">The <see cref="Quaternion"/> rotation to apply.</param>
+        /// <param name="rotation">The <see cref="SlimMath.Quaternion"/> rotation to apply.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
         public static void Transform(Vector2[] vectors, ref Quaternion rotation)
         {
@@ -795,11 +795,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms a 2D vector by the given <see cref="Matrix"/>.
+        /// Transforms a 2D vector by the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="vector">The source vector.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
-        /// <param name="result">When the method completes, contains the transformed <see cref="Vector4"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
+        /// <param name="result">When the method completes, contains the transformed <see cref="SlimMath.Vector4"/>.</param>
         public static void Transform(ref Vector2 vector, ref Matrix transform, out Vector4 result)
         {
             result = new Vector4(
@@ -810,11 +810,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms a 2D vector by the given <see cref="Matrix"/>.
+        /// Transforms a 2D vector by the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="vector">The source vector.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
-        /// <returns>The transformed <see cref="Vector4"/>.</returns>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
+        /// <returns>The transformed <see cref="SlimMath.Vector4"/>.</returns>
         public static Vector4 Transform(Vector2 vector, Matrix transform)
         {
             Vector4 result;
@@ -823,11 +823,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Transforms an array of 2D vectors by the given <see cref="Matrix"/>.
+        /// Transforms an array of 2D vectors by the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="vectors">The array of vectors to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
-        /// <returns>The array of transformed <see cref="Vector4"/>.</returns>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
+        /// <returns>The array of transformed <see cref="SlimMath.Vector4"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
         public static Vector4[] Transform(Vector2[] vectors, ref Matrix transform)
         {
@@ -845,10 +845,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a coordinate transformation using the given <see cref="Matrix"/>.
+        /// Performs a coordinate transformation using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="coordinate">The coordinate vector to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <param name="result">When the method completes, contains the transformed coordinates.</param>
         public static void TransformCoordinate(ref Vector2 coordinate, ref Matrix transform, out Vector2 result)
         {
@@ -862,10 +862,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a coordinate transformation using the given <see cref="Matrix"/>.
+        /// Performs a coordinate transformation using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="coordinate">The coordinate vector to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <returns>The transformed coordinates.</returns>
         public static Vector2 TransformCoordinate(Vector2 coordinate, Matrix transform)
         {
@@ -875,10 +875,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a coordinate transformation on an array of vectors using the given <see cref="Matrix"/>.
+        /// Performs a coordinate transformation on an array of vectors using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="coordinates">The array of coordinate vectors to trasnform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="coordinates"/> is <c>null</c>.</exception>
         public static void TransformCoordinate(Vector2[] coordinates, ref Matrix transform)
         {
@@ -892,10 +892,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a normal transformation using the given <see cref="Matrix"/>.
+        /// Performs a normal transformation using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="normal">The normal vector to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <param name="result">When the method completes, contains the transformed normal.</param>
         public static void TransformNormal(ref Vector2 normal, ref Matrix transform, out Vector2 result)
         {
@@ -905,10 +905,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a normal transformation using the given <see cref="Matrix"/>.
+        /// Performs a normal transformation using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="normal">The normal vector to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <returns>The transformed normal.</returns>
         public static Vector2 TransformNormal(Vector2 normal, Matrix transform)
         {
@@ -918,10 +918,10 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Performs a normal transformation on an array of vectors using the given <see cref="Matrix"/>.
+        /// Performs a normal transformation on an array of vectors using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
         /// <param name="normals">The array of normal vectors to transform.</param>
-        /// <param name="transform">The transformation <see cref="Matrix"/>.</param>
+        /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="normals"/> is <c>null</c>.</exception>
         public static void TransformNormal(Vector2[] normals, ref Matrix transform)
         {
@@ -1111,11 +1111,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Vector2"/> is equal to this instance.
+        /// Determines whether the specified <see cref="SlimMath.Vector2"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Vector2"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="SlimMath.Vector2"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="Vector2"/> is equal to this instance; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the specified <see cref="SlimMath.Vector2"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Vector2 value)
         {

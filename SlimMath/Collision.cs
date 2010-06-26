@@ -28,20 +28,22 @@ namespace SlimMath
 {
     /*
      * This class is organized so that the least complex objects come first so that the least
-     * complex objects will have the most methods in most cases. The order of complexity is
-     * as follows (note that not all shapes exist at this time and not all shapes have a
-     * corresponding struct):
+     * complex objects will have the most methods in most cases. Note that not all shapes exist
+     * at this time and not all shapes have a corresponding struct. Only the objects that have
+     * a corresponding struct should come first in naming and in parameter order. The order of
+     * complexity is as follows:
      * 
-     * 1. Ray
-     * 2. Segment
-     * 3. Plane
-     * 4. Triangle
-     * 5. Box
-     * 6. Sphere
-     * 7. Ellipsoid
-     * 8. Cone
-     * 9. Cylinder
-     * 10. Frustum
+     * 1. Point
+     * 2. Ray
+     * 3. Segment
+     * 4. Plane
+     * 5. Triangle
+     * 6. Box
+     * 7. Sphere
+     * 8. Ellipsoid
+     * 9. Cone
+     * 10. Cylinder
+     * 11. Frustum
     */
 
     /// <summary>
@@ -408,6 +410,388 @@ namespace SlimMath
 
             point = ray.Position + (ray.Direction * distance);
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Plane"/> and a <see cref="SlimMath.Plane"/>.
+        /// </summary>
+        /// <param name="plane1">The first plane to test.</param>
+        /// <param name="plane2">The second plane to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static bool PlaneIntersectsPlane(ref Plane plane1, ref Plane plane2)
+        {
+            Vector3 direction;
+            Vector3.Cross(ref plane1.Normal, ref plane2.Normal, out direction);
+
+            //If direction is the zero vector, the planes are parallel and possibly
+            //coincident. It is not an intersection. The dot product will tell us.
+            float denominator;
+            Vector3.Dot(ref direction, ref direction, out denominator);
+
+            if (Math.Abs(denominator) < Utilities.ZeroTolerance)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Plane"/> and a <see cref="SlimMath.Plane"/>.
+        /// </summary>
+        /// <param name="plane1">The first plane to test.</param>
+        /// <param name="plane2">The second plane to test.</param>
+        /// <param name="line">When the method completes, contains the line of intersection
+        /// as a <see cref="SlimMath.Ray"/>, or a zero ray if there was no intersection.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static bool PlaneIntersectsPlane(ref Plane plane1, ref Plane plane2, out Ray line)
+        {
+            Vector3 direction;
+            Vector3.Cross(ref plane1.Normal, ref plane2.Normal, out direction);
+
+            //If direction is the zero vector, the planes are parallel and possibly
+            //coincident. It is not an intersection. The dot product will tell us.
+            float denominator;
+            Vector3.Dot(ref direction, ref direction, out denominator);
+
+            //We assume the planes are normalized, therefore the denominator
+            //only serves as a parallel and coincident check. Otherwise we need
+            //to deivide the point by the denominator.
+            if (Math.Abs(denominator) < Utilities.ZeroTolerance)
+            {
+                line = new Ray();
+                return false;
+            }
+
+            Vector3 point;
+            Vector3 temp = plane1.D * plane2.Normal - plane2.D * plane1.Normal;
+            Vector3.Cross(ref temp, ref direction, out point);
+
+            line.Position = point;
+            line.Direction = direction;
+            line.Direction.Normalize();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Plane"/> and a <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="plane">The plane to test.</param>
+        /// <param name="box">The box to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static PlaneIntersectionType PlaneIntersectsBox(ref Plane plane, ref BoundingBox box)
+        {
+            Vector3 min;
+            Vector3 max;
+
+            max.X = (plane.Normal.X >= 0.0f) ? box.Minimum.X : box.Maximum.X;
+            max.Y = (plane.Normal.Y >= 0.0f) ? box.Minimum.Y : box.Maximum.Y;
+            max.Z = (plane.Normal.Z >= 0.0f) ? box.Minimum.Z : box.Maximum.Z;
+            min.X = (plane.Normal.X >= 0.0f) ? box.Maximum.X : box.Minimum.X;
+            min.Y = (plane.Normal.Y >= 0.0f) ? box.Maximum.Y : box.Minimum.Y;
+            min.Z = (plane.Normal.Z >= 0.0f) ? box.Maximum.Z : box.Minimum.Z;
+
+            float distance;
+            Vector3.Dot(ref plane.Normal, ref max, out distance);
+
+            if (distance + plane.D > 0.0f)
+                return PlaneIntersectionType.Front;
+
+            distance = Vector3.Dot(plane.Normal, min);
+
+            if (distance + plane.D < 0.0f)
+                return PlaneIntersectionType.Back;
+
+            return PlaneIntersectionType.Intersecting;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Plane"/> and a <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="plane">The plane to test.</param>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static PlaneIntersectionType PlaneIntersectsSphere(ref Plane plane, ref BoundingSphere sphere)
+        {
+            float distance;
+            Vector3.Dot(ref plane.Normal, ref sphere.Center, out distance);
+            distance += plane.D;
+
+            if (distance > sphere.Radius)
+                return PlaneIntersectionType.Front;
+
+            if (distance < -sphere.Radius)
+                return PlaneIntersectionType.Back;
+
+            return PlaneIntersectionType.Intersecting;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.BoundingBox"/> and a <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="box1">The first box to test.</param>
+        /// <param name="box2">The second box to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static bool BoxIntersectsBox(ref BoundingBox box1, ref BoundingBox box2)
+        {
+            if (box1.Minimum.X > box2.Maximum.X || box2.Minimum.X > box1.Maximum.X)
+                return false;
+
+            if (box1.Minimum.Y > box2.Maximum.Y || box2.Minimum.Y > box1.Maximum.Y)
+                return false;
+
+            if (box1.Minimum.Z > box2.Maximum.Z || box2.Minimum.Z > box1.Maximum.Z)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.BoundingBox"/> and a <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="box">The box to test.</param>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static bool BoxIntersectsSphere(ref BoundingBox box, ref BoundingSphere sphere)
+        {
+            Vector3 vector;
+            Vector3.Clamp(ref sphere.Center, ref box.Minimum, ref box.Maximum, out vector);
+            float distance = Vector3.DistanceSquared(sphere.Center, vector);
+
+            return distance <= sphere.Radius * sphere.Radius;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.BoundingSphere"/> and a <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="sphere1">First sphere to test.</param>
+        /// <param name="sphere2">Second sphere to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public static bool SphereIntersectsSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
+        {
+            float radiisum = sphere1.Radius + sphere2.Radius;
+            return Vector3.DistanceSquared(sphere1.Center, sphere2.Center) <= radiisum * radiisum;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a point.
+        /// </summary>
+        /// <param name="box">The box to test.</param>
+        /// <param name="point">The point to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType BoxContainsPoint(ref BoundingBox box, ref Vector3 point)
+        {
+            if (box.Minimum.X <= point.X && box.Maximum.X >= point.X &&
+                box.Minimum.Y <= point.Y && box.Maximum.Y >= point.Y &&
+                box.Minimum.Z <= point.Z && box.Maximum.Z >= point.Z)
+            {
+                return ContainmentType.Contains;
+            }
+
+            return ContainmentType.Disjoint;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a triangle.
+        /// </summary>
+        /// <param name="box">The box to test.</param>
+        /// <param name="vertex1">The first vertex of the triangle to test.</param>
+        /// <param name="vertex2">The second vertex of the triagnle to test.</param>
+        /// <param name="vertex3">The third vertex of the triangle to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType BoxContainsTriangle(ref BoundingBox box, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        {
+            ContainmentType test1 = BoxContainsPoint(ref box, ref vertex1);
+            ContainmentType test2 = BoxContainsPoint(ref box, ref vertex2);
+            ContainmentType test3 = BoxContainsPoint(ref box, ref vertex3);
+
+            if (test1 == ContainmentType.Contains && test2 == ContainmentType.Contains && test3 == ContainmentType.Contains)
+                return ContainmentType.Contains;
+
+            if (test1 == ContainmentType.Contains || test2 == ContainmentType.Contains || test3 == ContainmentType.Contains)
+                return ContainmentType.Intersects;
+
+            return ContainmentType.Disjoint;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="box1">The first box to test.</param>
+        /// <param name="box2">The second box to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType BoxContainsBox(ref BoundingBox box1, ref BoundingBox box2)
+        {
+            if (box1.Maximum.X < box2.Minimum.X || box1.Minimum.X > box2.Maximum.X)
+                return ContainmentType.Disjoint;
+
+            if (box1.Maximum.Y < box2.Minimum.Y || box1.Minimum.Y > box2.Maximum.Y)
+                return ContainmentType.Disjoint;
+
+            if (box1.Maximum.Z < box2.Minimum.Z || box1.Minimum.Z > box2.Maximum.Z)
+                return ContainmentType.Disjoint;
+
+            if (box1.Minimum.X <= box2.Minimum.X && (box2.Maximum.X <= box1.Maximum.X &&
+                box1.Minimum.Y <= box2.Minimum.Y && box2.Maximum.Y <= box1.Maximum.Y) &&
+                box1.Minimum.Z <= box2.Minimum.Z && box2.Maximum.Z <= box1.Maximum.Z)
+            {
+                return ContainmentType.Contains;
+            }
+
+            return ContainmentType.Intersects;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="box">The box to test.</param>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType BoxContainsSphere(ref BoundingBox box, ref BoundingSphere sphere)
+        {
+            Vector3 vector;
+            Vector3.Clamp(ref sphere.Center, ref box.Minimum, ref box.Maximum, out vector);
+            float distance = Vector3.DistanceSquared(sphere.Center, vector);
+
+            if (distance > sphere.Radius * sphere.Radius)
+                return ContainmentType.Disjoint;
+
+            if ((((box.Minimum.X + sphere.Radius <= sphere.Center.X) && (sphere.Center.X <= box.Maximum.X - sphere.Radius)) && ((box.Maximum.X - box.Minimum.X > sphere.Radius) &&
+                (box.Minimum.Y + sphere.Radius <= sphere.Center.Y))) && (((sphere.Center.Y <= box.Maximum.Y - sphere.Radius) && (box.Maximum.Y - box.Minimum.Y > sphere.Radius)) &&
+                (((box.Minimum.Z + sphere.Radius <= sphere.Center.Z) && (sphere.Center.Z <= box.Maximum.Z - sphere.Radius)) && (box.Maximum.X - box.Minimum.X > sphere.Radius))))
+            {
+                return ContainmentType.Contains;
+            }
+
+            return ContainmentType.Intersects;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingSphere"/> contains a point.
+        /// </summary>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <param name="point">The point to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType SphereContainsPoint(ref BoundingSphere sphere, ref Vector3 point)
+        {
+            if (Vector3.DistanceSquared(point, sphere.Center) <= sphere.Radius * sphere.Radius)
+                return ContainmentType.Contains;
+
+            return ContainmentType.Disjoint;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingSphere"/> contains a triangle.
+        /// </summary>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <param name="vertex1">The first vertex of the triangle to test.</param>
+        /// <param name="vertex2">The second vertex of the triagnle to test.</param>
+        /// <param name="vertex3">The third vertex of the triangle to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType SphereContainsTriangle(ref BoundingSphere sphere, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        {
+            ContainmentType test1 = SphereContainsPoint(ref sphere, ref vertex1);
+            ContainmentType test2 = SphereContainsPoint(ref sphere, ref vertex2);
+            ContainmentType test3 = SphereContainsPoint(ref sphere, ref vertex3);
+
+            if (test1 == ContainmentType.Contains && test2 == ContainmentType.Contains && test3 == ContainmentType.Contains)
+                return ContainmentType.Contains;
+
+            if (test1 == ContainmentType.Contains || test2 == ContainmentType.Contains || test3 == ContainmentType.Contains)
+                return ContainmentType.Intersects;
+
+            return ContainmentType.Disjoint;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingSphere"/> contains a <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <param name="box">The box to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType SphereContainsBox(ref BoundingSphere sphere, ref BoundingBox box)
+        {
+            Vector3 vector;
+
+            if (!BoxIntersectsSphere(ref box, ref sphere))
+                return ContainmentType.Disjoint;
+
+            float radiussquared = sphere.Radius * sphere.Radius;
+            vector.X = sphere.Center.X - box.Minimum.X;
+            vector.Y = sphere.Center.Y - box.Maximum.Y;
+            vector.Z = sphere.Center.Z - box.Maximum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Maximum.X;
+            vector.Y = sphere.Center.Y - box.Maximum.Y;
+            vector.Z = sphere.Center.Z - box.Maximum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Maximum.X;
+            vector.Y = sphere.Center.Y - box.Minimum.Y;
+            vector.Z = sphere.Center.Z - box.Maximum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Minimum.X;
+            vector.Y = sphere.Center.Y - box.Minimum.Y;
+            vector.Z = sphere.Center.Z - box.Maximum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Minimum.X;
+            vector.Y = sphere.Center.Y - box.Maximum.Y;
+            vector.Z = sphere.Center.Z - box.Minimum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Maximum.X;
+            vector.Y = sphere.Center.Y - box.Maximum.Y;
+            vector.Z = sphere.Center.Z - box.Minimum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Maximum.X;
+            vector.Y = sphere.Center.Y - box.Minimum.Y;
+            vector.Z = sphere.Center.Z - box.Minimum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            vector.X = sphere.Center.X - box.Minimum.X;
+            vector.Y = sphere.Center.Y - box.Minimum.Y;
+            vector.Z = sphere.Center.Z - box.Minimum.Z;
+
+            if (vector.LengthSquared() > radiussquared)
+                return ContainmentType.Intersects;
+
+            return ContainmentType.Contains;
+        }
+
+        /// <summary>
+        /// Determines whether a <see cref="SlimMath.BoundingSphere"/> contains a <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="sphere1">The first sphere to test.</param>
+        /// <param name="sphere2">The second sphere to test.</param>
+        /// <returns>The type of containment the two objects have.</returns>
+        public static ContainmentType SphereContainsSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
+        {
+            float distance = Vector3.Distance(sphere1.Center, sphere2.Center);
+
+            if (sphere1.Radius + sphere2.Radius < distance)
+                return ContainmentType.Disjoint;
+
+            if (sphere1.Radius - sphere2.Radius < distance)
+                return ContainmentType.Intersects;
+
+            return ContainmentType.Contains;
         }
     }
 }

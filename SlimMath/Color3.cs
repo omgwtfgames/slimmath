@@ -49,7 +49,7 @@ namespace SlimMath
         public float Blue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color3"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color3"/> struct.
         /// </summary>
         /// <param name="value">The value that will be assigned to all components.</param>
         public Color3(float value)
@@ -58,7 +58,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color3"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color3"/> struct.
         /// </summary>
         /// <param name="red">The red component of the color.</param>
         /// <param name="green">The green component of the color.</param>
@@ -71,7 +71,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color3"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color3"/> struct.
         /// </summary>
         /// <param name="value">The red, green, and blue components of the color.</param>
         public Color3(Vector3 value)
@@ -82,7 +82,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color3"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color3"/> struct.
         /// </summary>
         /// <param name="rgb">A packed integer containing all three color components.
         /// The alpha component is ignored.</param>
@@ -94,7 +94,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Color3"/> struct.
+        /// Initializes a new instance of the <see cref="SlimMath.Color3"/> struct.
         /// </summary>
         /// <param name="values">The values to assign to the red, green, and blue components of the color. This must be an array with three elements.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="values"/> is <c>null</c>.</exception>
@@ -721,11 +721,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Color3"/> is equal to this instance.
+        /// Determines whether the specified <see cref="SlimMath.Color3"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="Color3"/> to compare with this instance.</param>
+        /// <param name="value">The <see cref="SlimMath.Color3"/> to compare with this instance.</param>
         /// <returns>
-        /// <c>true</c> if the specified <see cref="Color3"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="SlimMath.Color3"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Color3 value)
         {
@@ -758,7 +758,7 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator SlimDX.Color3(Color3 value)
         {
-            return new SlimDX.Color3(value.X, value.Y, value.Z, value.W);
+            return new SlimDX.Color3(value.Red, value.Green, value.Blue);
         }
 
         /// <summary>
@@ -768,7 +768,7 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Color3(SlimDX.Color3 value)
         {
-            return new Color3(value.X, value.Y, value.Z, value.W);
+            return new Color3(value.Red, value.Green, value.Blue);
         }
 #endif
     }
