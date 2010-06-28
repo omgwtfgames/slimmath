@@ -117,6 +117,20 @@ namespace SlimMath
             return Collision.PlaneIntersectsBox(ref plane, ref this);
         }
 
+        /* This implentation is wrong
+        /// <summary>
+        /// Determines if there is an intersection between the current object and a triangle.
+        /// </summary>
+        /// <param name="vertex1">The first vertex of the triangle to test.</param>
+        /// <param name="vertex2">The second vertex of the triagnle to test.</param>
+        /// <param name="vertex3">The third vertex of the triangle to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        {
+            return Collision.BoxIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
+        }
+        */
+
         /// <summary>
         /// Determines if there is an intersection between the current object and a <see cref="SlimMath.BoundingBox"/>.
         /// </summary>
@@ -147,6 +161,7 @@ namespace SlimMath
             return Collision.BoxContainsPoint(ref this, ref point);
         }
 
+        /* This implentation is wrong
         /// <summary>
         /// Determines whether the current objects contains a triangle.
         /// </summary>
@@ -158,6 +173,7 @@ namespace SlimMath
         {
             return Collision.BoxContainsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
+        */
 
         /// <summary>
         /// Determines whether the current objects contains a <see cref="SlimMath.BoundingBox"/>.
@@ -407,6 +423,28 @@ namespace SlimMath
         public static implicit operator BoundingBox(SlimDX.BoundingBox value)
         {
             return new BoundingBox(value.Minimum, value.Maximum);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.BoundingBox"/> to <see cref="Microsoft.Xna.Framework.BoundingBox"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.BoundingBox(BoundingBox value)
+        {
+            return new Microsoft.Xna.Framework.BoundingBox(value.Minimum, value.Maximum);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.BoundingBox"/> to <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator BoundingBox(Microsoft.Xna.Framework.BoundingBox value)
+        {
+            return new BoundingBox(value.Min, value.Max);
         }
 #endif
     }

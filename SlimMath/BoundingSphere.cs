@@ -100,6 +100,18 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Determines if there is an intersection between the current object and a triangle.
+        /// </summary>
+        /// <param name="vertex1">The first vertex of the triangle to test.</param>
+        /// <param name="vertex2">The second vertex of the triagnle to test.</param>
+        /// <param name="vertex3">The third vertex of the triangle to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        {
+            return Collision.SphereIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
+        }
+
+        /// <summary>
         /// Determines if there is an intersection between the current object and a <see cref="SlimMath.BoundingBox"/>.
         /// </summary>
         /// <param name="box">The box to test.</param>
@@ -411,7 +423,7 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator SlimDX.BoundingSphere(BoundingSphere value)
         {
-            return new SlimDX.BoundingSphere(value.Minimum, value.Maximum);
+            return new SlimDX.BoundingSphere(value.Center, value.Radius);
         }
 
         /// <summary>
@@ -421,7 +433,29 @@ namespace SlimMath
         /// <returns>The result of the conversion.</returns>
         public static implicit operator BoundingSphere(SlimDX.BoundingSphere value)
         {
-            return new BoundingSphere(value.Minimum, value.Maximum);
+            return new BoundingSphere(value.Center, value.Radius);
+        }
+#endif
+
+#if SlimDX1xInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.BoundingSphere"/> to <see cref="Microsoft.Xna.Framework.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.BoundingSphere(BoundingSphere value)
+        {
+            return new Microsoft.Xna.Framework.BoundingSphere(value.Center, value.Radius);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.BoundingSphere"/> to <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator BoundingSphere(Microsoft.Xna.Framework.BoundingSphere value)
+        {
+            return new BoundingSphere(value.Center, value.Radius);
         }
 #endif
     }

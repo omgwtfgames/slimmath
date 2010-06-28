@@ -163,6 +163,14 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Gets a value indicting whether this isntance is normalized.
+        /// </summary>
+        public bool IsNormalized
+        {
+            get { return Math.Abs((X * X) + (Y * Y) + (Z * Z) + (W * W) - 1f) < Utilities.ZeroTolerance; }
+        }
+
+        /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the X, Y, Z, or W component, depending on the index.</value>
@@ -819,13 +827,20 @@ namespace SlimMath
         /// <summary>
         /// Transforms an array of vectors by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
-        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="source">The array of vectors to transform.</param>
         /// <param name="rotation">The <see cref="SlimMath.Quaternion"/> rotation to apply.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
-        public static void Transform(Vector4[] vectors, ref Quaternion rotation)
+        /// <param name="destination">The array for which the transformed vectors are stored.
+        /// This array may be the same array as <paramref name="source"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Transform(Vector4[] source, ref Quaternion rotation, Vector4[] destination)
         {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
@@ -840,17 +855,23 @@ namespace SlimMath
             float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
-            for (int i = 0; i < vectors.Length; ++i)
+            float num1 = ((1.0f - yy) - zz);
+            float num2 = (xy - wz);
+            float num3 = (xz + wy);
+            float num4 = (xy + wz);
+            float num5 = ((1.0f - xx) - zz);
+            float num6 = (yz - wx);
+            float num7 = (xz - wy);
+            float num8 = (yz + wx);
+            float num9 = ((1.0f - xx) - yy);
+
+            for (int i = 0; i < source.Length; ++i)
             {
-                /*
-                 * Note:
-                 * Factor common arithmetic out of loop.
-                */
-                vectors[i] = new Vector4(
-                    ((vectors[i].X * ((1.0f - yy) - zz)) + (vectors[i].Y * (xy - wz))) + (vectors[i].Z * (xz + wy)),
-                    ((vectors[i].X * (xy + wz)) + (vectors[i].Y * ((1.0f - xx) - zz))) + (vectors[i].Z * (yz - wx)),
-                    ((vectors[i].X * (xz - wy)) + (vectors[i].Y * (yz + wx))) + (vectors[i].Z * ((1.0f - xx) - yy)),
-                    vectors[i].W);
+                destination[i] = new Vector4(
+                    ((source[i].X * num1) + (source[i].Y * num2)) + (source[i].Z * num3),
+                    ((source[i].X * num4) + (source[i].Y * num5)) + (source[i].Z * num6),
+                    ((source[i].X * num7) + (source[i].Y * num8)) + (source[i].Z * num9),
+                    source[i].W);
             }
         }
 
@@ -885,17 +906,24 @@ namespace SlimMath
         /// <summary>
         /// Transforms an array of 4D vectors by the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
-        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="source">The array of vectors to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
-        public static void Transform(Vector4[] vectors, ref Matrix transform)
+        /// <param name="destination">The array for which the transformed vectors are stored.
+        /// This array may be the same array as <paramref name="source"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Transform(Vector4[] source, ref Matrix transform, Vector4[] destination)
         {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
-            for (int i = 0; i < vectors.Length; ++i)
+            for (int i = 0; i < source.Length; ++i)
             {
-                Transform(ref vectors[i], ref transform, out vectors[i]);
+                Transform(ref source[i], ref transform, out destination[i]);
             }
         }
 
@@ -1124,6 +1152,50 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Vector4(SlimDX.Vector4 value)
+        {
+            return new Vector4(value.X, value.Y, value.Z, value.W);
+        }
+#endif
+
+#if WPFInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="System.Windows.Media.Media3D.Point4D"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator System.Windows.Media.Media3D.Point4D(Vector4 value)
+        {
+            return new System.Windows.Media.Media3D.Point4D(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Windows.Media.Media3D.Point4D"/> to <see cref="SlimMath.Vector4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Vector4(System.Windows.Media.Media3D.Point4D value)
+        {
+            return new Vector4((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector4"/> to <see cref="Microsoft.Xna.Framework.Vector4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Vector4(Vector4 value)
+        {
+            return new Microsoft.Xna.Framework.Vector4(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Vector4"/> to <see cref="SlimMath.Vector4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Vector4(Microsoft.Xna.Framework.Vector4 value)
         {
             return new Vector4(value.X, value.Y, value.Z, value.W);
         }

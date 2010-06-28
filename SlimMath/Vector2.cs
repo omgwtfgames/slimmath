@@ -108,6 +108,14 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Gets a value indicting whether this isntance is normalized.
+        /// </summary>
+        public bool IsNormalized
+        {
+            get { return Math.Abs((X * X) + (Y * Y) - 1f) < Utilities.ZeroTolerance; }
+        }
+
+        /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the X or Y component, depending on the index.</value>
@@ -763,13 +771,20 @@ namespace SlimMath
         /// <summary>
         /// Transforms an array of vectors by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
-        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="source">The array of vectors to transform.</param>
         /// <param name="rotation">The <see cref="SlimMath.Quaternion"/> rotation to apply.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
-        public static void Transform(Vector2[] vectors, ref Quaternion rotation)
+        /// <param name="destination">The array for which the transformed vectors are stored.
+        /// This array may be the same array as <paramref name="source"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Transform(Vector2[] source, ref Quaternion rotation, Vector2[] destination)
         {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
@@ -784,13 +799,16 @@ namespace SlimMath
             float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
-            for (int i = 0; i < vectors.Length; ++i)
+            float num1 = (1.0f - yy - zz);
+            float num2 = (xy - wz);
+            float num3 = (xy + wz);
+            float num4 = (1.0f - xx - zz);
+
+            for (int i = 0; i < source.Length; ++i)
             {
-                /*
-                 * Note:
-                 * Factor common arithmetic out of loop.
-                */
-                vectors[i] = new Vector2((vectors[i].X * (1.0f - yy - zz)) + (vectors[i].Y * (xy - wz)), (vectors[i].X * (xy + wz)) + (vectors[i].Y * (1.0f - xx - zz)));
+                destination[i] = new Vector2(
+                    (source[i].X * num1) + (source[i].Y * num2),
+                    (source[i].X * num3) + (source[i].Y * num4));
             }
         }
 
@@ -825,23 +843,24 @@ namespace SlimMath
         /// <summary>
         /// Transforms an array of 2D vectors by the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
-        /// <param name="vectors">The array of vectors to transform.</param>
+        /// <param name="source">The array of vectors to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
-        /// <returns>The array of transformed <see cref="SlimMath.Vector4"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="vectors"/> is <c>null</c>.</exception>
-        public static Vector4[] Transform(Vector2[] vectors, ref Matrix transform)
+        /// <param name="destination">The array for which the transformed vectors are stored.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Transform(Vector2[] source, ref Matrix transform, Vector4[] destination)
         {
-            if (vectors == null)
-                throw new ArgumentNullException("vectors");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
-            Vector4[] result = new Vector4[vectors.Length];
-
-            for (int i = 0; i < vectors.Length; ++i)
+            for (int i = 0; i < source.Length; ++i)
             {
-                Transform(ref vectors[i], ref transform, out result[i]);
+                Transform(ref source[i], ref transform, out destination[i]);
             }
-
-            return result;
         }
 
         /// <summary>
@@ -877,17 +896,24 @@ namespace SlimMath
         /// <summary>
         /// Performs a coordinate transformation on an array of vectors using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
-        /// <param name="coordinates">The array of coordinate vectors to trasnform.</param>
+        /// <param name="source">The array of coordinate vectors to trasnform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="coordinates"/> is <c>null</c>.</exception>
-        public static void TransformCoordinate(Vector2[] coordinates, ref Matrix transform)
+        /// <param name="destination">The array for which the transformed vectors are stored.
+        /// This array may be the same array as <paramref name="source"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void TransformCoordinate(Vector2[] source, ref Matrix transform, Vector2[] destination)
         {
-            if (coordinates == null)
-                throw new ArgumentNullException("coordinates");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
-            for (int i = 0; i < coordinates.Length; ++i)
+            for (int i = 0; i < source.Length; ++i)
             {
-                TransformCoordinate(ref coordinates[i], ref transform, out coordinates[i]);
+                TransformCoordinate(ref source[i], ref transform, out destination[i]);
             }
         }
 
@@ -920,17 +946,24 @@ namespace SlimMath
         /// <summary>
         /// Performs a normal transformation on an array of vectors using the given <see cref="SlimMath.Matrix"/>.
         /// </summary>
-        /// <param name="normals">The array of normal vectors to transform.</param>
+        /// <param name="source">The array of normal vectors to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="normals"/> is <c>null</c>.</exception>
-        public static void TransformNormal(Vector2[] normals, ref Matrix transform)
+        /// <param name="destination">The array for which the transformed vectors are stored.
+        /// This array may be the same array as <paramref name="source"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void TransformNormal(Vector2[] source, ref Matrix transform, Vector2[] destination)
         {
-            if (normals == null)
-                throw new ArgumentNullException("normals");
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
 
-            for (int i = 0; i < normals.Length; ++i)
+            for (int i = 0; i < source.Length; ++i)
             {
-                TransformNormal(ref normals[i], ref transform, out normals[i]);
+                TransformNormal(ref source[i], ref transform, out destination[i]);
             }
         }
 
@@ -1157,6 +1190,50 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Vector2(SlimDX.Vector2 value)
+        {
+            return new Vector2(value.X, value.Y);
+        }
+#endif
+
+#if WPFInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector2"/> to <see cref="System.Windows.Point"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator System.Windows.Point(Vector2 value)
+        {
+            return new System.Windows.Point(value.X, value.Y);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Windows.Point"/> to <see cref="SlimMath.Vector2"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Vector2(System.Windows.Point value)
+        {
+            return new Vector2((float)value.X, (float)value.Y);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Vector2"/> to <see cref="Microsoft.Xna.Framework.Vector2"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Vector2(Vector2 value)
+        {
+            return new Microsoft.Xna.Framework.Vector2(value.X, value.Y);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Vector2"/> to <see cref="SlimMath.Vector2"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Vector2(Microsoft.Xna.Framework.Vector2 value)
         {
             return new Vector2(value.X, value.Y);
         }

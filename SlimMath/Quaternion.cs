@@ -173,6 +173,14 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Gets a value indicting whether this isntance is normalized.
+        /// </summary>
+        public bool IsNormalized
+        {
+            get { return Math.Abs((X * X) + (Y * Y) + (Z * Z) + (W * W) - 1f) < Utilities.ZeroTolerance; }
+        }
+
+        /// <summary>
         /// Gets the angle of the quaternion.
         /// </summary>
         /// <value>The quaternion's angle.</value>
@@ -1164,6 +1172,50 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Quaternion(SlimDX.Quaternion value)
+        {
+            return new Quaternion(value.X, value.Y, value.Z, value.W);
+        }
+#endif
+
+#if WPFInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Quaternion"/> to <see cref="System.Windows.Media.Media3D.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator System.Windows.Media.Media3D.Quaternion(Quaternion value)
+        {
+            return new System.Windows.Media.Media3D.Quaternion(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Windows.Media.Media3D.Quaternion"/> to <see cref="SlimMath.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Quaternion(System.Windows.Media.Media3D.Quaternion value)
+        {
+            return new Quaternion((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Quaternion"/> to <see cref="Microsoft.Xna.Framework.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Quaternion(Quaternion value)
+        {
+            return new Microsoft.Xna.Framework.Quaternion(value.X, value.Y, value.Z, value.W);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Quaternion"/> to <see cref="SlimMath.Quaternion"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Quaternion(Microsoft.Xna.Framework.Quaternion value)
         {
             return new Quaternion(value.X, value.Y, value.Z, value.W);
         }

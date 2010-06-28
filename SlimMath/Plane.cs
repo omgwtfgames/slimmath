@@ -180,6 +180,16 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Determines if there is an intersection between the current object and a point.
+        /// </summary>
+        /// <param name="point">The point to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public PlaneIntersectionType Intersects(ref Vector3 point)
+        {
+            return Collision.PlaneIntersectsPoint(ref this, ref point);
+        }
+
+        /// <summary>
         /// Determines if there is an intersection between the current object and a <see cref="SlimMath.Ray"/>.
         /// </summary>
         /// <param name="ray">The ray to test.</param>
@@ -234,6 +244,18 @@ namespace SlimMath
         public bool Intersects(ref Plane plane, out Ray line)
         {
             return Collision.PlaneIntersectsPlane(ref this, ref plane, out line);
+        }
+
+        /// <summary>
+        /// Determines if there is an intersection between the current object and a triangle.
+        /// </summary>
+        /// <param name="vertex1">The first vertex of the triangle to test.</param>
+        /// <param name="vertex2">The second vertex of the triagnle to test.</param>
+        /// <param name="vertex3">The third vertex of the triangle to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public PlaneIntersectionType Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        {
+            return Collision.PlaneIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
 
         /// <summary>
@@ -695,6 +717,28 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Plane(SlimDX.Plane value)
+        {
+            return new Plane(value.Normal, value.D);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Plane"/> to <see cref="Microsoft.Xna.Framework.Plane"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Plane(Plane value)
+        {
+            return new Microsoft.Xna.Framework.Plane(value.Normal, value.D);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Plane"/> to <see cref="SlimMath.Plane"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Plane(Microsoft.Xna.Framework.Plane value)
         {
             return new Plane(value.Normal, value.D);
         }

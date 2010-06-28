@@ -842,5 +842,71 @@ namespace SlimMath
             return new Color4(value.Alpha, value.Red, value.Green, value.Blue);
         }
 #endif
+
+#if WPFInterop
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="SlimMath.Color4"/> to <see cref="System.Windows.Media.Color"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator System.Windows.Media.Color(Color4 value)
+        {
+            return new System.Windows.Media.Color()
+            {
+                A = (byte)(255f * value.Alpha),
+                R = (byte)(255f * value.Red),
+                G = (byte)(255f * value.Green),
+                B = (byte)(255f * value.Blue)
+            };
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Windows.Media.Color"/> to <see cref="SlimMath.Color4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Color4(System.Windows.Media.Color value)
+        {
+            return new Color4()
+            {
+                Alpha = (float)value.A / 255f,
+                Red = (float)value.R / 255f,
+                Green = (float)value.G / 255f,
+                Blue = (float)value.B / 255f
+            };
+        }
+#endif
+
+#if WinFormsInterop
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="SlimMath.Color4"/> to <see cref="System.Drawing.Color"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator System.Drawing.Color(Color4 value)
+        {
+            return System.Drawing.Color.FromArgb(
+                (byte)(255f * value.Alpha),
+                (byte)(255f * value.Red),
+                (byte)(255f * value.Green),
+                (byte)(255f * value.Blue));
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Drawing.Color"/> to <see cref="SlimMath.Color4"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Color4(System.Drawing.Color value)
+        {
+            return new Color4()
+            {
+                Alpha = (float)value.A / 255f,
+                Red = (float)value.R / 255f,
+                Green = (float)value.G / 255f,
+                Blue = (float)value.B / 255f
+            };
+        }
+#endif
     }
 }

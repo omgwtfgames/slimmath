@@ -55,6 +55,39 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Determines if there is an intersection between the current object and a point.
+        /// </summary>
+        /// <param name="point">The point to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public bool Intersects(ref Vector3 point)
+        {
+            return Collision.RayIntersectsPoint(ref this, ref point);
+        }
+
+        /// <summary>
+        /// Determines if there is an intersection between the current object and a <see cref="SlimMath.Ray"/>.
+        /// </summary>
+        /// <param name="ray">The ray to test.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public bool Intersects(ref Ray ray)
+        {
+            Vector3 point;
+            return Collision.RayIntersectsRay(ref this, ref ray, out point);
+        }
+
+        /// <summary>
+        /// Determines if there is an intersection between the current object and a <see cref="SlimMath.Ray"/>.
+        /// </summary>
+        /// <param name="ray">The ray to test.</param>
+        /// <param name="point">When the method completes, contains the point of intersection,
+        /// or <see cref="SlimMath.Vector3.Zero"/> if there was no intersection.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        public bool Intersects(ref Ray ray, out Vector3 point)
+        {
+            return Collision.RayIntersectsRay(ref this, ref ray, out point);
+        }
+
+        /// <summary>
         /// Determines if there is an intersection between the current object and a <see cref="SlimMath.Plane"/>.
         /// </summary>
         /// <param name="plane">The plane to test</param>
@@ -330,6 +363,28 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Ray(SlimDX.Ray value)
+        {
+            return new Ray(value.Position, value.Direction);
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Ray"/> to <see cref="Microsoft.Xna.Framework.Ray"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Ray(Ray value)
+        {
+            return new Microsoft.Xna.Framework.Ray(value.Position, value.Direction);
+        }
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Ray"/> to <see cref="SlimMath.Ray"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Ray(Microsoft.Xna.Framework.Ray value)
         {
             return new Ray(value.Position, value.Direction);
         }

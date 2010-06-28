@@ -211,7 +211,7 @@ namespace SlimMath
         /// Gets a value indicating whether this instance is an identity matrix.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance is an identity matrix; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance is an identity matrix; otherwise, <c>false</c>.
         /// </value>
         public bool IsIdentity
         {
@@ -2107,6 +2107,74 @@ namespace SlimMath
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
         public static implicit operator Matrix(SlimDX.Matrix value)
+        {
+            return new Matrix()
+            {
+                M11 = value.M11, M12 = value.M12, M13 = value.M13, M14 = value.M14,
+                M21 = value.M21, M22 = value.M22, M23 = value.M23, M24 = value.M24,
+                M31 = value.M31, M32 = value.M32, M33 = value.M33, M34 = value.M34,
+                M41 = value.M41, M42 = value.M42, M43 = value.M43, M44 = value.M44
+            };
+        }
+#endif
+
+#if WPFInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Matrix"/> to <see cref="System.Windows.Media.Media3D.Matrix3D"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator System.Windows.Media.Media3D.Matrix3D(Matrix value)
+        {
+            return new System.Windows.Media.Media3D.Matrix3D()
+            {
+                M11 = value.M11, M12 = value.M12, M13 = value.M13, M14 = value.M14,
+                M21 = value.M21, M22 = value.M22, M23 = value.M23, M24 = value.M24,
+                M31 = value.M31, M32 = value.M32, M33 = value.M33, M34 = value.M34,
+                OffsetX = value.M41, OffsetY = value.M42, OffsetZ = value.M43, M44 = value.M44
+            };
+        }
+
+        /// <summary>
+        /// Performs an explicit conversion from <see cref="System.Windows.Media.Media3D.Matrix3D"/> to <see cref="SlimMath.Matrix"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator Matrix(System.Windows.Media.Media3D.Matrix3D value)
+        {
+            return new Matrix()
+            {
+                M11 = (float)value.M11, M12 = (float)value.M12, M13 = (float)value.M13, M14 = (float)value.M14,
+                M21 = (float)value.M21, M22 = (float)value.M22, M23 = (float)value.M23, M24 = (float)value.M24,
+                M31 = (float)value.M31, M32 = (float)value.M32, M33 = (float)value.M33, M34 = (float)value.M34,
+                M41 = (float)value.OffsetX, M42 = (float)value.OffsetY, M43 = (float)value.OffsetZ, M44 = (float)value.M44
+            };
+        }
+#endif
+
+#if XnaInterop
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SlimMath.Matrix"/> to <see cref="Microsoft.Xna.Framework.Matrix"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Microsoft.Xna.Framework.Matrix(Matrix value)
+        {
+            return new Microsoft.Xna.Framework.Matrix()
+            {
+                M11 = value.M11, M12 = value.M12, M13 = value.M13, M14 = value.M14,
+                M21 = value.M21, M22 = value.M22, M23 = value.M23, M24 = value.M24,
+                M31 = value.M31, M32 = value.M32, M33 = value.M33, M34 = value.M34,
+                M41 = value.M41, M42 = value.M42, M43 = value.M43, M44 = value.M44
+            };
+        }
+
+                /// <summary>
+        /// Performs an implicit conversion from <see cref="Microsoft.Xna.Framework.Matrix"/> to <see cref="SlimMath.Matrix"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Matrix(Microsoft.Xna.Framework.Matrix value)
         {
             return new Matrix()
             {
