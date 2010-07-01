@@ -80,11 +80,11 @@ namespace SlimMath
             switch (type)
             {
                 case AngleType.Revolution:
-                    radians = MathExtended.RevolutionsToRadians(angle);
+                    radians = Utilities.RevolutionsToRadians(angle);
                     break;
 
                 case AngleType.Degree:
-                    radians = MathExtended.DegreesToRadians(angle);
+                    radians = Utilities.DegreesToRadians(angle);
                     break;
 
                 case AngleType.Radian:
@@ -92,7 +92,7 @@ namespace SlimMath
                     break;
 
                 case AngleType.Gradian:
-                    radians = MathExtended.GradiansToRadians(angle);
+                    radians = Utilities.GradiansToRadians(angle);
                     break;
 
                 default:
@@ -145,8 +145,8 @@ namespace SlimMath
         /// </summary>
         public float Revolutions
         {
-            get { return MathExtended.RadiansToRevolutions(radians); }
-            set { radians = MathExtended.RevolutionsToRadians(value); }
+            get { return Utilities.RadiansToRevolutions(radians); }
+            set { radians = Utilities.RevolutionsToRadians(value); }
         }
 
         /// <summary>
@@ -154,8 +154,8 @@ namespace SlimMath
         /// </summary>
         public float Degrees
         {
-            get { return MathExtended.RadiansToDegrees(radians); }
-            set { radians = MathExtended.DegreesToRadians(value); }
+            get { return Utilities.RadiansToDegrees(radians); }
+            set { radians = Utilities.DegreesToRadians(value); }
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace SlimMath
         {
             get
             {
-                float degrees = MathExtended.RadiansToDegrees(radians);
+                float degrees = Utilities.RadiansToDegrees(radians);
 
                 if (degrees < 0)
                 {
@@ -183,11 +183,11 @@ namespace SlimMath
             }
             set
             {
-                float degrees = MathExtended.RadiansToDegrees(radians);
+                float degrees = Utilities.RadiansToDegrees(radians);
                 float degreesfloor = (float)Math.Floor(degrees);
 
                 degreesfloor += value / 60.0f;
-                radians = MathExtended.DegreesToRadians(degreesfloor);
+                radians = Utilities.DegreesToRadians(degreesfloor);
             }
         }
 
@@ -201,7 +201,7 @@ namespace SlimMath
         {
             get
             {
-                float degrees = MathExtended.RadiansToDegrees(radians);
+                float degrees = Utilities.RadiansToDegrees(radians);
 
                 if (degrees < 0)
                 {
@@ -224,7 +224,7 @@ namespace SlimMath
             }
             set
             {
-                float degrees = MathExtended.RadiansToDegrees(radians);
+                float degrees = Utilities.RadiansToDegrees(radians);
                 float degreesfloor = (float)Math.Floor(degrees);
 
                 float minutes = (degrees - degreesfloor) * 60.0f;
@@ -232,7 +232,7 @@ namespace SlimMath
 
                 minutesfloor += value / 60.0f;
                 degreesfloor += minutesfloor / 60.0f;
-                radians = MathExtended.DegreesToRadians(degreesfloor);
+                radians = Utilities.DegreesToRadians(degreesfloor);
             }
         }
         
@@ -260,8 +260,8 @@ namespace SlimMath
         /// </summary>
         public float Gradians
         {
-            get { return MathExtended.RadiansToGradians(radians); }
-            set { radians = MathExtended.RadiansToGradians(value); }
+            get { return Utilities.RadiansToGradians(radians); }
+            set { radians = Utilities.RadiansToGradians(value); }
         }
 
         /// <summary>
@@ -684,7 +684,7 @@ namespace SlimMath
         /// </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, MathExtended.RadiansToDegrees(radians).ToString("0.##°"));
+            return string.Format(CultureInfo.CurrentCulture, Utilities.RadiansToDegrees(radians).ToString("0.##°"));
         }
 
         /// <summary>
@@ -696,7 +696,7 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
-            return string.Format(CultureInfo.CurrentCulture, "{0}°", MathExtended.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
+            return string.Format(CultureInfo.CurrentCulture, "{0}°", Utilities.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
         }
 
         /// <summary>
@@ -708,7 +708,7 @@ namespace SlimMath
         /// </returns>
         public string ToString(IFormatProvider formatProvider)
         {
-            return string.Format(formatProvider, MathExtended.RadiansToDegrees(radians).ToString("0.##°"));
+            return string.Format(formatProvider, Utilities.RadiansToDegrees(radians).ToString("0.##°"));
         }
 
         /// <summary>
@@ -721,7 +721,7 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return string.Format(formatProvider, "{0}°", MathExtended.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
+            return string.Format(formatProvider, "{0}°", Utilities.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
         }
 
         /// <summary>

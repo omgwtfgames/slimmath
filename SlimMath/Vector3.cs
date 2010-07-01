@@ -1034,6 +1034,13 @@ namespace SlimMath
         /// <param name="coordinate">The coordinate vector to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <param name="result">When the method completes, contains the transformed coordinates.</param>
+        /// <remarks>
+        /// A coordinate transform performs the transformation with the assumption that the w component
+        /// is one. The four dimensional vector obtained from the transformation operation has each
+        /// component in the vector divided by the w component. This forces the wcomponent to be one and
+        /// therefore makes the vector homogeneous. The homogeneous vector is often prefered when working
+        /// with coordinates as the w component can safely be ignored.
+        /// </remarks>
         public static void TransformCoordinate(ref Vector3 coordinate, ref Matrix transform, out Vector3 result)
         {
             Vector4 vector = new Vector4();
@@ -1051,6 +1058,13 @@ namespace SlimMath
         /// <param name="coordinate">The coordinate vector to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <returns>The transformed coordinates.</returns>
+        /// <remarks>
+        /// A coordinate transform performs the transformation with the assumption that the w component
+        /// is one. The four dimensional vector obtained from the transformation operation has each
+        /// component in the vector divided by the w component. This forces the wcomponent to be one and
+        /// therefore makes the vector homogeneous. The homogeneous vector is often prefered when working
+        /// with coordinates as the w component can safely be ignored.
+        /// </remarks>
         public static Vector3 TransformCoordinate(Vector3 coordinate, Matrix transform)
         {
             Vector3 result;
@@ -1067,6 +1081,13 @@ namespace SlimMath
         /// This array may be the same array as <paramref name="source"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        /// <remarks>
+        /// A coordinate transform performs the transformation with the assumption that the w component
+        /// is one. The four dimensional vector obtained from the transformation operation has each
+        /// component in the vector divided by the w component. This forces the wcomponent to be one and
+        /// therefore makes the vector homogeneous. The homogeneous vector is often prefered when working
+        /// with coordinates as the w component can safely be ignored.
+        /// </remarks>
         public static void TransformCoordinate(Vector3[] source, ref Matrix transform, Vector3[] destination)
         {
             if (source == null)
@@ -1088,6 +1109,13 @@ namespace SlimMath
         /// <param name="normal">The normal vector to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <param name="result">When the method completes, contains the transformed normal.</param>
+        /// <remarks>
+        /// A normal transform performs the transformation with the assumption that the w component
+        /// is zero. This causes the fourth row and fourth collumn of the matrix to be unused. The
+        /// end result is a vector that is not translated, but all other transformation properties
+        /// apply. This is often prefered for normal vectors as normals purely represent direction
+        /// rather than location because normal vectors should not be translated.
+        /// </remarks>
         public static void TransformNormal(ref Vector3 normal, ref Matrix transform, out Vector3 result)
         {
             result = new Vector3(
@@ -1102,6 +1130,13 @@ namespace SlimMath
         /// <param name="normal">The normal vector to transform.</param>
         /// <param name="transform">The transformation <see cref="SlimMath.Matrix"/>.</param>
         /// <returns>The transformed normal.</returns>
+        /// <remarks>
+        /// A normal transform performs the transformation with the assumption that the w component
+        /// is zero. This causes the fourth row and fourth collumn of the matrix to be unused. The
+        /// end result is a vector that is not translated, but all other transformation properties
+        /// apply. This is often prefered for normal vectors as normals purely represent direction
+        /// rather than location because normal vectors should not be translated.
+        /// </remarks>
         public static Vector3 TransformNormal(Vector3 normal, Matrix transform)
         {
             Vector3 result;
@@ -1118,6 +1153,13 @@ namespace SlimMath
         /// This array may be the same array as <paramref name="source"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        /// <remarks>
+        /// A normal transform performs the transformation with the assumption that the w component
+        /// is zero. This causes the fourth row and fourth collumn of the matrix to be unused. The
+        /// end result is a vector that is not translated, but all other transformation properties
+        /// apply. This is often prefered for normal vectors as normals purely represent direction
+        /// rather than location because normal vectors should not be translated.
+        /// </remarks>
         public static void TransformNormal(Vector3[] source, ref Matrix transform, Vector3[] destination)
         {
             if (source == null)

@@ -27,8 +27,18 @@ namespace SlimMath
 {
     static class Utilities
     {
+        /// <summary>
+        /// The value for which all absolute numbers smaller than are considered equal to zero.
+        /// </summary>
         public const float ZeroTolerance = 1e-6f;
 
+        /// <summary>
+        /// Does something with arrays.
+        /// </summary>
+        /// <typeparam name="T">Most likely the type of elements in the array.</typeparam>
+        /// <param name="value">Who knows what this is for.</param>
+        /// <param name="count">Probably the length of the array.</param>
+        /// <returns>An array of who knows what.</returns>
         public static T[] Array<T>(T value, int count)
         {
             T[] result = new T[count];
@@ -36,6 +46,126 @@ namespace SlimMath
                 result[i] = value;
 
             return result;
+        }
+
+        /// <summary>
+        /// Converts revolutions to degrees.
+        /// </summary>
+        /// <param name="revolution">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RevolutionsToDegrees(float revolution)
+        {
+            return revolution * 360.0f;
+        }
+
+        /// <summary>
+        /// Converts revolutions to radians.
+        /// </summary>
+        /// <param name="revolution">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RevolutionsToRadians(float revolution)
+        {
+            return revolution * MathExtended.TwoPi;
+        }
+
+        /// <summary>
+        /// Converts revolutions to gradians.
+        /// </summary>
+        /// <param name="revolution">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RevolutionsToGradians(float revolution)
+        {
+            return revolution * 400.0f;
+        }
+
+        /// <summary>
+        /// Converts degrees to revolutions.
+        /// </summary>
+        /// <param name="degree">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float DegreesToRevolutions(float degree)
+        {
+            return degree / 360.0f;
+        }
+
+        /// <summary>
+        /// Converts degrees to radians.
+        /// </summary>
+        /// <param name="degree">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float DegreesToRadians(float degree)
+        {
+            return degree * (MathExtended.Pi / 180.0f);
+        }
+
+        /// <summary>
+        /// Converts degrees to gradians.
+        /// </summary>
+        /// <param name="degree">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float DegreesToGradians(float degree)
+        {
+            return degree * (10.0f / 9.0f);
+        }
+
+        /// <summary>
+        /// Converts radians to revolutions.
+        /// </summary>
+        /// <param name="radian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RadiansToRevolutions(float radian)
+        {
+            return radian / MathExtended.TwoPi;
+        }
+
+        /// <summary>
+        /// Converts radians to degrees.
+        /// </summary>
+        /// <param name="radian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RadiansToDegrees(float radian)
+        {
+            return radian * (180.0f / MathExtended.Pi);
+        }
+
+        /// <summary>
+        /// Converts radians to gradians.
+        /// </summary>
+        /// <param name="radian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float RadiansToGradians(float radian)
+        {
+            return radian * (200.0f / MathExtended.Pi);
+        }
+
+        /// <summary>
+        /// Converts gradians to revolutions.
+        /// </summary>
+        /// <param name="gradian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float GradiansToRevolutions(float gradian)
+        {
+            return gradian / 400.0f;
+        }
+
+        /// <summary>
+        /// Converts gradians to degrees.
+        /// </summary>
+        /// <param name="gradian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float GradiansToDegrees(float gradian)
+        {
+            return gradian * (9.0f / 10.0f);
+        }
+
+        /// <summary>
+        /// Converts gradians to radians.
+        /// </summary>
+        /// <param name="gradian">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static float GradiansToRadians(float gradian)
+        {
+            return gradian * (MathExtended.Pi / 200.0f);
         }
     }
 }

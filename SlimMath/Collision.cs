@@ -65,7 +65,10 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
         public static void ClosestPointPointTriangle(ref Vector3 point, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Vector3 result)
         {
-            // Check if P in vertex region outside A
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 136
+
+            //Check if P in vertex region outside A
             Vector3 ab = vertex2 - vertex1;
             Vector3 ac = vertex3 - vertex1;
             Vector3 ap = point - vertex1;
@@ -73,51 +76,51 @@ namespace SlimMath
             float d1 = Vector3.Dot(ab, ap);
             float d2 = Vector3.Dot(ac, ap);
             if (d1 <= 0.0f && d2 <= 0.0f)
-                result = vertex1; // barycentric coordinates (1,0,0)
+                result = vertex1; //Barycentric coordinates (1,0,0)
 
-            // Check if P in vertex region outside B
+            //Check if P in vertex region outside B
             Vector3 bp = point - vertex2;
             float d3 = Vector3.Dot(ab, bp);
             float d4 = Vector3.Dot(ac, bp);
             if (d3 >= 0.0f && d4 <= d3)
                 result = vertex2; // barycentric coordinates (0,1,0)
 
-            // Check if P in edge region of AB, if so return projection of P onto AB
+            //Check if P in edge region of AB, if so return projection of P onto AB
             float vc = d1 * d4 - d3 * d2;
             if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
             {
                 float v = d1 / (d1 - d3);
-                result = vertex1 + v * ab; // barycentric coordinates (1-v,v,0)
+                result = vertex1 + v * ab; //Barycentric coordinates (1-v,v,0)
             }
 
-            // Check if P in vertex region outside C
+            //Check if P in vertex region outside C
             Vector3 cp = point - vertex3;
             float d5 = Vector3.Dot(ab, cp);
             float d6 = Vector3.Dot(ac, cp);
             if (d6 >= 0.0f && d5 <= d6)
-                result = vertex3; // barycentric coordinates (0,0,1)
+                result = vertex3; //Barycentric coordinates (0,0,1)
 
-            // Check if P in edge region of AC, if so return projection of P onto AC
+            //Check if P in edge region of AC, if so return projection of P onto AC
             float vb = d5 * d2 - d1 * d6;
             if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
             {
                 float w = d2 / (d2 - d6);
-                result = vertex1 + w * ac; // barycentric coordinates (1-w,0,w)
+                result = vertex1 + w * ac; //Barycentric coordinates (1-w,0,w)
             }
 
-            // Check if P in edge region of BC, if so return projection of P onto BC
+            //Check if P in edge region of BC, if so return projection of P onto BC
             float va = d3 * d6 - d5 * d4;
             if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
             {
                 float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-                result = vertex2 + w * (vertex3 - vertex2); // barycentric coordinates (0,1-w,w)
+                result = vertex2 + w * (vertex3 - vertex2); //Barycentric coordinates (0,1-w,w)
             }
 
-            // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+            //P inside face region. Compute Q through its barycentric coordinates (u,v,w)
             float denom = 1.0f / (va + vb + vc);
             float v2 = vb * denom;
             float w2 = vc * denom;
-            result = vertex1 + ab * v2 + ac * w2; // = u*vertex1 + v*vertex2 + w*vertex3, u = va * denom = 1.0f - v - w
+            result = vertex1 + ab * v2 + ac * w2; //= u*vertex1 + v*vertex2 + w*vertex3, u = va * denom = 1.0f - v - w
         }
 
         /// <summary>
@@ -128,6 +131,9 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
         public static void ClosestPointPlanePoint(ref Plane plane, ref Vector3 point, out Vector3 result)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 126
+
             float dot;
             Vector3.Dot(ref plane.Normal, ref point, out dot);
             float t = dot - plane.D;
@@ -143,6 +149,9 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
         public static void ClosestPointBoxPoint(ref BoundingBox box, ref Vector3 point, out Vector3 result)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 130
+
             Vector3 temp;
             Vector3.Max(ref point, ref box.Minimum, out temp);
             Vector3.Min(ref temp, ref box.Maximum, out result);
@@ -157,6 +166,9 @@ namespace SlimMath
         /// or, if the point is directly in the center of the sphere, contains <see cref="SlimMath.Vector3.Zero"/>.</param>
         public static void ClosestPointSpherePoint(ref BoundingSphere sphere, ref Vector3 point, out Vector3 result)
         {
+            //Source: Jorgy343
+            //Reference: None
+
             //Get the unit direction from the sphere's center to the point.
             Vector3.Subtract(ref point, ref sphere.Center, out result);
             result.Normalize();
@@ -183,7 +195,8 @@ namespace SlimMath
         /// </remarks>
         public static void ClosestPointSphereSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2, out Vector3 result)
         {
-            //Note: If two spheres are overlapping, this method will return the 'closest' point of intersection.
+            //Source: Jorgy343
+            //Reference: None
 
             //Get the unit direction from the first sphere's center to the second sphere's center.
             Vector3.Subtract(ref sphere2.Center, ref sphere1.Center, out result);
@@ -205,6 +218,9 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistancePlanePoint(ref Plane plane, ref Vector3 point)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 127
+
             float dot;
             Vector3.Dot(ref plane.Normal, ref point, out dot);
             return dot - plane.D;
@@ -218,6 +234,9 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistanceBoxPoint(ref BoundingBox box, ref Vector3 point)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 131
+
             float distance = 0f;
 
             if (point.X < box.Minimum.X)
@@ -246,6 +265,9 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistanceBoxBox(ref BoundingBox box1, ref BoundingBox box2)
         {
+            //Source:
+            //Reference:
+
             float distance = 0f;
 
             //Distance for X.
@@ -295,6 +317,9 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistanceSpherePoint(ref BoundingSphere sphere, ref Vector3 point)
         {
+            //Source: Jorgy343
+            //Reference: None
+
             float distance;
             Vector3.Distance(ref sphere.Center, ref point, out distance);
             distance -= sphere.Radius;
@@ -310,6 +335,9 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistanceSphereSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
         {
+            //Source: Jorgy343
+            //Reference: None
+
             float distance;
             Vector3.Distance(ref sphere1.Center, ref sphere2.Center, out distance);
             distance -= sphere1.Radius + sphere2.Radius;
@@ -325,9 +353,14 @@ namespace SlimMath
         /// <returns>Whether the two objects intersect.</returns>
         public static bool RayIntersectsPoint(ref Ray ray, ref Vector3 point)
         {
+            //Source: RayIntersectsSphere
+            //Reference: None
+
             Vector3 m;
             Vector3.Subtract(ref ray.Position, ref point, out m);
 
+            //Same thing as RayIntersectsSphere except that the radius of the sphere (point)
+            //is the epsilon for zero.
             float b = Vector3.Dot(m, ray.Direction);
             float c = Vector3.Dot(m, m) - Utilities.ZeroTolerance;
 
@@ -362,6 +395,9 @@ namespace SlimMath
         /// </remarks>
         public static bool RayIntersectsRay(ref Ray ray1, ref Ray ray2, out Vector3 point)
         {
+            //Source: Real-Time Rendering, Third Edition
+            //Reference: Page 780
+
             Vector3 cross;
 
             Vector3.Cross(ref ray1.Direction, ref ray2.Direction, out cross);
@@ -447,6 +483,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersect.</returns>
         public static bool RayIntersectsPlane(ref Ray ray, ref Plane plane, out float distance)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 175
+
             float direction;
             Vector3.Dot(ref plane.Normal, ref ray.Direction, out direction);
 
@@ -484,6 +523,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool RayIntersectsPlane(ref Ray ray, ref Plane plane, out Vector3 point)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 175
+
             float distance;
             if (!RayIntersectsPlane(ref ray, ref plane, out distance))
             {
@@ -514,6 +556,9 @@ namespace SlimMath
         /// </remarks>
         public static bool RayIntersectsTriangle(ref Ray ray, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out float distance)
         {
+            //Source: Fast Minimum Storage Ray / Triangle Intersection
+            //Reference: http://www.cs.virginia.edu/~gfx/Courses/2003/ImageSynthesis/papers/Acceleration/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
+
             //Compute vectors along two edges of the triangle.
             Vector3 edge1, edge2;
 
@@ -632,6 +677,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool RayIntersectsBox(ref Ray ray, ref BoundingBox box, out float distance)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 179
+
             distance = 0f;
             float tmax = float.MaxValue;
 
@@ -762,6 +810,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out float distance)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 177
+
             Vector3 m;
             Vector3.Subtract(ref ray.Position, ref sphere.Center, out m);
 
@@ -869,6 +920,9 @@ namespace SlimMath
         /// </remarks>
         public static bool PlaneIntersectsPlane(ref Plane plane1, ref Plane plane2, out Ray line)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 207
+
             Vector3 direction;
             Vector3.Cross(ref plane1.Normal, ref plane2.Normal, out direction);
 
@@ -907,6 +961,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static PlaneIntersectionType PlaneIntersectsTriangle(ref Plane plane, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 207
+
             PlaneIntersectionType test1 = PlaneIntersectsPoint(ref plane, ref vertex1);
             PlaneIntersectionType test2 = PlaneIntersectsPoint(ref plane, ref vertex2);
             PlaneIntersectionType test3 = PlaneIntersectsPoint(ref plane, ref vertex3);
@@ -928,6 +985,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static PlaneIntersectionType PlaneIntersectsBox(ref Plane plane, ref BoundingBox box)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 161
+
             Vector3 min;
             Vector3 max;
 
@@ -960,6 +1020,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static PlaneIntersectionType PlaneIntersectsSphere(ref Plane plane, ref BoundingSphere sphere)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 160
+
             float distance;
             Vector3.Dot(ref plane.Normal, ref sphere.Center, out distance);
             distance += plane.D;
@@ -1025,6 +1088,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool BoxIntersectsSphere(ref BoundingBox box, ref BoundingSphere sphere)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 166
+
             Vector3 vector;
             Vector3.Clamp(ref sphere.Center, ref box.Minimum, ref box.Maximum, out vector);
             float distance = Vector3.DistanceSquared(sphere.Center, vector);
@@ -1042,6 +1108,9 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool SphereIntersectsTriangle(ref BoundingSphere sphere, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
         {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 167
+
             Vector3 point;
             ClosestPointPointTriangle(ref sphere.Center, ref vertex1, ref vertex2, ref vertex3, out point);
             Vector3 v = point - sphere.Center;
@@ -1183,6 +1252,9 @@ namespace SlimMath
         /// <returns>The type of containment the two objects have.</returns>
         public static ContainmentType SphereContainsTriangle(ref BoundingSphere sphere, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
         {
+            //Source: Jorgy343
+            //Reference: None
+
             ContainmentType test1 = SphereContainsPoint(ref sphere, ref vertex1);
             ContainmentType test2 = SphereContainsPoint(ref sphere, ref vertex2);
             ContainmentType test3 = SphereContainsPoint(ref sphere, ref vertex3);
