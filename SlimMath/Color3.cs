@@ -723,13 +723,13 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="SlimMath.Color3"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="SlimMath.Color3"/> to compare with this instance.</param>
+        /// <param name="other">The <see cref="SlimMath.Color3"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="SlimMath.Color3"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Color3 value)
+        public bool Equals(Color3 other)
         {
-            return Red == value.Red && Green == value.Green && Blue == value.Blue;
+            return Red == other.Red && Green == other.Green && Blue == other.Blue;
         }
 
         /// <summary>

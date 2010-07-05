@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="1.36" Name="SlimMath">
+<FxCopProject Version="10.0" Name="SlimMath">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
-  <Stylesheet Apply="False">c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <Stylesheet Apply="False">$(ProjectDir)/../../../../program files (x86)/microsoft fxcop 1.36/Xml/FxCopReport.xsl</Stylesheet>
   <SaveMessages>
    <Project Status="Active, Excluded" NewOnly="False" />
    <Report Status="Active" NewOnly="False" />
@@ -98,31 +98,601 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.36">
+ <FxCopReport Version="10.0">
   <Targets>
    <Target Name="$(ProjectDir)/SlimMath/bin/Debug/SlimMath.dll">
     <Modules>
      <Module Name="slimmath.dll">
-      <Messages>
-       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-02-26 04:21:01Z">
-        <Issue Name="NoStrongName">
-         <Item>'SlimMath.dll'</Item>
-        </Issue>
-       </Message>
-      </Messages>
       <Namespaces>
        <Namespace Name="SlimMath">
         <Types>
-         <Type Name="Matrix">
+         <Type Name="AngleSingle">
           <Members>
-           <Member Name="#Equals(SlimMath.Matrix)">
+           <Member Name="#CompareTo(System.Object)">
             <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
               <Issue>
-               <Item>'Matrix.Equals(Matrix)'</Item>
+               <Item>'AngleSingle.CompareTo(object)'</Item>
+               <Item>'other'</Item>
+               <Item>'obj'</Item>
+               <Item>'IComparable.CompareTo(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Gradian">
+            <Messages>
+             <Message Id="Gradian" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Gradian</Item>
+               <Item>'AngleSingle.Gradian'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Gradians">
+            <Messages>
+             <Message Id="Gradians" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Gradians</Item>
+               <Item>'AngleSingle.Gradians'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Milliradian">
+            <Messages>
+             <Message Id="Milliradian" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Milliradian</Item>
+               <Item>'AngleSingle.Milliradian'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Milliradians">
+            <Messages>
+             <Message Id="Milliradians" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Milliradians</Item>
+               <Item>'AngleSingle.Milliradians'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryNegation(SlimMath.AngleSingle)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Negate</Item>
+               <Item>'AngleSingle.operator -(AngleSingle)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.AngleSingle)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'AngleSingle.operator +(AngleSingle)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString()">
+            <Messages>
+             <Message Id="System.Single.ToString(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-07-01 21:30:25Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'float.ToString(string)'</Item>
+               <Item>'AngleSingle.ToString()'</Item>
+               <Item>'float.ToString(string, IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString(System.IFormatProvider)">
+            <Messages>
+             <Message Id="System.Single.ToString(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-07-01 21:30:25Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'float.ToString(string)'</Item>
+               <Item>'AngleSingle.ToString(IFormatProvider)'</Item>
+               <Item>'float.ToString(string, IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="AngleType">
+          <Members>
+           <Member Name="#Gradian">
+            <Messages>
+             <Message Id="Gradian" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Gradian</Item>
+               <Item>'AngleType.Gradian'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BoundingBox">
+          <Members>
+           <Member Name="#Equals(SlimMath.BoundingBox)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingBox.Equals(BoundingBox)'</Item>
                <Item>'value'</Item>
                <Item>'other'</Item>
-               <Item>'IEquatable&lt;Matrix&gt;.Equals(Matrix)'</Item>
+               <Item>'IEquatable&lt;BoundingBox&gt;.Equals(BoundingBox)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingBox.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Maximum">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingBox.Maximum'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Minimum">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingBox.Minimum'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="BoundingSphere">
+          <Members>
+           <Member Name="#Center">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingSphere.Center'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(SlimMath.BoundingSphere)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingSphere.Equals(BoundingSphere)'</Item>
+               <Item>'value'</Item>
+               <Item>'other'</Item>
+               <Item>'IEquatable&lt;BoundingSphere&gt;.Equals(BoundingSphere)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingSphere.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Radius">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'BoundingSphere.Radius'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString()">
+            <Messages>
+             <Message Id="System.Single.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-07-01 21:30:25Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'float.ToString()'</Item>
+               <Item>'BoundingSphere.ToString()'</Item>
+               <Item>'float.ToString(IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString(System.IFormatProvider)">
+            <Messages>
+             <Message Id="System.Single.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-07-01 21:30:25Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'float.ToString()'</Item>
+               <Item>'BoundingSphere.ToString(IFormatProvider)'</Item>
+               <Item>'float.ToString(IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Color3">
+          <Members>
+           <Member Name="#.ctor(System.Int32)">
+            <Messages>
+             <Message Id="rgb" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="MemberParameter">
+               <Item>'Color3.Color3(int)'</Item>
+               <Item>rgb</Item>
+               <Item>'rgb'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Blue">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color3.Blue'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color3.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Green">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color3.Green'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(SlimMath.Color3,SlimMath.Color3)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color3.operator *(Color3, Color3)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(SlimMath.Color3,System.Single)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color3.operator *(Color3, float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(System.Single,SlimMath.Color3)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color3.operator *(float, Color3)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.Color3)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'Color3.operator +(Color3)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color3.Red'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Scale(SlimMath.Color3&amp;,System.Single,SlimMath.Color3&amp;)">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'scale'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Scale(SlimMath.Color3,System.Single)">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'scale'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToRgb()">
+            <Messages>
+             <Message Id="Rgb" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Rgb</Item>
+               <Item>'Color3.ToRgb()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Color4">
+          <Members>
+           <Member Name="#.ctor(System.Int32)">
+            <Messages>
+             <Message Id="argb" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="MemberParameter">
+               <Item>'Color4.Color4(int)'</Item>
+               <Item>argb</Item>
+               <Item>'argb'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Alpha">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color4.Alpha'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Blue">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color4.Blue'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color4.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Green">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color4.Green'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(SlimMath.Color4,SlimMath.Color4)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color4.operator *(Color4, Color4)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(SlimMath.Color4,System.Single)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color4.operator *(Color4, float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_Multiply(System.Single,SlimMath.Color4)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Multiply</Item>
+               <Item>'Color4.operator *(float, Color4)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.Color4)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'Color4.operator +(Color4)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Red">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Color4.Red'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Scale(SlimMath.Color4&amp;,System.Single,SlimMath.Color4&amp;)">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'scale'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Scale(SlimMath.Color4,System.Single)">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'scale'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToArgb()">
+            <Messages>
+             <Message Id="Argb" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-01 21:30:25Z">
+              <Issue Name="Member">
+               <Item>Argb</Item>
+               <Item>'Color4.ToArgb()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Matrix">
+          <Members>
+           <Member Name="#.ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <Messages>
+             <Message Id="M" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-07-01 21:30:25Z">
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M11'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M12'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M13'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M14'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M21'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M22'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M23'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M24'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M31'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M32'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M33'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M34'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M41'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M42'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M43'</Item>
+               <Item>m</Item>
+              </Issue>
+              <Issue Name="MemberParameter">
+               <Item>'Matrix.Matrix(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)'</Item>
+               <Item>M</Item>
+               <Item>'M44'</Item>
+               <Item>m</Item>
               </Issue>
              </Message>
             </Messages>
@@ -292,6 +862,16 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.Matrix)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'Matrix.operator +(Matrix)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#PerspectiveFovLH(System.Single,System.Single,System.Single,System.Single)">
             <Messages>
              <Message Id="Fov" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-02-26 04:21:01Z">
@@ -363,10 +943,12 @@
            <Member Name="#ToString(System.String)">
             <Messages>
              <Message Id="System.String.Format(System.String,System.Object[])" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-02-26 04:21:01Z">
-              <Issue>
+              <Issue Name="IFormatProviderAlternateString">
                <Item>'string.Format(string, params object[])'</Item>
                <Item>'Matrix.ToString(string)'</Item>
                <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -374,10 +956,58 @@
            <Member Name="#ToString(System.String,System.IFormatProvider)">
             <Messages>
              <Message Id="System.String.Format(System.String,System.Object[])" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2010-02-26 04:21:01Z">
-              <Issue>
+              <Issue Name="IFormatProviderAlternateString">
                <Item>'string.Format(string, params object[])'</Item>
                <Item>'Matrix.ToString(string, IFormatProvider)'</Item>
                <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Plane">
+          <Members>
+           <Member Name="#D">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Plane.D'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(SlimMath.Plane)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Plane.Equals(Plane)'</Item>
+               <Item>'value'</Item>
+               <Item>'other'</Item>
+               <Item>'IEquatable&lt;Plane&gt;.Equals(Plane)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Plane.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Normal">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Plane.Normal'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -386,18 +1016,6 @@
          </Type>
          <Type Name="Quaternion">
           <Members>
-           <Member Name="#Equals(SlimMath.Quaternion)">
-            <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Quaternion.Equals(Quaternion)'</Item>
-               <Item>'value'</Item>
-               <Item>'other'</Item>
-               <Item>'IEquatable&lt;Quaternion&gt;.Equals(Quaternion)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Equals(System.Object)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
@@ -477,20 +1095,112 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="Vector2">
+         <Type Name="Ray">
           <Members>
-           <Member Name="#Equals(SlimMath.Vector2)">
+           <Member Name="#Direction">
             <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
               <Issue>
-               <Item>'Vector2.Equals(Vector2)'</Item>
-               <Item>'value'</Item>
-               <Item>'other'</Item>
-               <Item>'IEquatable&lt;Vector2&gt;.Equals(Vector2)'</Item>
+               <Item>'Ray.Direction'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
+           <Member Name="#Equals(SlimMath.Ray)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Ray.Equals(Ray)'</Item>
+               <Item>'value'</Item>
+               <Item>'other'</Item>
+               <Item>'IEquatable&lt;Ray&gt;.Equals(Ray)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Equals(System.Object)">
+            <Messages>
+             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Ray.Equals(object)'</Item>
+               <Item>'value'</Item>
+               <Item>'obj'</Item>
+               <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Position">
+            <Messages>
+             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Ray.Position'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Utilities">
+          <Members>
+           <Member Name="#DegreesToGradians(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.DegreesToGradians(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DegreesToRevolutions(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.DegreesToRevolutions(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GradiansToDegrees(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.GradiansToDegrees(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GradiansToRevolutions(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.GradiansToRevolutions(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RevolutionsToDegrees(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.RevolutionsToDegrees(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RevolutionsToGradians(System.Single)">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>'Utilities.RevolutionsToGradians(float)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Vector2">
+          <Members>
            <Member Name="#Equals(System.Object)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
@@ -503,13 +1213,12 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Normalize(SlimMath.Vector2&amp;,SlimMath.Vector2&amp;)">
+           <Member Name="#op_UnaryPlus(SlimMath.Vector2)">
             <Messages>
-             <Message Id="temp" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-02-26 04:21:01Z">
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
               <Issue>
-               <Item>'Vector2.Normalize(ref Vector2, out Vector2)'</Item>
-               <Item>'temp'</Item>
-               <Item>'Vector2'</Item>
+               <Item>Plus</Item>
+               <Item>'Vector2.operator +(Vector2)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -523,41 +1232,18 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Transform(SlimMath.Vector2&amp;,SlimMath.Quaternion&amp;,SlimMath.Vector2&amp;)">
+           <Member Name="#Transform(SlimMath.Vector2,SlimMath.Matrix)">
             <Messages>
-             <Message Id="wx" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-02-26 04:21:01Z">
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-02-26 04:21:01Z">
               <Issue>
-               <Item>'Vector2.Transform(ref Vector2, ref Quaternion, out Vector2)'</Item>
-               <Item>'wx'</Item>
-               <Item>'float'</Item>
-              </Issue>
-             </Message>
-             <Message Id="wy" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Vector2.Transform(ref Vector2, ref Quaternion, out Vector2)'</Item>
-               <Item>'wy'</Item>
-               <Item>'float'</Item>
-              </Issue>
-             </Message>
-             <Message Id="xz" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Vector2.Transform(ref Vector2, ref Quaternion, out Vector2)'</Item>
-               <Item>'xz'</Item>
-               <Item>'float'</Item>
-              </Issue>
-             </Message>
-             <Message Id="yz" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Vector2.Transform(ref Vector2, ref Quaternion, out Vector2)'</Item>
-               <Item>'yz'</Item>
-               <Item>'float'</Item>
+               <Item>'transform'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#Transform(SlimMath.Vector2,SlimMath.Matrix)">
+           <Member Name="#Transform(SlimMath.Vector2[],SlimMath.Matrix&amp;,SlimMath.Vector4[])">
             <Messages>
-             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-02-26 04:21:01Z">
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
               <Issue>
                <Item>'transform'</Item>
               </Issue>
@@ -586,18 +1272,6 @@
          </Type>
          <Type Name="Vector3">
           <Members>
-           <Member Name="#Equals(SlimMath.Vector3)">
-            <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Vector3.Equals(Vector3)'</Item>
-               <Item>'value'</Item>
-               <Item>'other'</Item>
-               <Item>'IEquatable&lt;Vector3&gt;.Equals(Vector3)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Equals(System.Object)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
@@ -606,6 +1280,16 @@
                <Item>'value'</Item>
                <Item>'obj'</Item>
                <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.Vector3)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'Vector3.operator +(Vector3)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -646,6 +1330,15 @@
            <Member Name="#Transform(SlimMath.Vector3,SlimMath.Matrix)">
             <Messages>
              <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-02-26 04:21:01Z">
+              <Issue>
+               <Item>'transform'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Transform(SlimMath.Vector3[],SlimMath.Matrix&amp;,SlimMath.Vector4[])">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
               <Issue>
                <Item>'transform'</Item>
               </Issue>
@@ -719,18 +1412,6 @@
          </Type>
          <Type Name="Vector4">
           <Members>
-           <Member Name="#Equals(SlimMath.Vector4)">
-            <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
-              <Issue>
-               <Item>'Vector4.Equals(Vector4)'</Item>
-               <Item>'value'</Item>
-               <Item>'other'</Item>
-               <Item>'IEquatable&lt;Vector4&gt;.Equals(Vector4)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Equals(System.Object)">
             <Messages>
              <Message Id="0#" TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725" Created="2010-02-26 04:21:01Z">
@@ -739,6 +1420,16 @@
                <Item>'value'</Item>
                <Item>'obj'</Item>
                <Item>'ValueType.Equals(object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#op_UnaryPlus(SlimMath.Vector4)">
+            <Messages>
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-07-01 21:30:25Z">
+              <Issue>
+               <Item>Plus</Item>
+               <Item>'Vector4.operator +(Vector4)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -755,6 +1446,15 @@
            <Member Name="#Transform(SlimMath.Vector4,SlimMath.Matrix)">
             <Messages>
              <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-02-26 04:21:01Z">
+              <Issue>
+               <Item>'transform'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Transform(SlimMath.Vector4[],SlimMath.Matrix&amp;,SlimMath.Vector4[])">
+            <Messages>
+             <Message Id="1#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-07-01 21:30:25Z">
               <Issue>
                <Item>'transform'</Item>
               </Issue>
@@ -838,8 +1538,8 @@
    </Target>
   </Targets>
   <Rules>
-   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
-    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
    </Rule>
    <Rule TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227">
     <Resolution Name="Default">Change {0} to be read-only by removing the property setter.</Resolution>
@@ -850,12 +1550,18 @@
    <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
     <Resolution Name="Default">Because field {0} is visible outside of its declaring type, change its accessibility to private and add a property, with the same accessibility as the field has currently, to provide access to it.</Resolution>
    </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="MemberParameter">In member {0}, correct the casing of '{1}' in parameter name {2} by changing it to '{3}'.</Resolution>
+   </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
    </Rule>
    <Rule TypeName="IndexersShouldNotBeMultidimensional" Category="Microsoft.Design" CheckId="CA1023">
     <Resolution Name="Default">Redesign indexer {0} to use a single string or integer value as its index.</Resolution>
+   </Rule>
+   <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
+    <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
    </Rule>
    <Rule TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725">
     <Resolution Name="Default">In member {0}, change parameter name {1} to {2} in order to match the identifier as it has been declared in {3}.</Resolution>
@@ -866,14 +1572,11 @@
    <Rule TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721">
     <Resolution Name="BaseType">The property name {0} is confusing given the existence of inherited method {1}. Rename or remove this property.</Resolution>
    </Rule>
-   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
-    <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
-   </Rule>
    <Rule TypeName="ReplaceRepetitiveArgumentsWithParamsArray" Category="Microsoft.Design" CheckId="CA1025">
     <Resolution Name="Default">Consider implementing a version of {0} that accepts a parameter array argument.</Resolution>
    </Rule>
    <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
-    <Resolution Name="Default">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Resolution>
+    <Resolution Name="IFormatProviderAlternateString">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify {3} as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify {4}.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

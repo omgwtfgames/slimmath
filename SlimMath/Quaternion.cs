@@ -173,7 +173,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Gets a value indicting whether this isntance is normalized.
+        /// Gets a value indicting whether this instance is normalized.
         /// </summary>
         public bool IsNormalized
         {
@@ -383,27 +383,27 @@ namespace SlimMath
         /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
-        /// <param name="quaternion">The quaternion to scale.</param>
+        /// <param name="value">The quaternion to scale.</param>
         /// <param name="scale">The amount by which to scale the quaternion.</param>
         /// <param name="result">When the method completes, contains the scaled quaternion.</param>
-        public static void Multiply(ref Quaternion quaternion, float scale, out Quaternion result)
+        public static void Multiply(ref Quaternion value, float scale, out Quaternion result)
         {
-            result.X = quaternion.X * scale;
-            result.Y = quaternion.Y * scale;
-            result.Z = quaternion.Z * scale;
-            result.W = quaternion.W * scale;
+            result.X = value.X * scale;
+            result.Y = value.Y * scale;
+            result.Z = value.Z * scale;
+            result.W = value.W * scale;
         }
 
         /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
-        /// <param name="quaternion">The quaternion to scale.</param>
+        /// <param name="value">The quaternion to scale.</param>
         /// <param name="scale">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion Multiply(Quaternion quaternion, float scale)
+        public static Quaternion Multiply(Quaternion value, float scale)
         {
             Quaternion result;
-            Multiply(ref quaternion, scale, out result);
+            Multiply(ref value, scale, out result);
             return result;
         }
 
@@ -446,83 +446,83 @@ namespace SlimMath
         /// <summary>
         /// Reverses the direction of a given quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to negate.</param>
+        /// <param name="value">The quaternion to negate.</param>
         /// <param name="result">When the method completes, contains a quaternion facing in the opposite direction.</param>
-        public static void Negate(ref Quaternion quaternion, out Quaternion result)
+        public static void Negate(ref Quaternion value, out Quaternion result)
         {
-            result.X = -quaternion.X;
-            result.Y = -quaternion.Y;
-            result.Z = -quaternion.Z;
-            result.W = -quaternion.W;
+            result.X = -value.X;
+            result.Y = -value.Y;
+            result.Z = -value.Z;
+            result.W = -value.W;
         }
 
         /// <summary>
         /// Reverses the direction of a given quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to negate.</param>
+        /// <param name="value">The quaternion to negate.</param>
         /// <returns>A quaternion facing in the opposite direction.</returns>
-        public static Quaternion Negate(Quaternion quaternion)
+        public static Quaternion Negate(Quaternion value)
         {
             Quaternion result;
-            Negate(ref quaternion, out result);
+            Negate(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Returns a <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="source1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="source2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="source3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
-        /// <param name="weight1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="source2"/>).</param>
-        /// <param name="weight2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="source3"/>).</param>
+        /// <param name="value1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="value2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="value3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
+        /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <param name="result">When the method completes, contains a new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</param>
-        public static void Barycentric(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, float weight1, float weight2, out Quaternion result)
+        public static void Barycentric(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, float amount1, float amount2, out Quaternion result)
         {
             Quaternion start, end;
-            Slerp(ref source1, ref source2, weight1 + weight2, out start);
-            Slerp(ref source1, ref source3, weight1 + weight2, out end);
-            Slerp(ref start, ref end, weight2 / (weight1 + weight2), out result);
+            Slerp(ref value1, ref value2, amount1 + amount2, out start);
+            Slerp(ref value1, ref value3, amount1 + amount2, out end);
+            Slerp(ref start, ref end, amount2 / (amount1 + amount2), out result);
         }
 
         /// <summary>
         /// Returns a <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of a point specified in Barycentric coordinates relative to a 2D triangle.
         /// </summary>
-        /// <param name="source1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
-        /// <param name="source2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
-        /// <param name="source3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
-        /// <param name="weight1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="source2"/>).</param>
-        /// <param name="weight2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="source3"/>).</param>
+        /// <param name="value1">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 1 of the triangle.</param>
+        /// <param name="value2">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 2 of the triangle.</param>
+        /// <param name="value3">A <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of vertex 3 of the triangle.</param>
+        /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2"/>).</param>
+        /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3"/>).</param>
         /// <returns>A new <see cref="SlimMath.Quaternion"/> containing the 4D Cartesian coordinates of the specified point.</returns>
-        public static Quaternion Barycentric(Quaternion source1, Quaternion source2, Quaternion source3, float weight1, float weight2)
+        public static Quaternion Barycentric(Quaternion value1, Quaternion value2, Quaternion value3, float amount1, float amount2)
         {
             Quaternion result;
-            Barycentric(ref source1, ref source2, ref source3, weight1, weight2, out result);
+            Barycentric(ref value1, ref value2, ref value3, amount1, amount2, out result);
             return result;
         }
 
         /// <summary>
         /// Conjugates a quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to conjugate.</param>
+        /// <param name="value">The quaternion to conjugate.</param>
         /// <param name="result">When the method completes, contains the conjugated quaternion.</param>
-        public static void Conjugate(ref Quaternion quaternion, out Quaternion result)
+        public static void Conjugate(ref Quaternion value, out Quaternion result)
         {
-            result.X = -quaternion.X;
-            result.Y = -quaternion.Y;
-            result.Z = -quaternion.Z;
-            result.W = quaternion.W;
+            result.X = -value.X;
+            result.Y = -value.Y;
+            result.Z = -value.Z;
+            result.W = value.W;
         }
 
         /// <summary>
         /// Conjugates a quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to conjugate.</param>
+        /// <param name="value">The quaternion to conjugate.</param>
         /// <returns>The conjugated quaternion.</returns>
-        public static Quaternion Conjugate(Quaternion quaternion)
+        public static Quaternion Conjugate(Quaternion value)
         {
             Quaternion result;
-            Conjugate(ref quaternion, out result);
+            Conjugate(ref value, out result);
             return result;
         }
 
@@ -551,22 +551,24 @@ namespace SlimMath
         /// <summary>
         /// Exponentiates a quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to exponentiate.</param>
+        /// <param name="value">The quaternion to exponentiate.</param>
         /// <param name="result">When the method completes, contains the exponentiated quaternion.</param>
-        public static void Exponential(ref Quaternion quaternion, out Quaternion result)
+        public static void Exponential(ref Quaternion value, out Quaternion result)
         {
-            float angle = (float)Math.Sqrt((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z));
+            float angle = (float)Math.Sqrt((value.X * value.X) + (value.Y * value.Y) + (value.Z * value.Z));
             float sin = (float)Math.Sin(angle);
 
             if (Math.Abs(sin) >= Utilities.ZeroTolerance)
             {
-                float coeff = angle / sin;
-                result.X = coeff * quaternion.X;
-                result.Y = coeff * quaternion.Y;
-                result.Z = coeff * quaternion.Z;
+                float coeff = sin / angle;
+                result.X = coeff * value.X;
+                result.Y = coeff * value.Y;
+                result.Z = coeff * value.Z;
             }
             else
-                result = quaternion;
+            {
+                result = value;
+            }
 
             result.W = (float)Math.Cos(angle);
         }
@@ -574,35 +576,35 @@ namespace SlimMath
         /// <summary>
         /// Exponentiates a quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to exponentiate.</param>
+        /// <param name="value">The quaternion to exponentiate.</param>
         /// <returns>The exponentiated quaternion.</returns>
-        public static Quaternion Exponential(Quaternion quaternion)
+        public static Quaternion Exponential(Quaternion value)
         {
             Quaternion result;
-            Exponential(ref quaternion, out result);
+            Exponential(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Conjugates and renormalizes the quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to conjugate and renormalize.</param>
+        /// <param name="value">The quaternion to conjugate and renormalize.</param>
         /// <param name="result">When the method completes, contains the conjugated and renormalized quaternion.</param>
-        public static void Invert(ref Quaternion quaternion, out Quaternion result)
+        public static void Invert(ref Quaternion value, out Quaternion result)
         {
-            result = quaternion;
+            result = value;
             result.Invert();
         }
 
         /// <summary>
         /// Conjugates and renormalizes the quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to conjugate and renormalize.</param>
+        /// <param name="value">The quaternion to conjugate and renormalize.</param>
         /// <returns>The conjugated and renormalized quaternion.</returns>
-        public static Quaternion Invert(Quaternion quaternion)
+        public static Quaternion Invert(Quaternion value)
         {
             Quaternion result;
-            Invert(ref quaternion, out result);
+            Invert(ref value, out result);
             return result;
         }
 
@@ -662,23 +664,30 @@ namespace SlimMath
         /// <summary>
         /// Calculates the natural logarithm of the specified quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion whose logarithm will be calculated.</param>
+        /// <param name="value">The quaternion whose logarithm will be calculated.</param>
         /// <param name="result">When the method completes, contains the natural logarithm of the quaternion.</param>
-        public static void Logarithm(ref Quaternion quaternion, out Quaternion result)
+        public static void Logarithm(ref Quaternion value, out Quaternion result)
         {
-            float angle = (float)Math.Acos(quaternion.W);
-            float sin = (float)Math.Sin(angle);
-
-            if (Math.Abs(quaternion.W) < 1.0 && Math.Abs(sin) >= Utilities.ZeroTolerance)
+            if (Math.Abs(value.W) < 1.0)
             {
-                float coeff = angle / sin;
-                result.X = quaternion.X * coeff;
-                result.Y = quaternion.Y * coeff;
-                result.Z = quaternion.Z * coeff;
+                float angle = (float)Math.Acos(value.W);
+                float sin = (float)Math.Sin(angle);
+
+                if (Math.Abs(sin) >= Utilities.ZeroTolerance)
+                {
+                    float coeff = angle / sin;
+                    result.X = value.X * coeff;
+                    result.Y = value.Y * coeff;
+                    result.Z = value.Z * coeff;
+                }
+                else
+                {
+                    result = value;
+                }
             }
             else
             {
-                result = quaternion;
+                result = value;
             }
 
             result.W = 0.0f;
@@ -687,23 +696,23 @@ namespace SlimMath
         /// <summary>
         /// Calculates the natural logarithm of the specified quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion whose logarithm will be calculated.</param>
+        /// <param name="value">The quaternion whose logarithm will be calculated.</param>
         /// <returns>The natural logarithm of the quaternion.</returns>
-        public static Quaternion Logarithm(Quaternion quaternion)
+        public static Quaternion Logarithm(Quaternion value)
         {
             Quaternion result;
-            Logarithm(ref quaternion, out result);
+            Logarithm(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Converts the quaternion into a unit quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to normalize.</param>
+        /// <param name="value">The quaternion to normalize.</param>
         /// <param name="result">When the method completes, contains the normalized quaternion.</param>
-        public static void Normalize(ref Quaternion quaternion, out Quaternion result)
+        public static void Normalize(ref Quaternion value, out Quaternion result)
         {
-            Quaternion temp = quaternion;
+            Quaternion temp = value;
             result = temp;
             result.Normalize();
         }
@@ -711,12 +720,12 @@ namespace SlimMath
         /// <summary>
         /// Converts the quaternion into a unit quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to normalize.</param>
+        /// <param name="value">The quaternion to normalize.</param>
         /// <returns>The normalized quaternion.</returns>
-        public static Quaternion Normalize(Quaternion quaternion)
+        public static Quaternion Normalize(Quaternion value)
         {
-            quaternion.Normalize();
-            return quaternion;
+            value.Normalize();
+            return value;
         }
 
         /// <summary>
@@ -908,50 +917,50 @@ namespace SlimMath
         /// <summary>
         /// Interpolates between quaternions, using spherical quadrangle interpolation.
         /// </summary>
-        /// <param name="source1">First source quaternion.</param>
-        /// <param name="source2">Second source quaternion.</param>
-        /// <param name="source3">Thrid source quaternion.</param>
-        /// <param name="source4">Fourth source quaternion.</param>
+        /// <param name="value1">First source quaternion.</param>
+        /// <param name="value2">Second source quaternion.</param>
+        /// <param name="value3">Thrid source quaternion.</param>
+        /// <param name="value4">Fourth source quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of interpolation.</param>
         /// <param name="result">When the method completes, contains the spherical quadrangle interpolation of the quaternions.</param>
-        public static void Squad(ref Quaternion source1, ref Quaternion source2, ref Quaternion source3, ref Quaternion source4, float amount, out Quaternion result)
+        public static void Squad(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, ref Quaternion value4, float amount, out Quaternion result)
         {
             Quaternion start, end;
-            Slerp(ref source1, ref source4, amount, out start);
-            Slerp(ref source2, ref source3, amount, out end);
+            Slerp(ref value1, ref value4, amount, out start);
+            Slerp(ref value2, ref value3, amount, out end);
             Slerp(ref start, ref end, 2.0f * amount * (1.0f - amount), out result);
         }
 
         /// <summary>
         /// Interpolates between quaternions, using spherical quadrangle interpolation.
         /// </summary>
-        /// <param name="source1">First source quaternion.</param>
-        /// <param name="source2">Second source quaternion.</param>
-        /// <param name="source3">Thrid source quaternion.</param>
-        /// <param name="source4">Fourth source quaternion.</param>
+        /// <param name="value1">First source quaternion.</param>
+        /// <param name="value2">Second source quaternion.</param>
+        /// <param name="value3">Thrid source quaternion.</param>
+        /// <param name="value4">Fourth source quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of interpolation.</param>
         /// <returns>The spherical quadrangle interpolation of the quaternions.</returns>
-        public static Quaternion Squad(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4, float amount)
+        public static Quaternion Squad(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4, float amount)
         {
             Quaternion result;
-            Squad(ref source1, ref source2, ref source3, ref source4, amount, out result);
+            Squad(ref value1, ref value2, ref value3, ref value4, amount, out result);
             return result;
         }
 
         /// <summary>
         /// Sets up control points for spherical quadrangle interpolation.
         /// </summary>
-        /// <param name="source1">First source quaternion.</param>
-        /// <param name="source2">Second source quaternion.</param>
-        /// <param name="source3">Third source quaternion.</param>
-        /// <param name="source4">Fourth source quaternion.</param>
+        /// <param name="value1">First source quaternion.</param>
+        /// <param name="value2">Second source quaternion.</param>
+        /// <param name="value3">Third source quaternion.</param>
+        /// <param name="value4">Fourth source quaternion.</param>
         /// <returns>An array of three quaternions that represent control points for spherical quadrangle interpolation.</returns>
-        public static Quaternion[] SquadSetup(Quaternion source1, Quaternion source2, Quaternion source3, Quaternion source4)
+        public static Quaternion[] SquadSetup(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4)
         {
-            Quaternion q0 = (source1 + source2).LengthSquared() < (source1 - source2).LengthSquared() ? -source1 : source1;
-            Quaternion q2 = (source2 + source3).LengthSquared() < (source2 - source3).LengthSquared() ? -source3 : source3;
-            Quaternion q3 = (source3 + source4).LengthSquared() < (source3 - source4).LengthSquared() ? -source4 : source4;
-            Quaternion q1 = source2;
+            Quaternion q0 = (value1 + value2).LengthSquared() < (value1 - value2).LengthSquared() ? -value1 : value1;
+            Quaternion q2 = (value2 + value3).LengthSquared() < (value2 - value3).LengthSquared() ? -value3 : value3;
+            Quaternion q3 = (value3 + value4).LengthSquared() < (value3 - value4).LengthSquared() ? -value4 : value4;
+            Quaternion q1 = value2;
 
             Quaternion q1Exp, q2Exp;
             Exponential(ref q1, out q1Exp);
@@ -994,38 +1003,38 @@ namespace SlimMath
         /// <summary>
         /// Reverses the direction of a given quaternion.
         /// </summary>
-        /// <param name="quaternion">The quaternion to negate.</param>
+        /// <param name="value">The quaternion to negate.</param>
         /// <returns>A quaternion facing in the opposite direction.</returns>
-        public static Quaternion operator -(Quaternion quaternion)
+        public static Quaternion operator -(Quaternion value)
         {
             Quaternion result;
-            Negate(ref quaternion, out result);
+            Negate(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
-        /// <param name="quaternion">The quaternion to scale.</param>
+        /// <param name="value">The quaternion to scale.</param>
         /// <param name="scale">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(float scale, Quaternion quaternion)
+        public static Quaternion operator *(float scale, Quaternion value)
         {
             Quaternion result;
-            Multiply(ref quaternion, scale, out result);
+            Multiply(ref value, scale, out result);
             return result;
         }
 
         /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
-        /// <param name="quaternion">The quaternion to scale.</param>
+        /// <param name="value">The quaternion to scale.</param>
         /// <param name="scale">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(Quaternion quaternion, float scale)
+        public static Quaternion operator *(Quaternion value, float scale)
         {
             Quaternion result;
-            Multiply(ref quaternion, scale, out result);
+            Multiply(ref value, scale, out result);
             return result;
         }
 
@@ -1128,13 +1137,16 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="SlimMath.Quaternion"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="SlimMath.Quaternion"/> to compare with this instance.</param>
+        /// <param name="other">The <see cref="SlimMath.Quaternion"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="SlimMath.Quaternion"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="SlimMath.Quaternion"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Quaternion value)
+        public bool Equals(Quaternion other)
         {
-            return (X == value.X && Y == value.Y && Z == value.Z && W == value.W);
+            return ((float)Math.Abs(other.X - X) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.Y - Y) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.Z - Z) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.W - W) < Utilities.ZeroTolerance);
         }
 
         /// <summary>
@@ -1142,7 +1154,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object value)
         {

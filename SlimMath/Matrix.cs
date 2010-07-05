@@ -393,53 +393,6 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Decomposes a matrix into a scale, rotation, and translation.
-        /// </summary>
-        /// <param name="scale">The scaling component of the decomposed matrix.</param>
-        /// <param name="rotation">The rtoation component of the decomposed matrix.</param>
-        /// <param name="translation">The translation component of the decomposed matrix.</param>
-        public bool Decompose(out Vector3 scale, out Matrix rotation, out Vector3 translation)
-        {
-            //Source: Unknown
-            //References: http://www.gamedev.net/community/forums/topic.asp?topic_id=441695
-
-            translation.X = this.M41;
-            translation.Y = this.M42;
-            translation.Z = this.M43;
-
-            //Scaling is the length of the rows.
-            scale.X = (float)Math.Sqrt((M11 * M11) + (M12 * M12) + (M13 * M13));
-            scale.Y = (float)Math.Sqrt((M21 * M21) + (M22 * M22) + (M23 * M23));
-            scale.Z = (float)Math.Sqrt((M31 * M31) + (M32 * M32) + (M33 * M33));
-
-            //If any of the scaling factors are zero, than the rotation matrix can not exist.
-            if (Math.Abs(scale.X) < Utilities.ZeroTolerance ||
-                Math.Abs(scale.Y) < Utilities.ZeroTolerance ||
-                Math.Abs(scale.Z) < Utilities.ZeroTolerance)
-            {
-                rotation = Matrix.Identity;
-                return false;
-            }
-
-            //The rotation is the left over matrix after dividing out the scaling.
-            rotation = new Matrix();
-            rotation.M11 = M11 / scale.X;
-            rotation.M12 = M12 / scale.X;
-            rotation.M13 = M13 / scale.X;
-
-            rotation.M21 = M21 / scale.Y;
-            rotation.M22 = M22 / scale.Y;
-            rotation.M23 = M23 / scale.Y;
-
-            rotation.M31 = M31 / scale.Z;
-            rotation.M32 = M32 / scale.Z;
-            rotation.M33 = M33 / scale.Z;
-
-            rotation.M44 = 1f;
-            return true;
-        }
-
-        /// <summary>
         /// Determines the sum of two matrices.
         /// </summary>
         /// <param name="left">The first matrix to add.</param>
@@ -679,37 +632,37 @@ namespace SlimMath
         /// <summary>
         /// Negates a matrix.
         /// </summary>
-        /// <param name="matrix">The matrix to be negated.</param>
+        /// <param name="value">The matrix to be negated.</param>
         /// <param name="result">When the method completes, contains the negated matrix.</param>
-        public static void Negate(ref Matrix matrix, out Matrix result)
+        public static void Negate(ref Matrix value, out Matrix result)
         {
-            result.M11 = -matrix.M11;
-            result.M12 = -matrix.M12;
-            result.M13 = -matrix.M13;
-            result.M14 = -matrix.M14;
-            result.M21 = -matrix.M21;
-            result.M22 = -matrix.M22;
-            result.M23 = -matrix.M23;
-            result.M24 = -matrix.M24;
-            result.M31 = -matrix.M31;
-            result.M32 = -matrix.M32;
-            result.M33 = -matrix.M33;
-            result.M34 = -matrix.M34;
-            result.M41 = -matrix.M41;
-            result.M42 = -matrix.M42;
-            result.M43 = -matrix.M43;
-            result.M44 = -matrix.M44;
+            result.M11 = -value.M11;
+            result.M12 = -value.M12;
+            result.M13 = -value.M13;
+            result.M14 = -value.M14;
+            result.M21 = -value.M21;
+            result.M22 = -value.M22;
+            result.M23 = -value.M23;
+            result.M24 = -value.M24;
+            result.M31 = -value.M31;
+            result.M32 = -value.M32;
+            result.M33 = -value.M33;
+            result.M34 = -value.M34;
+            result.M41 = -value.M41;
+            result.M42 = -value.M42;
+            result.M43 = -value.M43;
+            result.M44 = -value.M44;
         }
 
         /// <summary>
         /// Negates a matrix.
         /// </summary>
-        /// <param name="matrix">The matrix to be negated.</param>
+        /// <param name="value">The matrix to be negated.</param>
         /// <returns>The negated matrix.</returns>
-        public static Matrix Negate(Matrix matrix)
+        public static Matrix Negate(Matrix value)
         {
             Matrix result;
-            Negate(ref matrix, out result);
+            Negate(ref value, out result);
             return result;
         }
 
@@ -832,13 +785,13 @@ namespace SlimMath
             crossed.Normalize();
             Vector3.Cross(ref difference, ref crossed, out final);
 
-            result.M11 = final.X;
-            result.M12 = final.Y;
-            result.M13 = final.Z;
+            result.M11 = crossed.X;
+            result.M12 = crossed.Y;
+            result.M13 = crossed.Z;
             result.M14 = 0.0f;
-            result.M21 = crossed.X;
-            result.M22 = crossed.Y;
-            result.M23 = crossed.Z;
+            result.M21 = final.X;
+            result.M22 = final.Y;
+            result.M23 = final.Z;
             result.M24 = 0.0f;
             result.M31 = difference.X;
             result.M32 = difference.Y;
@@ -868,27 +821,27 @@ namespace SlimMath
         /// <summary>
         /// Calculates the transpose of the specified matrix.
         /// </summary>
-        /// <param name="matrix">The matrix whose transpose is to be calculated.</param>
+        /// <param name="value">The matrix whose transpose is to be calculated.</param>
         /// <param name="result">When the method completes, contains the transpose of the specified matrix.</param>
-        public static void Transpose(ref Matrix matrix, out Matrix result)
+        public static void Transpose(ref Matrix value, out Matrix result)
         {
             Matrix temp = new Matrix();
-            temp.M11 = matrix.M11;
-            temp.M12 = matrix.M21;
-            temp.M13 = matrix.M31;
-            temp.M14 = matrix.M41;
-            temp.M21 = matrix.M12;
-            temp.M22 = matrix.M22;
-            temp.M23 = matrix.M32;
-            temp.M24 = matrix.M42;
-            temp.M31 = matrix.M13;
-            temp.M32 = matrix.M23;
-            temp.M33 = matrix.M33;
-            temp.M34 = matrix.M43;
-            temp.M41 = matrix.M14;
-            temp.M42 = matrix.M24;
-            temp.M43 = matrix.M34;
-            temp.M44 = matrix.M44;
+            temp.M11 = value.M11;
+            temp.M12 = value.M21;
+            temp.M13 = value.M31;
+            temp.M14 = value.M41;
+            temp.M21 = value.M12;
+            temp.M22 = value.M22;
+            temp.M23 = value.M32;
+            temp.M24 = value.M42;
+            temp.M31 = value.M13;
+            temp.M32 = value.M23;
+            temp.M33 = value.M33;
+            temp.M34 = value.M43;
+            temp.M41 = value.M14;
+            temp.M42 = value.M24;
+            temp.M43 = value.M34;
+            temp.M44 = value.M44;
 
             result = temp;
         }
@@ -896,62 +849,64 @@ namespace SlimMath
         /// <summary>
         /// Calculates the transpose of the specified matrix.
         /// </summary>
-        /// <param name="matrix">The matrix whose transpose is to be calculated.</param>
+        /// <param name="value">The matrix whose transpose is to be calculated.</param>
         /// <returns>The transpose of the specified matrix.</returns>
-        public static Matrix Transpose(Matrix matrix)
+        public static Matrix Transpose(Matrix value)
         {
             Matrix result;
-            Transpose(ref matrix, out result);
+            Transpose(ref value, out result);
             return result;
         }
 
         /// <summary>
         /// Calculates the inverse of the specified matrix.
         /// </summary>
-        /// <param name="matrix">The matrix whose inverse is to be calculated.</param>
+        /// <param name="value">The matrix whose inverse is to be calculated.</param>
         /// <param name="result">When the method completes, contains the inverse of the specified matrix.</param>
-        public static void Invert(ref Matrix matrix, out Matrix result)
+        public static void Invert(ref Matrix value, out Matrix result)
         {
-            float a0 = (matrix.M11 * matrix.M22) - (matrix.M12 * matrix.M21);
-            float a1 = (matrix.M11 * matrix.M23) - (matrix.M13 * matrix.M21);
-            float a2 = (matrix.M14 * matrix.M21) - (matrix.M11 * matrix.M24);
-            float a3 = (matrix.M12 * matrix.M23) - (matrix.M13 * matrix.M22);
-            float a4 = (matrix.M14 * matrix.M22) - (matrix.M12 * matrix.M24);
-            float a5 = (matrix.M13 * matrix.M24) - (matrix.M14 * matrix.M23);
+            float b0 = (value.M31 * value.M42) - (value.M32 * value.M41);
+            float b1 = (value.M31 * value.M43) - (value.M33 * value.M41);
+            float b2 = (value.M34 * value.M41) - (value.M31 * value.M44);
+            float b3 = (value.M32 * value.M43) - (value.M33 * value.M42);
+            float b4 = (value.M34 * value.M42) - (value.M32 * value.M44);
+            float b5 = (value.M33 * value.M44) - (value.M34 * value.M43);
 
-            float b0 = (matrix.M31 * matrix.M42) - (matrix.M32 * matrix.M41);
-            float b1 = (matrix.M31 * matrix.M43) - (matrix.M33 * matrix.M41);
-            float b2 = (matrix.M34 * matrix.M41) - (matrix.M31 * matrix.M44);
-            float b3 = (matrix.M32 * matrix.M43) - (matrix.M33 * matrix.M42);
-            float b4 = (matrix.M34 * matrix.M42) - (matrix.M32 * matrix.M44);
-            float b5 = (matrix.M33 * matrix.M44) - (matrix.M34 * matrix.M43);
+            float d11 = value.M22 * b5 + value.M23 * b4 + value.M24 * b3;
+            float d12 = value.M21 * b5 + value.M23 * b2 + value.M24 * b1;
+            float d13 = value.M21 * -b4 + value.M22 * b2 + value.M24 * b0;
+            float d14 = value.M21 * b3 + value.M22 * -b1 + value.M23 * b0;
 
-            float d11 = matrix.M22 * b5 + matrix.M23 * b4 + matrix.M24 * b3;
-            float d12 = matrix.M21 * b5 + matrix.M23 * b2 + matrix.M24 * b1;
-            float d13 = matrix.M21 * -b4 + matrix.M22 * b2 + matrix.M24 * b0;
-            float d14 = matrix.M21 * b3 + matrix.M22 * -b1 + matrix.M23 * b0;
-
-            float det = matrix.M11 * d11 - matrix.M12 * d12 + matrix.M13 * d13 - matrix.M14 * d14;
+            float det = value.M11 * d11 - value.M12 * d12 + value.M13 * d13 - value.M14 * d14;
             if (Math.Abs(det) <= Utilities.ZeroTolerance)
             {
                 result = Matrix.Zero;
                 return;
             }
 
-            float d21 = matrix.M12 * b5 + matrix.M13 * b4 + matrix.M14 * b3;
-            float d22 = matrix.M11 * b5 + matrix.M13 * b2 + matrix.M14 * b1;
-            float d23 = matrix.M11 * -b4 + matrix.M12 * b2 + matrix.M14 * b0;
-            float d24 = matrix.M11 * b3 + matrix.M12 * -b1 + matrix.M13 * b0;
+            det = 1f / det;
 
-            float d31 = matrix.M42 * a5 + matrix.M43 * a4 + matrix.M44 * a3;
-            float d32 = matrix.M41 * a5 + matrix.M43 * a2 + matrix.M44 * a1;
-            float d33 = matrix.M41 * -a4 + matrix.M42 * a2 + matrix.M44 * a0;
-            float d34 = matrix.M41 * a3 + matrix.M42 * -a1 + matrix.M43 * a0;
+            float a0 = (value.M11 * value.M22) - (value.M12 * value.M21);
+            float a1 = (value.M11 * value.M23) - (value.M13 * value.M21);
+            float a2 = (value.M14 * value.M21) - (value.M11 * value.M24);
+            float a3 = (value.M12 * value.M23) - (value.M13 * value.M22);
+            float a4 = (value.M14 * value.M22) - (value.M12 * value.M24);
+            float a5 = (value.M13 * value.M24) - (value.M14 * value.M23);
 
-            float d41 = matrix.M32 * a5 + matrix.M33 * a4 + matrix.M34 * a3;
-            float d42 = matrix.M31 * a5 + matrix.M33 * a2 + matrix.M34 * a1;
-            float d43 = matrix.M31 * -a4 + matrix.M32 * a2 + matrix.M34 * a0;
-            float d44 = matrix.M31 * a3 + matrix.M32 * -a1 + matrix.M33 * a0;
+            float d21 = value.M12 * b5 + value.M13 * b4 + value.M14 * b3;
+            float d22 = value.M11 * b5 + value.M13 * b2 + value.M14 * b1;
+            float d23 = value.M11 * -b4 + value.M12 * b2 + value.M14 * b0;
+            float d24 = value.M11 * b3 + value.M12 * -b1 + value.M13 * b0;
+
+            float d31 = value.M42 * a5 + value.M43 * a4 + value.M44 * a3;
+            float d32 = value.M41 * a5 + value.M43 * a2 + value.M44 * a1;
+            float d33 = value.M41 * -a4 + value.M42 * a2 + value.M44 * a0;
+            float d34 = value.M41 * a3 + value.M42 * -a1 + value.M43 * a0;
+
+            float d41 = value.M32 * a5 + value.M33 * a4 + value.M34 * a3;
+            float d42 = value.M31 * a5 + value.M33 * a2 + value.M34 * a1;
+            float d43 = value.M31 * -a4 + value.M32 * a2 + value.M34 * a0;
+            float d44 = value.M31 * a3 + value.M32 * -a1 + value.M33 * a0;
 
             result.M11 = +d11 * det; result.M12 = -d21 * det; result.M13 = +d31 * det; result.M14 = -d41 * det;
             result.M21 = -d12 * det; result.M22 = +d22 * det; result.M23 = -d32 * det; result.M24 = +d42 * det;
@@ -962,12 +917,12 @@ namespace SlimMath
         /// <summary>
         /// Calculates the inverse of the specified matrix.
         /// </summary>
-        /// <param name="matrix">The matrix whose inverse is to be calculated.</param>
+        /// <param name="value">The matrix whose inverse is to be calculated.</param>
         /// <returns>The inverse of the specified matrix.</returns>
-        public static Matrix Invert(Matrix matrix)
+        public static Matrix Invert(Matrix value)
         {
-            matrix.Invert();
-            return matrix;
+            value.Invert();
+            return value;
         }
 
         /// <summary>
@@ -1399,12 +1354,10 @@ namespace SlimMath
         /// <summary>
         /// Builds a matrix that can be used to reflect vectors about a plane.
         /// </summary>
-        /// <param name="plane">The plane for which the reflection occurs.</param>
+        /// <param name="plane">The plane for which the reflection occurs. This parameter is assumed to be normalized.</param>
         /// <param name="result">When the method completes, contains the reflection matrix.</param>
         public static void Reflection(ref Plane plane, out Matrix result)
         {
-            plane.Normalize();
-
             float x = plane.Normal.X;
             float y = plane.Normal.Y;
             float z = plane.Normal.Z;
@@ -1433,7 +1386,7 @@ namespace SlimMath
         /// <summary>
         /// Builds a matrix that can be used to reflect vectors about a plane.
         /// </summary>
-        /// <param name="plane">The plane for which the reflection occurs.</param>
+        /// <param name="plane">The plane for which the reflection occurs. This parameter is assumed to be normalized.</param>
         /// <returns>The reflection matrix.</returns>
         public static Matrix Reflection(Plane plane)
         {
@@ -1446,12 +1399,10 @@ namespace SlimMath
         /// Creates a matrix that flattens geometry into a shadow.
         /// </summary>
         /// <param name="light">The light direction.</param>
-        /// <param name="plane">The plane onto which to project the geometry as a shadow.</param>
+        /// <param name="plane">The plane onto which to project the geometry as a shadow. This parameter is assumed to be normalized.</param>
         /// <param name="result">When the method completes, contains the shadow matrix.</param>
         public static void Shadow(ref Vector4 light, ref Plane plane, out Matrix result)
-        {
-            plane.Normalize();
-        
+        {        
             float dot = ((plane.Normal.X * light.X) + (plane.Normal.Y * light.Y)) + (plane.Normal.Z * light.Z);
             float x = -plane.Normal.X;
             float y = -plane.Normal.Y;
@@ -1480,7 +1431,7 @@ namespace SlimMath
         /// Creates a matrix that flattens geometry into a shadow.
         /// </summary>
         /// <param name="light">The light direction.</param>
-        /// <param name="plane">The plane onto which to project the geometry as a shadow.</param>
+        /// <param name="plane">The plane onto which to project the geometry as a shadow. This parameter is assumed to be normalized.</param>
         /// <returns>The shadow matrix.</returns>
         public static Matrix Shadow(Vector4 light, Plane plane)
         {
@@ -1653,14 +1604,11 @@ namespace SlimMath
         /// <summary>
         /// Creates a matrix that rotates around an arbitary axis.
         /// </summary>
-        /// <param name="axis">The axis around which to rotate.</param>
+        /// <param name="axis">The axis around which to rotate. This parameter is assumed to be normalized.</param>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
         public static void RotationAxis(ref Vector3 axis, float angle, out Matrix result)
         {
-            if (axis.LengthSquared() != 1.0f)
-                axis.Normalize();
-
             float x = axis.X;
             float y = axis.Y;
             float z = axis.Z;
@@ -1688,7 +1636,7 @@ namespace SlimMath
         /// <summary>
         /// Creates a matrix that rotates around an arbitary axis.
         /// </summary>
-        /// <param name="axis">The axis around which to rotate.</param>
+        /// <param name="axis">The axis around which to rotate. This parameter is assumed to be normalized.</param>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationAxis(Vector3 axis, float angle)
@@ -1770,22 +1718,22 @@ namespace SlimMath
         /// <summary>
         /// Creates a translation matrix using the specified offsets.
         /// </summary>
-        /// <param name="amount">The offset for all three coordinate planes.</param>
+        /// <param name="value">The offset for all three coordinate planes.</param>
         /// <param name="result">When the method completes, contains the created translation matrix.</param>
-        public static void Translation(ref Vector3 amount, out Matrix result)
+        public static void Translation(ref Vector3 value, out Matrix result)
         {
-            Translation(amount.X, amount.Y, amount.Z, out result);
+            Translation(value.X, value.Y, value.Z, out result);
         }
 
         /// <summary>
         /// Creates a translation matrix using the specified offsets.
         /// </summary>
-        /// <param name="amount">The offset for all three coordinate planes.</param>
+        /// <param name="value">The offset for all three coordinate planes.</param>
         /// <returns>The created translation matrix.</returns>
-        public static Matrix Translation(Vector3 amount)
+        public static Matrix Translation(Vector3 value)
         {
             Matrix result;
-            Translation(ref amount, out result);
+            Translation(ref value, out result);
             return result;
         }
 
@@ -1976,7 +1924,10 @@ namespace SlimMath
         public static void Transformation2D(ref Vector2 scalingCenter, float scalingRotation, ref Vector2 scaling, ref Vector2 rotationCenter, float rotation, ref Vector2 translation, out Matrix result)
         {
             result = Translation((Vector3)(-scalingCenter)) * RotationZ(-scalingRotation) * Scaling((Vector3)scaling) * RotationZ(scalingRotation) * Translation((Vector3)scalingCenter) * 
-                Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) * Translation((Vector3)rotationCenter) * Translation((Vector3)translation);     
+                Translation((Vector3)(-rotationCenter)) * RotationZ(rotation) * Translation((Vector3)rotationCenter) * Translation((Vector3)translation);
+
+            result.M33 = 1f;
+            result.M44 = 1f;
         }
 
         /// <summary>
@@ -2209,16 +2160,31 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="SlimMath.Matrix"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="SlimMath.Matrix"/> to compare with this instance.</param>
+        /// <param name="other">The <see cref="SlimMath.Matrix"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="SlimMath.Matrix"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Matrix value)
+        public bool Equals(Matrix other)
         {
-            return (M11 == value.M11 && M12 == value.M12 && M13 == value.M13 && M14 == value.M14 &&
-                 M21 == value.M21 && M22 == value.M22 && M23 == value.M23 && M24 == value.M24 &&
-                 M31 == value.M31 && M32 == value.M32 && M33 == value.M33 && M34 == value.M34 &&
-                 M41 == value.M41 && M42 == value.M42 && M43 == value.M43 && M44 == value.M44);
+            return (Math.Abs(other.M11 - M11) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M12 - M12) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M13 - M13) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M14 - M14) < Utilities.ZeroTolerance &&
+
+                Math.Abs(other.M21 - M21) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M22 - M22) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M23 - M23) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M24 - M24) < Utilities.ZeroTolerance &&
+
+                Math.Abs(other.M31 - M31) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M32 - M32) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M33 - M33) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M34 - M34) < Utilities.ZeroTolerance &&
+
+                Math.Abs(other.M41 - M41) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M42 - M42) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M43 - M43) < Utilities.ZeroTolerance &&
+                Math.Abs(other.M44 - M44) < Utilities.ZeroTolerance);
         }
 
         /// <summary>

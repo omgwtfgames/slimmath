@@ -108,7 +108,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Gets a value indicting whether this isntance is normalized.
+        /// Gets a value indicting whether this instance is normalized.
         /// </summary>
         public bool IsNormalized
         {
@@ -242,12 +242,12 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Vector2 vector, float scale, out Vector2 result)
+        public static void Multiply(ref Vector2 value, float scale, out Vector2 result)
         {
-            result = new Vector2(vector.X * scale, vector.Y * scale);
+            result = new Vector2(value.X * scale, value.Y * scale);
         }
 
         /// <summary>
@@ -286,12 +286,12 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Vector2 vector, float scale, out Vector2 result)
+        public static void Divide(ref Vector2 value, float scale, out Vector2 result)
         {
-            result = new Vector2(vector.X / scale, vector.Y / scale);
+            result = new Vector2(value.X / scale, value.Y / scale);
         }
 
         /// <summary>
@@ -402,7 +402,10 @@ namespace SlimMath
         /// </remarks>
         public static void Distance(ref Vector2 value1, ref Vector2 value2, out float result)
         {
-            result = (float)Math.Sqrt((value1.X * value2.X) + (value1.Y * value2.Y));
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+
+            result = (float)Math.Sqrt((x * x) + (y * y));
         }
 
         /// <summary>
@@ -438,7 +441,10 @@ namespace SlimMath
         /// </remarks>
         public static void DistanceSquared(ref Vector2 value1, ref Vector2 value2, out float result)
         {
-            result = (value1.X * value2.X) + (value1.Y * value2.Y);
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+
+            result = (x * x) + (y * y);
         }
 
         /// <summary>
@@ -487,23 +493,23 @@ namespace SlimMath
         /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
+        /// <param name="value">The vector to normalize.</param>
         /// <param name="result">When the method completes, contains the normalized vector.</param>
-        public static void Normalize(ref Vector2 vector, out Vector2 result)
+        public static void Normalize(ref Vector2 value, out Vector2 result)
         {
-            result = vector;
+            result = value;
             result.Normalize();
         }
 
         /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
+        /// <param name="value">The vector to normalize.</param>
         /// <returns>The normalized vector.</returns>
-        public static Vector2 Normalize(Vector2 vector)
+        public static Vector2 Normalize(Vector2 value)
         {
-            vector.Normalize();
-            return vector;
+            value.Normalize();
+            return value;
         }
 
         /// <summary>
@@ -742,14 +748,10 @@ namespace SlimMath
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
             float z = rotation.Z + rotation.Z;
-            float wx = rotation.W * x;
-            float wy = rotation.W * y;
             float wz = rotation.W * z;
             float xx = rotation.X * x;
             float xy = rotation.X * y;
-            float xz = rotation.X * z;
             float yy = rotation.Y * y;
-            float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
             result = new Vector2((vector.X * (1.0f - yy - zz)) + (vector.Y * (xy - wz)), (vector.X * (xy + wz)) + (vector.Y * (1.0f - xx - zz)));
@@ -789,14 +791,10 @@ namespace SlimMath
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
             float z = rotation.Z + rotation.Z;
-            float wx = rotation.W * x;
-            float wy = rotation.W * y;
             float wz = rotation.W * z;
             float xx = rotation.X * x;
             float xy = rotation.X * y;
-            float xz = rotation.X * z;
             float yy = rotation.Y * y;
-            float yz = rotation.Y * z;
             float zz = rotation.Z * z;
 
             float num1 = (1.0f - yy - zz);
@@ -1054,34 +1052,34 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector2 operator *(float scale, Vector2 vector)
+        public static Vector2 operator *(float scale, Vector2 value)
         {
-            return new Vector2(vector.X * scale, vector.Y * scale);
+            return new Vector2(value.X * scale, value.Y * scale);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector2 operator *(Vector2 vector, float scale)
+        public static Vector2 operator *(Vector2 value, float scale)
         {
-            return new Vector2(vector.X * scale, vector.Y * scale);
+            return new Vector2(value.X * scale, value.Y * scale);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector2 operator /(Vector2 vector, float scale)
+        public static Vector2 operator /(Vector2 value, float scale)
         {
-            return new Vector2(vector.X / scale, vector.Y / scale);
+            return new Vector2(value.X / scale, value.Y / scale);
         }
 
         /// <summary>
@@ -1188,13 +1186,14 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="SlimMath.Vector2"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="SlimMath.Vector2"/> to compare with this instance.</param>
+        /// <param name="other">The <see cref="SlimMath.Vector2"/> to compare with this instance.</param>
         /// <returns>
         /// 	<c>true</c> if the specified <see cref="SlimMath.Vector2"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Vector2 value)
+        public bool Equals(Vector2 other)
         {
-            return (X == value.X && Y == value.Y);
+            return ((float)Math.Abs(other.X - X) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.Y - Y) < Utilities.ZeroTolerance);
         }
 
         /// <summary>

@@ -134,7 +134,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Gets a value indicting whether this isntance is normalized.
+        /// Gets a value indicting whether this instance is normalized.
         /// </summary>
         public bool IsNormalized
         {
@@ -271,12 +271,12 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Vector3 vector, float scale, out Vector3 result)
+        public static void Multiply(ref Vector3 value, float scale, out Vector3 result)
         {
-            result = new Vector3(vector.X * scale, vector.Y * scale, vector.Z * scale);
+            result = new Vector3(value.X * scale, value.Y * scale, value.Z * scale);
         }
 
         /// <summary>
@@ -315,23 +315,23 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Vector3 vector, float scale, out Vector3 result)
+        public static void Divide(ref Vector3 value, float scale, out Vector3 result)
         {
-            result = new Vector3(vector.X / scale, vector.Y / scale, vector.Z / scale);
+            result = new Vector3(value.X / scale, value.Y / scale, value.Z / scale);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector3 Divide(Vector3 vector, float scale)
+        public static Vector3 Divide(Vector3 value, float scale)
         {
-            return new Vector3(vector.X / scale, vector.Y / scale, vector.Z / scale);
+            return new Vector3(value.X / scale, value.Y / scale, value.Z / scale);
         }
 
         /// <summary>
@@ -463,7 +463,11 @@ namespace SlimMath
         /// </remarks>
         public static void Distance(ref Vector3 value1, ref Vector3 value2, out float result)
         {
-            result = (float)Math.Sqrt((value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z));
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+            float z = value1.Z - value2.Z;
+
+            result = (float)Math.Sqrt((x * x) + (y * y) + (z * z));
         }
 
         /// <summary>
@@ -500,7 +504,11 @@ namespace SlimMath
         /// </remarks>
         public static void DistanceSquared(ref Vector3 value1, ref Vector3 value2, out float result)
         {
-            result = (value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z);
+            float x = value1.X - value2.X;
+            float y = value1.Y - value2.Y;
+            float z = value1.Z - value2.Z;
+
+            result = (x * x) + (y * y) + (z * z);
         }
 
         /// <summary>
@@ -550,23 +558,23 @@ namespace SlimMath
         /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
+        /// <param name="value">The vector to normalize.</param>
         /// <param name="result">When the method completes, contains the normalized vector.</param>
-        public static void Normalize(ref Vector3 vector, out Vector3 result)
+        public static void Normalize(ref Vector3 value, out Vector3 result)
         {
-            result = vector;
+            result = value;
             result.Normalize();
         }
 
         /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
-        /// <param name="vector">The vector to normalize.</param>
+        /// <param name="value">The vector to normalize.</param>
         /// <returns>The normalized vector.</returns>
-        public static Vector3 Normalize(Vector3 vector)
+        public static Vector3 Normalize(Vector3 value)
         {
-            vector.Normalize();
-            return vector;
+            value.Normalize();
+            return value;
         }
 
         /// <summary>
@@ -865,7 +873,7 @@ namespace SlimMath
         /// whether the original vector was close enough to the surface to hit it.</remarks>
         public static void Reflect(ref Vector3 vector, ref Vector3 normal, out Vector3 result)
         {
-            float dot = ((vector.X * normal.X) + (vector.Y * normal.Y)) + (vector.Z * normal.Z);
+            float dot = (vector.X * normal.X) + (vector.Y * normal.Y) + (vector.Z * normal.Z);
 
             result.X = vector.X - ((2.0f * dot) * normal.X);
             result.Y = vector.Y - ((2.0f * dot) * normal.Y);
@@ -1220,34 +1228,34 @@ namespace SlimMath
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector3 operator *(float scale, Vector3 vector)
+        public static Vector3 operator *(float scale, Vector3 value)
         {
-            return new Vector3(vector.X * scale, vector.Y * scale, vector.Z * scale);
+            return new Vector3(value.X * scale, value.Y * scale, value.Z * scale);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector3 operator *(Vector3 vector, float scale)
+        public static Vector3 operator *(Vector3 value, float scale)
         {
-            return new Vector3(vector.X * scale, vector.Y * scale, vector.Z * scale);
+            return new Vector3(value.X * scale, value.Y * scale, value.Z * scale);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
-        /// <param name="vector">The vector to scale.</param>
+        /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector3 operator /(Vector3 vector, float scale)
+        public static Vector3 operator /(Vector3 value, float scale)
         {
-            return new Vector3(vector.X / scale, vector.Y / scale, vector.Z / scale);
+            return new Vector3(value.X / scale, value.Y / scale, value.Z / scale);
         }
 
         /// <summary>
@@ -1356,13 +1364,15 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="SlimMath.Vector3"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="SlimMath.Vector3"/> to compare with this instance.</param>
+        /// <param name="other">The <see cref="SlimMath.Vector3"/> to compare with this instance.</param>
         /// <returns>
         /// 	<c>true</c> if the specified <see cref="SlimMath.Vector3"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Vector3 value)
+        public bool Equals(Vector3 other)
         {
-            return (X == value.X && Y == value.Y && Z == value.Z);
+            return ((float)Math.Abs(other.X - X) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.Y - Y) < Utilities.ZeroTolerance &&
+                (float)Math.Abs(other.Z - Z) < Utilities.ZeroTolerance);
         }
 
         /// <summary>
