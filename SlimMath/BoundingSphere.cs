@@ -344,6 +344,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(CultureInfo.CurrentCulture, "Center:{0} Radius:{1}", Center.ToString(format, CultureInfo.CurrentCulture),
                 Radius.ToString(format, CultureInfo.CurrentCulture));
         }
@@ -370,6 +373,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                return ToString(formatProvider);
+
             return string.Format(formatProvider, "Center:{0} Radius:{1}", Center.ToString(format, formatProvider),
                 Radius.ToString(format, formatProvider));
         }

@@ -208,6 +208,96 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Gets or sets the first row in the matrix; that is M11, M12, M13, and M14.
+        /// </summary>
+        public Vector4 Row1
+        {
+            get { return new Vector4(M11, M12, M13, M14); }
+            set { M11 = value.X; M12 = value.Y; M13 = value.Z; M14 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the second row in the matrix; that is M21, M22, M23, and M24.
+        /// </summary>
+        public Vector4 Row2
+        {
+            get { return new Vector4(M21, M22, M23, M24); }
+            set { M21 = value.X; M22 = value.Y; M23 = value.Z; M24 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the third row in the matrix; that is M31, M32, M33, and M34.
+        /// </summary>
+        public Vector4 Row3
+        {
+            get { return new Vector4(M31, M32, M33, M34); }
+            set { M31 = value.X; M32 = value.Y; M33 = value.Z; M34 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the fourth row in the matrix; that is M41, M42, M43, and M44.
+        /// </summary>
+        public Vector4 Row4
+        {
+            get { return new Vector4(M41, M42, M43, M44); }
+            set { M41 = value.X; M42 = value.Y; M43 = value.Z; M44 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the first column in the matrix; that is M11, M21, M31, and M41.
+        /// </summary>
+        public Vector4 Column1
+        {
+            get { return new Vector4(M11, M21, M31, M41); }
+            set { M11 = value.X; M21 = value.Y; M31 = value.Z; M41 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the second column in the matrix; that is M12, M22, M32, and M42.
+        /// </summary>
+        public Vector4 Column2
+        {
+            get { return new Vector4(M12, M22, M32, M42); }
+            set { M12 = value.X; M22 = value.Y; M32 = value.Z; M42 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the third column in the matrix; that is M13, M23, M33, and M43.
+        /// </summary>
+        public Vector4 Column3
+        {
+            get { return new Vector4(M13, M23, M33, M43); }
+            set { M13 = value.X; M23 = value.Y; M33 = value.Z; M43 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the fourth column in the matrix; that is M14, M24, M34, and M44.
+        /// </summary>
+        public Vector4 Column4
+        {
+            get { return new Vector4(M14, M24, M34, M44); }
+            set { M14 = value.X; M24 = value.Y; M34 = value.Z; M44 = value.W; }
+        }
+
+        /// <summary>
+        /// Gets or sets the translation of the matrix; that is M41, M42, and M43.
+        /// </summary>
+        public Vector3 TranslationVector
+        {
+            get { return new Vector3(M41, M42, M43); }
+            set { M41 = value.X; M42 = value.Y; M43 = value.Z; }
+        }
+
+        /// <summary>
+        /// Gets or sets the scale of the matrix; that is M11, M22, and M33.
+        /// </summary>
+        public Vector3 ScaleVector
+        {
+            get { return new Vector3(M11, M22, M33); }
+            set { M11 = value.X; M22 = value.Y; M33 = value.Z; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this instance is an identity matrix.
         /// </summary>
         /// <value>
@@ -335,25 +425,121 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Creates an array containing the elements of the matrix.
+        /// Transposes the matrix.
         /// </summary>
-        /// <returns>A sixteen-element array containing the components of the matrix.</returns>
-        public float[] ToArray()
+        public void Transpose()
         {
-            return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
+            Transpose(ref this, out this);
+        }
+
+        /// <summary>
+        /// Orthogonalizes the specified matrix.
+        /// </summary>
+        /// <remarks>
+        /// <para>Orthogonalization is the process of making all rows orthogonal to each other. This
+        /// means that any given row in the matrix will be orthogonal to any other given row in the
+        /// matrix.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public void Orthogonalize()
+        {
+            Orthogonalize(ref this, out this);
+        }
+
+        /// <summary>
+        /// Orthonormalizes the specified matrix.
+        /// </summary>
+        /// <remarks>
+        /// <para>Orthonormalization is the process of making all rows and columns orthogonal to each
+        /// other and making all rows and columns of unit length. This means that any given row will
+        /// be orthogonal to any other given row and any given column will be orthogonal to any other
+        /// given column. Any given row will not be orthogonal to any given column. Every row and every
+        /// column will be of unit length.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public void Orthonormalize()
+        {
+            Orthonormalize(ref this, out this);
+        }
+
+        /// <summary>
+        /// Decomposes a matrix into an orthonormalized matrix Q and a right traingular matrix R.
+        /// </summary>
+        /// <param name="Q">When the method completes, contains the orthonormalized matrix of the decomposition.</param>
+        /// <param name="R">When the method completes, contains the right triangular matrix of the decomposition.</param>
+        public void DecomposeQR(out Matrix Q, out Matrix R)
+        {
+            Matrix temp = this;
+            temp.Transpose();
+            Orthonormalize(ref temp, out Q);
+            Q.Transpose();
+
+            R = new Matrix();
+            R.M11 = Vector4.Dot(Q.Column1, Column1);
+            R.M12 = Vector4.Dot(Q.Column1, Column2);
+            R.M13 = Vector4.Dot(Q.Column1, Column3);
+            R.M14 = Vector4.Dot(Q.Column1, Column4);
+
+            R.M22 = Vector4.Dot(Q.Column2, Column2);
+            R.M23 = Vector4.Dot(Q.Column2, Column3);
+            R.M24 = Vector4.Dot(Q.Column2, Column4);
+
+            R.M33 = Vector4.Dot(Q.Column3, Column3);
+            R.M34 = Vector4.Dot(Q.Column3, Column4);
+
+            R.M44 = Vector4.Dot(Q.Column4, Column4);
+        }
+
+        /// <summary>
+        /// Decomposes a matrix into a lower triangular matrix L and an orthonormalized matrix Q.
+        /// </summary>
+        /// <param name="L">When the method completes, contains the lower triangular matrix of the decomposition.</param>
+        /// <param name="Q">When the method completes, contains the orthonormalized matrix of the decomposition.</param>
+        public void DecomposeLQ(out Matrix L, out Matrix Q)
+        {
+            Orthonormalize(ref this, out Q);
+
+            L = new Matrix();
+            L.M11 = Vector4.Dot(Q.Row1, Row1);
+            
+            L.M21 = Vector4.Dot(Q.Row1, Row2);
+            L.M22 = Vector4.Dot(Q.Row2, Row2);
+            
+            L.M31 = Vector4.Dot(Q.Row1, Row3);
+            L.M32 = Vector4.Dot(Q.Row2, Row3);
+            L.M33 = Vector4.Dot(Q.Row3, Row3);
+            
+            L.M41 = Vector4.Dot(Q.Row1, Row4);
+            L.M42 = Vector4.Dot(Q.Row2, Row4);
+            L.M43 = Vector4.Dot(Q.Row3, Row4);
+            L.M44 = Vector4.Dot(Q.Row4, Row4);
         }
 
         /// <summary>
         /// Decomposes a matrix into a scale, rotation, and translation.
         /// </summary>
-        /// <param name="scale">The scaling component of the decomposed matrix.</param>
-        /// <param name="rotation">The rtoation component of the decomposed matrix.</param>
-        /// <param name="translation">The translation component of the decomposed matrix.</param>
+        /// <param name="scale">When the method completes, contains the scaling component of the decomposed matrix.</param>
+        /// <param name="rotation">When the method completes, contains the rtoation component of the decomposed matrix.</param>
+        /// <param name="translation">When the method completes, contains the translation component of the decomposed matrix.</param>
+        /// <remarks>
+        /// This method is designed to decompose an SRT transformation matrix only.
+        /// </remarks>
         public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
         {
             //Source: Unknown
             //References: http://www.gamedev.net/community/forums/topic.asp?topic_id=441695
 
+            //Get the translation.
             translation.X = this.M41;
             translation.Y = this.M42;
             translation.Z = this.M43;
@@ -390,6 +576,85 @@ namespace SlimMath
 
             Quaternion.RotationMatrix(ref rotationmatrix, out rotation);
             return true;
+        }
+
+        /// <summary>
+        /// Exchanges two rows in the matrix.
+        /// </summary>
+        /// <param name="firstRow">The first row to exchange. This is an index of the row starting at zero.</param>
+        /// <param name="secondRow">The second row to exchange. This is an index of the row starting at zero.</param>
+        public void ExchangeRows(int firstRow, int secondRow)
+        {
+            if (firstRow < 0)
+                throw new ArgumentOutOfRangeException("firstRow", "The parameter firstRow must be greater than or equal to zero.");
+            if (firstRow > 3)
+                throw new ArgumentOutOfRangeException("firstRow", "The parameter firstRow must be less than or equal to three.");
+            if (secondRow < 0)
+                throw new ArgumentOutOfRangeException("secondRow", "The parameter secondRow must be greater than or equal to zero.");
+            if (secondRow > 3)
+                throw new ArgumentOutOfRangeException("secondRow", "The parameter secondRow must be less than or equal to three.");
+
+            if (firstRow == secondRow)
+                return;
+
+            float temp0 = this[secondRow, 0];
+            float temp1 = this[secondRow, 1];
+            float temp2 = this[secondRow, 2];
+            float temp3 = this[secondRow, 3];
+
+            this[secondRow, 0] = this[firstRow, 0];
+            this[secondRow, 1] = this[firstRow, 1];
+            this[secondRow, 2] = this[firstRow, 2];
+            this[secondRow, 3] = this[firstRow, 3];
+
+            this[firstRow, 0] = temp0;
+            this[firstRow, 1] = temp1;
+            this[firstRow, 2] = temp2;
+            this[firstRow, 3] = temp3;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstColumn"></param>
+        /// <param name="secondColumn"></param>
+        public void ExchangeColumns(int firstColumn, int secondColumn)
+        {
+            if (firstColumn < 0)
+                throw new ArgumentOutOfRangeException("firstColumn", "The parameter firstColumn must be greater than or equal to zero.");
+            if (firstColumn > 3)
+                throw new ArgumentOutOfRangeException("firstColumn", "The parameter firstColumn must be less than or equal to three.");
+            if (secondColumn < 0)
+                throw new ArgumentOutOfRangeException("secondColumn", "The parameter secondColumn must be greater than or equal to zero.");
+            if (secondColumn > 3)
+                throw new ArgumentOutOfRangeException("secondColumn", "The parameter secondColumn must be less than or equal to three.");
+
+            if (firstColumn == secondColumn)
+                return;
+
+            float temp0 = this[0, secondColumn];
+            float temp1 = this[1, secondColumn];
+            float temp2 = this[2, secondColumn];
+            float temp3 = this[3, secondColumn];
+
+            this[0, secondColumn] = this[0, firstColumn];
+            this[1, secondColumn] = this[1, firstColumn];
+            this[2, secondColumn] = this[2, firstColumn];
+            this[3, secondColumn] = this[3, firstColumn];
+
+            this[0, firstColumn] = temp0;
+            this[1, firstColumn] = temp1;
+            this[2, firstColumn] = temp2;
+            this[3, firstColumn] = temp3;
+        }
+
+        /// <summary>
+        /// Creates an array containing the elements of the matrix.
+        /// </summary>
+        /// <returns>A sixteen-element array containing the components of the matrix.</returns>
+        public float[] ToArray()
+        {
+            return new[] { M11, M12, M13, M14, M21, M22, M23, M24, M31, M32, M33, M34, M41, M42, M43, M44 };
         }
 
         /// <summary>
@@ -630,6 +895,66 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Performs the exponential operation on a matrix.
+        /// </summary>
+        /// <param name="value">The matrix to perform the operation on.</param>
+        /// <param name="exponent">The exponent to raise the matrix to.</param>
+        /// <param name="result">When the method completes, contains the exponential matrix.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="exponent"/> is negative.</exception>
+        public static void Exponent(ref Matrix value, int exponent, out Matrix result)
+        {
+            //Source: http://rosettacode.org
+            //Refrence: http://rosettacode.org/wiki/Matrix-exponentiation_operator
+
+            if (exponent < 0)
+                throw new ArgumentOutOfRangeException("exponent", "The exponent can not be negative.");
+
+            if (exponent == 0)
+            {
+                result = Matrix.Identity;
+                return;
+            }
+
+            if (exponent == 1)
+            {
+                result = value;
+                return;
+            }
+
+            Matrix identity = Matrix.Identity;
+            Matrix temp = value;
+
+            while (true)
+            {
+                if ((exponent & 1) != 0)
+                    identity = identity * temp;
+
+                exponent /= 2;
+
+                if (exponent > 0)
+                    temp *= temp;
+                else
+                    break;
+            }
+
+            result = identity;
+        }
+
+        /// <summary>
+        /// Performs the exponential operation on a matrix.
+        /// </summary>
+        /// <param name="value">The matrix to perform the operation on.</param>
+        /// <param name="exponent">The exponent to raise the matrix to.</param>
+        /// <returns>The exponential matrix.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="exponent"/> is negative.</exception>
+        public static Matrix Exponent(Matrix value, int exponent)
+        {
+            Matrix result;
+            Exponent(ref value, exponent, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Negates a matrix.
         /// </summary>
         /// <param name="value">The matrix to be negated.</param>
@@ -762,63 +1087,6 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Creates a spherical billboard that rotates around a specified object position.
-        /// </summary>
-        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
-        /// <param name="cameraPosition">The position of the camera.</param>
-        /// <param name="cameraUpVector">The up vector of the camera.</param>
-        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
-        /// <param name="result">When the method completes, contains the created billboard matrix.</param>
-        public static void Billboard(ref Vector3 objectPosition, ref Vector3 cameraPosition, ref Vector3 cameraUpVector, ref Vector3 cameraForwardVector, out Matrix result)
-        {
-            Vector3 crossed;
-            Vector3 final;
-            Vector3 difference = objectPosition - cameraPosition;
-
-            float lengthSq = difference.LengthSquared();
-            if (lengthSq < Utilities.ZeroTolerance)
-                difference = -cameraForwardVector;
-            else
-                difference *= (float)(1.0 / Math.Sqrt(lengthSq));
-
-            Vector3.Cross(ref cameraUpVector, ref difference, out crossed);
-            crossed.Normalize();
-            Vector3.Cross(ref difference, ref crossed, out final);
-
-            result.M11 = crossed.X;
-            result.M12 = crossed.Y;
-            result.M13 = crossed.Z;
-            result.M14 = 0.0f;
-            result.M21 = final.X;
-            result.M22 = final.Y;
-            result.M23 = final.Z;
-            result.M24 = 0.0f;
-            result.M31 = difference.X;
-            result.M32 = difference.Y;
-            result.M33 = difference.Z;
-            result.M34 = 0.0f;
-            result.M41 = objectPosition.X;
-            result.M42 = objectPosition.Y;
-            result.M43 = objectPosition.Z;
-            result.M44 = 1.0f;
-        }
-
-        /// <summary>
-        /// Creates a spherical billboard that rotates around a specified object position.
-        /// </summary>
-        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
-        /// <param name="cameraPosition">The position of the camera.</param>
-        /// <param name="cameraUpVector">The up vector of the camera.</param>
-        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
-        /// <returns>The created billboard matrix.</returns>
-        public static Matrix Billboard(Vector3 objectPosition, Vector3 cameraPosition, Vector3 cameraUpVector, Vector3 cameraForwardVector)
-        {
-            Matrix result;
-            Billboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, ref cameraForwardVector, out result);
-            return result;
-        }
-
-        /// <summary>
         /// Calculates the transpose of the specified matrix.
         /// </summary>
         /// <param name="value">The matrix whose transpose is to be calculated.</param>
@@ -923,6 +1191,557 @@ namespace SlimMath
         {
             value.Invert();
             return value;
+        }
+
+        /// <summary>
+        /// Orthogonalizes the specified matrix.
+        /// </summary>
+        /// <param name="value">The matrix to orthogonalize.</param>
+        /// <param name="result">When the method completes, contains the orthogonalized matrix.</param>
+        /// <remarks>
+        /// <para>Orthogonalization is the process of making all rows orthogonal to each other. This
+        /// means that any given row in the matrix will be orthogonal to any other given row in the
+        /// matrix.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public static void Orthogonalize(ref Matrix value, out Matrix result)
+        {
+            //Uses the modified Gram-Schmidt process.
+            //q1 = m1
+            //q2 = m2 - ((q1 ⋅ m2) / (q1 ⋅ q1)) * q1
+            //q3 = m3 - ((q1 ⋅ m3) / (q1 ⋅ q1)) * q1 - ((q2 ⋅ m3) / (q2 ⋅ q2)) * q2
+            //q4 = m4 - ((q1 ⋅ m4) / (q1 ⋅ q1)) * q1 - ((q2 ⋅ m4) / (q2 ⋅ q2)) * q2 - ((q3 ⋅ m4) / (q3 ⋅ q3)) * q3
+
+            //By separating the above algorithm into multiple lines, we actually increase accuracy.
+            result = value;
+
+            result.Row2 = result.Row2 - (Vector4.Dot(result.Row1, result.Row2) / Vector4.Dot(result.Row1, result.Row1)) * result.Row1;
+
+            result.Row3 = result.Row3 - (Vector4.Dot(result.Row1, result.Row3) / Vector4.Dot(result.Row1, result.Row1)) * result.Row1;
+            result.Row3 = result.Row3 - (Vector4.Dot(result.Row2, result.Row3) / Vector4.Dot(result.Row2, result.Row2)) * result.Row2;
+
+            result.Row4 = result.Row4 - (Vector4.Dot(result.Row1, result.Row4) / Vector4.Dot(result.Row1, result.Row1)) * result.Row1;
+            result.Row4 = result.Row4 - (Vector4.Dot(result.Row2, result.Row4) / Vector4.Dot(result.Row2, result.Row2)) * result.Row2;
+            result.Row4 = result.Row4 - (Vector4.Dot(result.Row3, result.Row4) / Vector4.Dot(result.Row3, result.Row3)) * result.Row3;
+        }
+
+        /// <summary>
+        /// Orthogonalizes the specified matrix.
+        /// </summary>
+        /// <param name="value">The matrix to orthogonalize.</param>
+        /// <returns>The orthogonalized matrix.</returns>
+        /// <remarks>
+        /// <para>Orthogonalization is the process of making all rows orthogonal to each other. This
+        /// means that any given row in the matrix will be orthogonal to any other given row in the
+        /// matrix.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public static Matrix Orthogonalize(Matrix value)
+        {
+            Matrix result;
+            Orthogonalize(ref value, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Orthonormalizes the specified matrix.
+        /// </summary>
+        /// <param name="value">The matrix to orthonormalize.</param>
+        /// <param name="result">When the method completes, contains the orthonormalized matrix.</param>
+        /// <remarks>
+        /// <para>Orthonormalization is the process of making all rows and columns orthogonal to each
+        /// other and making all rows and columns of unit length. This means that any given row will
+        /// be orthogonal to any other given row and any given column will be orthogonal to any other
+        /// given column. Any given row will not be orthogonal to any given column. Every row and every
+        /// column will be of unit length.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public static void Orthonormalize(ref Matrix value, out Matrix result)
+        {
+            //Uses the modified Gram-Schmidt process.
+            //Because we are making unit vectors, we can optimize the math for orthogonalization
+            //and simplify the projection operation to remove the division.
+            //q1 = m1 / |m1|
+            //q2 = (m2 - (q1 ⋅ m2) * q1) / |m2 - (q1 ⋅ m2) * q1|
+            //q3 = (m3 - (q1 ⋅ m3) * q1 - (q2 ⋅ m3) * q2) / |m3 - (q1 ⋅ m3) * q1 - (q2 ⋅ m3) * q2|
+            //q4 = (m4 - (q1 ⋅ m4) * q1 - (q2 ⋅ m4) * q2 - (q3 ⋅ m4) * q3) / |m4 - (q1 ⋅ m4) * q1 - (q2 ⋅ m4) * q2 - (q3 ⋅ m4) * q3|
+
+            //By separating the above algorithm into multiple lines, we actually increase accuracy.
+            result = value;
+
+            result.Row1 = Vector4.Normalize(result.Row1);
+
+            result.Row2 = result.Row2 - Vector4.Dot(result.Row1, result.Row2) * result.Row1;
+            result.Row2 = Vector4.Normalize(result.Row2);
+
+            result.Row3 = result.Row3 - Vector4.Dot(result.Row1, result.Row3) * result.Row1;
+            result.Row3 = result.Row3 - Vector4.Dot(result.Row2, result.Row3) * result.Row2;
+            result.Row3 = Vector4.Normalize(result.Row3);
+
+            result.Row4 = result.Row4 - Vector4.Dot(result.Row1, result.Row4) * result.Row1;
+            result.Row4 = result.Row4 - Vector4.Dot(result.Row2, result.Row4) * result.Row2;
+            result.Row4 = result.Row4 - Vector4.Dot(result.Row3, result.Row4) * result.Row3;
+            result.Row4 = Vector4.Normalize(result.Row4);
+        }
+
+        /// <summary>
+        /// Orthonormalizes the specified matrix.
+        /// </summary>
+        /// <param name="value">The matrix to orthonormalize.</param>
+        /// <returns>The orthonormalized matrix.</returns>
+        /// <remarks>
+        /// <para>Orthonormalization is the process of making all rows and columns orthogonal to each
+        /// other and making all rows and columns of unit length. This means that any given row will
+        /// be orthogonal to any other given row and any given column will be orthogonal to any other
+        /// given column. Any given row will not be orthogonal to any given column. Every row and every
+        /// column will be of unit length.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting matrix
+        /// tends to be numerically unstable. The numeric stability decreases according to the rows
+        /// so that the first row is the most stable and the last row is the least stable.</para>
+        /// <para>This operation is performed on the rows of the matrix rather than the columns.
+        /// If you wish for this operation to be performed on the columns, first transpose the
+        /// input and than transpose the output.</para>
+        /// </remarks>
+        public static Matrix Orthonormalize(Matrix value)
+        {
+            Matrix result;
+            Orthonormalize(ref value, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Brings the matrix into upper triangular form using elementry row operations.
+        /// </summary>
+        /// <param name="value">The matrix to put into upper triangular form.</param>
+        /// <param name="result">When the method completes, contains the upper triangular matrix.</param>
+        /// <remarks>
+        /// If the matrix is not invertable (i.e. its determinant is zero) than the result of this
+        /// method may produce Single.Nan and Single.Inf values. When the matrix represents a system
+        /// of linear equations, than this often means that either no solution exists or an infinite
+        /// number of solutions exist.
+        /// </remarks>
+        public static void UpperTriangularForm(ref Matrix value, out Matrix result)
+        {
+            //Adapted from the row echelon code.
+            result = value;
+            int lead = 0;
+            int rowcount = 4;
+            int columncount = 4;
+
+            for (int r = 0; r < rowcount; ++r)
+            {
+                if (columncount <= lead)
+                    return;
+
+                int i = r;
+
+                while (Math.Abs(result[i, lead]) < Utilities.ZeroTolerance)
+                {
+                    i++;
+
+                    if (i == rowcount)
+                    {
+                        i = r;
+                        lead++;
+
+                        if (lead == columncount)
+                            return;
+                    }
+                }
+
+                if (i != r)
+                {
+                    result.ExchangeRows(i, r);
+                }
+
+                float multiplier = 1f / result[r, lead];
+
+                for (; i < rowcount; ++i)
+                {
+                    if (i != r)
+                    {
+                        result[i, 0] -= result[r, 0] * multiplier * result[i, lead];
+                        result[i, 1] -= result[r, 1] * multiplier * result[i, lead];
+                        result[i, 2] -= result[r, 2] * multiplier * result[i, lead];
+                        result[i, 3] -= result[r, 3] * multiplier * result[i, lead];
+                    }
+                }
+
+                lead++;
+            }
+        }
+
+        /// <summary>
+        /// Brings the matrix into upper triangular form using elementry row operations.
+        /// </summary>
+        /// <param name="value">The matrix to put into upper triangular form.</param>
+        /// <returns>The upper triangular matrix.</returns>
+        /// <remarks>
+        /// If the matrix is not invertable (i.e. its determinant is zero) than the result of this
+        /// method may produce Single.Nan and Single.Inf values. When the matrix represents a system
+        /// of linear equations, than this often means that either no solution exists or an infinite
+        /// number of solutions exist.
+        /// </remarks>
+        public static Matrix UpperTriangularForm(Matrix value)
+        {
+            Matrix result;
+            UpperTriangularForm(ref value, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Brings the matrix into lower triangular form using elementry row operations.
+        /// </summary>
+        /// <param name="value">The matrix to put into lower triangular form.</param>
+        /// <param name="result">When the method completes, contains the lower triangular matrix.</param>
+        /// <remarks>
+        /// If the matrix is not invertable (i.e. its determinant is zero) than the result of this
+        /// method may produce Single.Nan and Single.Inf values. When the matrix represents a system
+        /// of linear equations, than this often means that either no solution exists or an infinite
+        /// number of solutions exist.
+        /// </remarks>
+        public static void LowerTriangularForm(ref Matrix value, out Matrix result)
+        {
+            //Adapted from the row echelon code.
+            Matrix temp = value;
+            Matrix.Transpose(ref temp, out result);
+
+            int lead = 0;
+            int rowcount = 4;
+            int columncount = 4;
+
+            for (int r = 0; r < rowcount; ++r)
+            {
+                if (columncount <= lead)
+                    return;
+
+                int i = r;
+
+                while (Math.Abs(result[i, lead]) < Utilities.ZeroTolerance)
+                {
+                    i++;
+
+                    if (i == rowcount)
+                    {
+                        i = r;
+                        lead++;
+
+                        if (lead == columncount)
+                            return;
+                    }
+                }
+
+                if (i != r)
+                {
+                    result.ExchangeRows(i, r);
+                }
+
+                float multiplier = 1f / result[r, lead];
+
+                for (; i < rowcount; ++i)
+                {
+                    if (i != r)
+                    {
+                        result[i, 0] -= result[r, 0] * multiplier * result[i, lead];
+                        result[i, 1] -= result[r, 1] * multiplier * result[i, lead];
+                        result[i, 2] -= result[r, 2] * multiplier * result[i, lead];
+                        result[i, 3] -= result[r, 3] * multiplier * result[i, lead];
+                    }
+                }
+
+                lead++;
+            }
+
+            Matrix.Transpose(ref result, out result);
+        }
+
+        /// <summary>
+        /// Brings the matrix into lower triangular form using elementry row operations.
+        /// </summary>
+        /// <param name="value">The matrix to put into lower triangular form.</param>
+        /// <returns>The lower triangular matrix.</returns>
+        /// <remarks>
+        /// If the matrix is not invertable (i.e. its determinant is zero) than the result of this
+        /// method may produce Single.Nan and Single.Inf values. When the matrix represents a system
+        /// of linear equations, than this often means that either no solution exists or an infinite
+        /// number of solutions exist.
+        /// </remarks>
+        public static Matrix LowerTriangularForm(Matrix value)
+        {
+            Matrix result;
+            LowerTriangularForm(ref value, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Brings the matrix into row echelon form using elementry row operations;
+        /// </summary>
+        /// <param name="value">The matrix to put into row echelon form.</param>
+        /// <param name="result">When the method completes, contains the row echelon form of the matrix.</param>
+        public static void RowEchelonForm(ref Matrix value, out Matrix result)
+        {
+            //Source: Wikipedia psuedo code
+            //Reference: http://en.wikipedia.org/wiki/Row_echelon_form#Pseudocode
+
+            result = value;
+            int lead = 0;
+            int rowcount = 4;
+            int columncount = 4;
+
+            for (int r = 0; r < rowcount; ++r)
+            {
+                if (columncount <= lead)
+                    return;
+
+                int i = r;
+
+                while (Math.Abs(result[i, lead]) < Utilities.ZeroTolerance)
+                {
+                    i++;
+
+                    if (i == rowcount)
+                    {
+                        i = r;
+                        lead++;
+
+                        if (lead == columncount)
+                            return;
+                    }
+                }
+
+                if (i != r)
+                {
+                    result.ExchangeRows(i, r);
+                }
+
+                float multiplier = 1f / result[r, lead];
+                result[r, 0] *= multiplier;
+                result[r, 1] *= multiplier;
+                result[r, 2] *= multiplier;
+                result[r, 3] *= multiplier;
+
+                for (; i < rowcount; ++i)
+                {
+                    if (i != r)
+                    {
+                        result[i, 0] -= result[r, 0] * result[i, lead];
+                        result[i, 1] -= result[r, 1] * result[i, lead];
+                        result[i, 2] -= result[r, 2] * result[i, lead];
+                        result[i, 3] -= result[r, 3] * result[i, lead];
+                    }
+                }
+
+                lead++;
+            }
+        }
+
+        /// <summary>
+        /// Brings the matrix into row echelon form using elementry row operations;
+        /// </summary>
+        /// <param name="value">The matrix to put into row echelon form.</param>
+        /// <returns>When the method completes, contains the row echelon form of the matrix.</returns>
+        public static Matrix RowEchelonForm(Matrix value)
+        {
+            Matrix result;
+            RowEchelonForm(ref value, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Brings the matrix into reduced row echelon form using elementry row operations.
+        /// </summary>
+        /// <param name="value">The matrix to put into reduced row echelon form.</param>
+        /// <param name="augment">The fifth column of the matrix.</param>
+        /// <param name="result">When the method completes, contains the resultant matrix after the operation.</param>
+        /// <param name="augmentResult">When the method completes, contains the resultant fifth column of the matrix.</param>
+        /// <remarks>
+        /// <para>The fifth column is often called the agumented part of the matrix. This is because the fifth
+        /// column is really just an extension of the matrix so that there is a place to put all of the
+        /// non-zero components after the operation is complete.</para>
+        /// <para>Often times the resultant matrix will the identity matrix or a matrix similar to the identity
+        /// matrix. Sometimes, however, that is not possible and numbers other than zero and one may appear.</para>
+        /// <para>This method can be used to solve systems of linear equations. Upon completion of this method,
+        /// the <paramref name="augmentResult"/> will contain the solution for the system. It is up to the user
+        /// to analyze both the input and the result to determine if a solution really exists.</para>
+        /// </remarks>
+        public static void ReducedRowEchelonForm(ref Matrix value, ref Vector4 augment, out Matrix result, out Vector4 augmentResult)
+        {
+            //Source: http://rosettacode.org
+            //Reference: http://rosettacode.org/wiki/Reduced_row_echelon_form
+
+            float[,] matrix = new float[4, 5];
+
+            matrix[0, 0] = value[0, 0];
+            matrix[0, 1] = value[0, 1];
+            matrix[0, 2] = value[0, 2];
+            matrix[0, 3] = value[0, 3];
+            matrix[0, 4] = augment[0];
+
+            matrix[1, 0] = value[1, 0];
+            matrix[1, 1] = value[1, 1];
+            matrix[1, 2] = value[1, 2];
+            matrix[1, 3] = value[1, 3];
+            matrix[1, 4] = augment[1];
+
+            matrix[2, 0] = value[2, 0];
+            matrix[2, 1] = value[2, 1];
+            matrix[2, 2] = value[2, 2];
+            matrix[2, 3] = value[2, 3];
+            matrix[2, 4] = augment[2];
+
+            matrix[3, 0] = value[3, 0];
+            matrix[3, 1] = value[3, 1];
+            matrix[3, 2] = value[3, 2];
+            matrix[3, 3] = value[3, 3];
+            matrix[3, 4] = augment[3];
+
+            int lead = 0;
+            int rowcount = 4;
+            int columncount = 5;
+
+            for (int r = 0; r < rowcount; r++)
+            {
+                if (columncount <= lead)
+                    break;
+
+                int i = r;
+
+                while (matrix[i, lead] == 0)
+                {
+                    i++;
+
+                    if (i == rowcount)
+                    {
+                        i = r;
+                        lead++;
+
+                        if (columncount == lead)
+                            break;
+                    }
+                }
+
+                for (int j = 0; j < columncount; j++)
+                {
+                    float temp = matrix[r, j];
+                    matrix[r, j] = matrix[i, j];
+                    matrix[i, j] = temp;
+                }
+
+                float div = matrix[r, lead];
+
+                for (int j = 0; j < columncount; j++)
+                {
+                    matrix[r, j] /= div;
+                }
+
+                for (int j = 0; j < rowcount; j++)
+                {
+                    if (j != r)
+                    {
+                        float sub = matrix[j, lead];
+                        for (int k = 0; k < columncount; k++) matrix[j, k] -= (sub * matrix[r, k]);
+                    }
+                }
+
+                lead++;
+            }
+
+            result.M11 = matrix[0, 0];
+            result.M12 = matrix[0, 1];
+            result.M13 = matrix[0, 2];
+            result.M14 = matrix[0, 3];
+
+            result.M21 = matrix[1, 0];
+            result.M22 = matrix[1, 1];
+            result.M23 = matrix[1, 2];
+            result.M24 = matrix[1, 3];
+
+            result.M31 = matrix[2, 0];
+            result.M32 = matrix[2, 1];
+            result.M33 = matrix[2, 2];
+            result.M34 = matrix[2, 3];
+
+            result.M41 = matrix[3, 0];
+            result.M42 = matrix[3, 1];
+            result.M43 = matrix[3, 2];
+            result.M44 = matrix[3, 3];
+
+            augmentResult.X = matrix[0, 4];
+            augmentResult.Y = matrix[1, 4];
+            augmentResult.Z = matrix[2, 4];
+            augmentResult.W = matrix[3, 4];
+        }
+
+        /// <summary>
+        /// Creates a spherical billboard that rotates around a specified object position.
+        /// </summary>
+        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        /// <param name="cameraUpVector">The up vector of the camera.</param>
+        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
+        /// <param name="result">When the method completes, contains the created billboard matrix.</param>
+        public static void Billboard(ref Vector3 objectPosition, ref Vector3 cameraPosition, ref Vector3 cameraUpVector, ref Vector3 cameraForwardVector, out Matrix result)
+        {
+            Vector3 crossed;
+            Vector3 final;
+            Vector3 difference = objectPosition - cameraPosition;
+
+            float lengthSq = difference.LengthSquared();
+            if (lengthSq < Utilities.ZeroTolerance)
+                difference = -cameraForwardVector;
+            else
+                difference *= (float)(1.0 / Math.Sqrt(lengthSq));
+
+            Vector3.Cross(ref cameraUpVector, ref difference, out crossed);
+            crossed.Normalize();
+            Vector3.Cross(ref difference, ref crossed, out final);
+
+            result.M11 = crossed.X;
+            result.M12 = crossed.Y;
+            result.M13 = crossed.Z;
+            result.M14 = 0.0f;
+            result.M21 = final.X;
+            result.M22 = final.Y;
+            result.M23 = final.Z;
+            result.M24 = 0.0f;
+            result.M31 = difference.X;
+            result.M32 = difference.Y;
+            result.M33 = difference.Z;
+            result.M34 = 0.0f;
+            result.M41 = objectPosition.X;
+            result.M42 = objectPosition.Y;
+            result.M43 = objectPosition.Z;
+            result.M44 = 1.0f;
+        }
+
+        /// <summary>
+        /// Creates a spherical billboard that rotates around a specified object position.
+        /// </summary>
+        /// <param name="objectPosition">The position of the object around which the billboard will rotate.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        /// <param name="cameraUpVector">The up vector of the camera.</param>
+        /// <param name="cameraForwardVector">The forward vector of the camera.</param>
+        /// <returns>The created billboard matrix.</returns>
+        public static Matrix Billboard(Vector3 objectPosition, Vector3 cameraPosition, Vector3 cameraUpVector, Vector3 cameraForwardVector)
+        {
+            Matrix result;
+            Billboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, ref cameraForwardVector, out result);
+            return result;
         }
 
         /// <summary>
@@ -1398,12 +2217,13 @@ namespace SlimMath
         /// <summary>
         /// Creates a matrix that flattens geometry into a shadow.
         /// </summary>
-        /// <param name="light">The light direction.</param>
+        /// <param name="light">The light direction. If the W component is 0, the light is directional light; if the
+        /// W component is 1, the light is a point light.</param>
         /// <param name="plane">The plane onto which to project the geometry as a shadow. This parameter is assumed to be normalized.</param>
         /// <param name="result">When the method completes, contains the shadow matrix.</param>
         public static void Shadow(ref Vector4 light, ref Plane plane, out Matrix result)
         {        
-            float dot = ((plane.Normal.X * light.X) + (plane.Normal.Y * light.Y)) + (plane.Normal.Z * light.Z);
+            float dot = (plane.Normal.X * light.X) + (plane.Normal.Y * light.Y) + (plane.Normal.Z * light.Z) + (plane.D * light.W);
             float x = -plane.Normal.X;
             float y = -plane.Normal.Y;
             float z = -plane.Normal.Z;
@@ -1421,16 +2241,17 @@ namespace SlimMath
             result.M23 = y * light.Z;
             result.M33 = (z * light.Z) + dot;
             result.M43 = d * light.Z;
-            result.M14 = 0.0f;
-            result.M24 = 0.0f;
-            result.M34 = 0.0f;
-            result.M44 = dot;
+            result.M14 = x * light.W;
+            result.M24 = y * light.W;
+            result.M34 = z * light.W;
+            result.M44 = (d * light.W) + dot;
         }
         
         /// <summary>
         /// Creates a matrix that flattens geometry into a shadow.
         /// </summary>
-        /// <param name="light">The light direction.</param>
+        /// <param name="light">The light direction. If the W component is 0, the light is directional light; if the
+        /// W component is 1, the light is a point light.</param>
         /// <param name="plane">The plane onto which to project the geometry as a shadow. This parameter is assumed to be normalized.</param>
         /// <returns>The shadow matrix.</returns>
         public static Matrix Shadow(Vector4 light, Plane plane)
@@ -2103,6 +2924,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(format, CultureInfo.CurrentCulture, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
                 M11.ToString(format, CultureInfo.CurrentCulture), M12.ToString(format, CultureInfo.CurrentCulture), M13.ToString(format, CultureInfo.CurrentCulture), M14.ToString(format, CultureInfo.CurrentCulture),
                 M21.ToString(format, CultureInfo.CurrentCulture), M22.ToString(format, CultureInfo.CurrentCulture), M23.ToString(format, CultureInfo.CurrentCulture), M24.ToString(format, CultureInfo.CurrentCulture),
@@ -2136,6 +2960,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                return ToString(formatProvider);
+
             return string.Format(format, formatProvider, "[M11:{0} M12:{1} M13:{2} M14:{3}] [M21:{4} M22:{5} M23:{6} M24:{7}] [M31:{8} M32:{9} M33:{10} M34:{11}] [M41:{12} M42:{13} M43:{14} M44:{15}]",
                 M11.ToString(format, formatProvider), M12.ToString(format, formatProvider), M13.ToString(format, formatProvider), M14.ToString(format, formatProvider),
                 M21.ToString(format, formatProvider), M22.ToString(format, formatProvider), M23.ToString(format, formatProvider), M24.ToString(format, formatProvider),

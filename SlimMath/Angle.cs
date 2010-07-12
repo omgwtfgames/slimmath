@@ -696,6 +696,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(CultureInfo.CurrentCulture, "{0}°", Utilities.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
         }
 
@@ -721,6 +724,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                return ToString(formatProvider);
+
             return string.Format(formatProvider, "{0}°", Utilities.RadiansToDegrees(radians).ToString(format, CultureInfo.CurrentCulture));
         }
 

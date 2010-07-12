@@ -763,6 +763,76 @@ namespace SlimMathManagedTests
         }
 
         [TestMethod()]
+        public void OrthogonalizeTest()
+        {
+            //Because orthogonalization is numerically unstable, we adjust the assert delta.
+            float deltabefore = Utilities.AssertDelta;
+            Utilities.AssertDelta = 1e-2f;
+
+            Vector2[] source = new Vector2[5];
+            Vector2[] destination = new Vector2[5];
+
+            for (int i = 0; i < source.Length; ++i)
+            {
+                source[i] = Utilities.GenerateVector2();
+            }
+
+            Vector2.Orthogonalize(destination, source);
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[1]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[2]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[3]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[4]));
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[1], destination[2]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[1], destination[3]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[1], destination[4]));
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[2], destination[3]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[2], destination[4]));
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[3], destination[4]));
+
+            //Reset the assert delta.
+            Utilities.AssertDelta = deltabefore;
+        }
+
+        [TestMethod()]
+        public void Orthonormalize()
+        {
+            //Because orthogonalization is numerically unstable, we adjust the assert delta.
+            float deltabefore = Utilities.AssertDelta;
+            Utilities.AssertDelta = 1e-2f;
+
+            Vector2[] source = new Vector2[4];
+            Vector2[] destination = new Vector2[4];
+
+            for (int i = 0; i < source.Length; ++i)
+            {
+                source[i] = Utilities.GenerateVector2();
+            }
+
+            Vector2.Orthonormalize(destination, source);
+
+            for (int i = 0; i < destination.Length; ++i)
+            {
+                Utilities.AreEqual(1f, destination[i].Length());
+            }
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[1]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[2]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[3]));
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[1], destination[2]));
+            Utilities.AreEqual(0f, Vector2.Dot(destination[1], destination[3]));
+
+            Utilities.AreEqual(0f, Vector2.Dot(destination[2], destination[3]));
+
+            //Reset the assert delta.
+            Utilities.AssertDelta = deltabefore;
+        }
+
+        [TestMethod()]
         public void ReflectTest()
         {
             Vector2 vector = Utilities.GenerateVector2();

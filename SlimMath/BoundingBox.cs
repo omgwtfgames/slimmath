@@ -333,6 +333,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(CultureInfo.CurrentCulture, "Minimum:{0} Maximum:{1}", Minimum.ToString(format, CultureInfo.CurrentCulture),
                 Maximum.ToString(format, CultureInfo.CurrentCulture));
         }
@@ -359,6 +362,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                return ToString(formatProvider);
+
             return string.Format(formatProvider, "Minimum:{0} Maximum:{1}", Minimum.ToString(format, formatProvider),
                 Maximum.ToString(format, formatProvider));
         }

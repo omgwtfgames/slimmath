@@ -679,6 +679,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(CultureInfo.CurrentCulture, "Red:{1} Green:{2} Blue:{3}", Red.ToString(format, CultureInfo.CurrentCulture),
                 Green.ToString(format, CultureInfo.CurrentCulture), Blue.ToString(format, CultureInfo.CurrentCulture));
         }
@@ -705,6 +708,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                return ToString(formatProvider);
+
             return string.Format(formatProvider, "Red:{1} Green:{2} Blue:{3}",Red.ToString(format, formatProvider),
                 Green.ToString(format, formatProvider), Blue.ToString(format, formatProvider));
         }

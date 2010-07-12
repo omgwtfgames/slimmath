@@ -794,6 +794,99 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Orthogonalizes a list of vectors.
+        /// </summary>
+        /// <param name="destination">The list of orthogonalized vectors.</param>
+        /// <param name="source">The list of vectors to orthogonalize.</param>
+        /// <remarks>
+        /// <para>Orthogonalization is the process of making all vectors orthogonal to each other. This
+        /// means that any given vector in the list will be orthogonal to any other given vector in the
+        /// list.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting vectors
+        /// tend to be numerically unstable. The numeric stability decreases according to the vectors
+        /// position in the list so that the first vector is the most stable and the last vector is the
+        /// least stable.</para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Orthogonalize(Vector4[] destination, params Vector4[] source)
+        {
+            //Uses the modified Gram-Schmidt process.
+            //q1 = m1
+            //q2 = m2 - ((q1 ⋅ m2) / (q1 ⋅ q1)) * q1
+            //q3 = m3 - ((q1 ⋅ m3) / (q1 ⋅ q1)) * q1 - ((q2 ⋅ m3) / (q2 ⋅ q2)) * q2
+            //q4 = m4 - ((q1 ⋅ m4) / (q1 ⋅ q1)) * q1 - ((q2 ⋅ m4) / (q2 ⋅ q2)) * q2 - ((q3 ⋅ m4) / (q3 ⋅ q3)) * q3
+            //q5 = ...
+
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
+
+            for (int i = 0; i < source.Length; ++i)
+            {
+                Vector4 newvector = source[i];
+
+                for (int r = 0; r < i; ++r)
+                {
+                    newvector -= (Vector4.Dot(destination[r], newvector) / Vector4.Dot(destination[r], destination[r])) * destination[r];
+                }
+
+                destination[i] = newvector;
+            }
+        }
+
+        /// <summary>
+        /// Orthonormalizes a list of vectors.
+        /// </summary>
+        /// <param name="destination">The list of orthonormalized vectors.</param>
+        /// <param name="source">The list of vectors to orthonormalize.</param>
+        /// <remarks>
+        /// <para>Orthonormalization is the process of making all vectors orthogonal to each
+        /// other and making all vectors of unit length. This means that any given vector will
+        /// be orthogonal to any other given vector in the list.</para>
+        /// <para>Because this method uses the modified Gram-Schmidt process, the resulting vectors
+        /// tend to be numerically unstable. The numeric stability decreases according to the vectors
+        /// position in the list so that the first vector is the most stable and the last vector is the
+        /// least stable.</para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="destination"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="destination"/> is shorter in length than <paramref name="source"/>.</exception>
+        public static void Orthonormalize(Vector4[] destination, params Vector4[] source)
+        {
+            //Uses the modified Gram-Schmidt process.
+            //Because we are making unit vectors, we can optimize the math for orthogonalization
+            //and simplify the projection operation to remove the division.
+            //q1 = m1 / |m1|
+            //q2 = (m2 - (q1 ⋅ m2) * q1) / |m2 - (q1 ⋅ m2) * q1|
+            //q3 = (m3 - (q1 ⋅ m3) * q1 - (q2 ⋅ m3) * q2) / |m3 - (q1 ⋅ m3) * q1 - (q2 ⋅ m3) * q2|
+            //q4 = (m4 - (q1 ⋅ m4) * q1 - (q2 ⋅ m4) * q2 - (q3 ⋅ m4) * q3) / |m4 - (q1 ⋅ m4) * q1 - (q2 ⋅ m4) * q2 - (q3 ⋅ m4) * q3|
+            //q5 = ...
+
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destination.Length < source.Length)
+                throw new ArgumentOutOfRangeException("destination", "The destination array must be of same length or larger length than the source array.");
+
+            for (int i = 0; i < source.Length; ++i)
+            {
+                Vector4 newvector = source[i];
+
+                for (int r = 0; r < i; ++r)
+                {
+                    newvector -= Vector4.Dot(destination[r], newvector) * destination[r];
+                }
+
+                newvector.Normalize();
+                destination[i] = newvector;
+            }
+        }
+
+        /// <summary>
         /// Transforms a 4D vector by the given <see cref="SlimMath.Quaternion"/> rotation.
         /// </summary>
         /// <param name="vector">The vector to rotate.</param>
@@ -1074,6 +1167,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format)
         {
+            if (format == null)
+                return ToString();
+
             return string.Format(CultureInfo.CurrentCulture, "X:{0} Y:{1} Z:{2} W:{3}", X.ToString(format, CultureInfo.CurrentCulture), 
                 Y.ToString(format, CultureInfo.CurrentCulture), Z.ToString(format, CultureInfo.CurrentCulture), W.ToString(format, CultureInfo.CurrentCulture));
         }
@@ -1100,6 +1196,9 @@ namespace SlimMath
         /// </returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (format == null)
+                ToString(formatProvider);
+
             return string.Format(formatProvider, "X:{0} Y:{1} Z:{2} W:{3}", X.ToString(format, formatProvider),
                 Y.ToString(format, formatProvider), Z.ToString(format, formatProvider), W.ToString(format, formatProvider));
         }

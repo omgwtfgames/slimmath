@@ -10,7 +10,7 @@ namespace SlimMathManagedTests
     static class Utilities
     {
         public const float ZeroTolerance = 1e-6f;
-        public const float AssertDelta = 1e-3f;
+        public static float AssertDelta = 1e-3f;
 
         static Random random = new Random();
         static Queue<int> last = new Queue<int>();
@@ -20,6 +20,11 @@ namespace SlimMathManagedTests
         public static void AreEqual(object expected, object actual)
         {
             Assert.AreEqual(expected, actual);
+        }
+
+        public static void AreEqual(float expected, float actual)
+        {
+            AreEqual(expected, actual, AssertDelta);
         }
 
         public static void AreEqual(float expected, float actual, float delta)
@@ -86,6 +91,11 @@ namespace SlimMathManagedTests
         public static void AreNotEqual(object expected, object actual)
         {
             Assert.AreNotEqual(expected, actual);
+        }
+
+        public static void AreNotEqual(float expected, float actual)
+        {
+            AreNotEqual(expected, actual, AssertDelta);
         }
 
         public static void AreNotEqual(float expected, float actual, float delta)
