@@ -987,6 +987,42 @@ namespace SlimMathManagedTests
         }
 
         [TestMethod()]
+        public void RefractTest()
+        {
+            Vector3 vector = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 normal = new Vector3(); // TODO: Initialize to an appropriate value
+            float index = 0F; // TODO: Initialize to an appropriate value
+            Vector3 expected = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 actual;
+
+            actual = Vector3.Refract(vector, normal, index);
+
+            Assert.AreEqual(expected, actual);
+
+            Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        [TestMethod()]
+        public void RefractByRefTest()
+        {
+            Vector3 vector = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 vectorExpected = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 normal = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 normalExpected = new Vector3(); // TODO: Initialize to an appropriate value
+            float index = 0F; // TODO: Initialize to an appropriate value
+            Vector3 result = new Vector3(); // TODO: Initialize to an appropriate value
+            Vector3 resultExpected = new Vector3(); // TODO: Initialize to an appropriate value
+
+            Vector3.Refract(ref vector, ref normal, index, out result);
+
+            Assert.AreEqual(vectorExpected, vector);
+            Assert.AreEqual(normalExpected, normal);
+            Assert.AreEqual(resultExpected, result);
+
+            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+        }
+
+        [TestMethod()]
         public void SmoothStepTest()
         {
             Vector3 start = Utilities.GenerateVector3();

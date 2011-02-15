@@ -491,6 +491,70 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Calculates a vector that is perpendicular to the given vector.
+        /// </summary>
+        /// <param name="vector">The vector to base the perpendicular vector on.</param>
+        /// <param name="result">When the method completes, contains the perpendicular vector.</param>
+        /// <remarks>
+        /// This method finds the perpendicular vector using a 90 degree counterclockwise rotation.
+        /// </remarks>
+        public static void Perp(ref Vector2 vector, out Vector2 result)
+        {
+            result.X = -vector.Y;
+            result.Y = vector.X;
+        }
+
+        /// <summary>
+        /// Calculates a vector that is perpendicular to the given vector.
+        /// </summary>
+        /// <param name="vector">The vector to base the perpendicular vector on.</param>
+        /// <returns>The perpendicular vector.</returns>
+        /// <remarks>
+        /// This method finds the perpendicular vector using a 90 degree counterclockwise rotation.
+        /// </remarks>
+        public static Vector2 Perp(Vector2 vector)
+        {
+            Vector2 result;
+            Perp(ref vector, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Calculates the perp dot product.
+        /// </summary>
+        /// <param name="left">First source vector.</param>
+        /// <param name="right">Second source vector.</param>
+        /// <param name="result">When the method completes, contains the perp dot product of the two vectors.</param>
+        /// <remarks>
+        /// The perp dot product is defined as taking the dot product of the perpendicular vector
+        /// of the left vector with the right vector.
+        /// </remarks>
+        public static void PerpDot(ref Vector2 left, ref Vector2 right, out float result)
+        {
+            Vector2 temp;
+            Perp(ref left, out temp);
+
+            Dot(ref temp, ref right, out result);
+        }
+
+        /// <summary>
+        /// Calculates the perp dot product.
+        /// </summary>
+        /// <param name="left">First source vector.</param>
+        /// <param name="right">Second source vector.</param>
+        /// <returns>The perp dot product of the two vectors.</returns>
+        /// <remarks>
+        /// The perp dot product is defined as taking the dot product of the perpendicular vector
+        /// of the left vector with the right vector.
+        /// </remarks>
+        public static float PerpDot(Vector2 left, Vector2 right)
+        {
+            float result;
+            PerpDot(ref left, ref right, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
         /// <param name="value">The vector to normalize.</param>

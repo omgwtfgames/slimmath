@@ -81,6 +81,17 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="SlimMath.Plane"/> struct.
         /// </summary>
+        /// <param name="point">Any point that lies along the plane.</param>
+        /// <param name="normal">The normal of the plane.</param>
+        public Plane(Vector3 point, Vector3 normal)
+        {
+            Normal = normal;
+            D = -Vector3.Dot(normal, point);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SlimMath.Plane"/> struct.
+        /// </summary>
         /// <param name="point1">First point of a triangle defining the plane.</param>
         /// <param name="point2">Second point of a triangle defining the plane.</param>
         /// <param name="point3">Third point of a triangle defining the plane.</param>

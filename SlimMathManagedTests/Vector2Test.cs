@@ -798,7 +798,7 @@ namespace SlimMathManagedTests
         }
 
         [TestMethod()]
-        public void Orthonormalize()
+        public void OrthonormalizeTest()
         {
             //Because orthogonalization is numerically unstable, we adjust the assert delta.
             float deltabefore = Utilities.AssertDelta;
@@ -830,6 +830,70 @@ namespace SlimMathManagedTests
 
             //Reset the assert delta.
             Utilities.AssertDelta = deltabefore;
+        }
+
+        [TestMethod()]
+        public void PerpDotTest()
+        {
+            Vector2 left = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 right = new Vector2(); // TODO: Initialize to an appropriate value
+            float expected = 0F; // TODO: Initialize to an appropriate value
+            float actual;
+
+            actual = Vector2.PerpDot(left, right);
+
+            Assert.AreEqual(expected, actual);
+
+            Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        [TestMethod()]
+        public void PerpDotByRefTest()
+        {
+            Vector2 left = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 leftExpected = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 right = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 rightExpected = new Vector2(); // TODO: Initialize to an appropriate value
+            float result = 0F; // TODO: Initialize to an appropriate value
+            float resultExpected = 0F; // TODO: Initialize to an appropriate value
+
+            Vector2.PerpDot(ref left, ref right, out result);
+
+            Assert.AreEqual(leftExpected, left);
+            Assert.AreEqual(rightExpected, right);
+            Assert.AreEqual(resultExpected, result);
+
+            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+        }
+
+        [TestMethod()]
+        public void PerpTest()
+        {
+            Vector2 vector = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 expected = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 actual;
+
+            actual = Vector2.Perp(vector);
+
+            Assert.AreEqual(expected, actual);
+
+            Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        [TestMethod()]
+        public void PerpByRefTest()
+        {
+            Vector2 vector = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 vectorExpected = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 result = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 resultExpected = new Vector2(); // TODO: Initialize to an appropriate value
+
+            Vector2.Perp(ref vector, out result);
+
+            Assert.AreEqual(vectorExpected, vector);
+            Assert.AreEqual(resultExpected, result);
+
+            Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
         [TestMethod()]

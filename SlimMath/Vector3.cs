@@ -896,6 +896,45 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Returns the fraction of a vector off a surface that has the specified normal and index.
+        /// </summary>
+        /// <param name="vector">The source vector.</param>
+        /// <param name="normal">Normal of the surface.</param>
+        /// <param name="index">Index of refraction.</param>
+        /// <param name="result">When the method completes, contains the refracted vector.</param>
+        public static void Refract(ref Vector3 vector, ref Vector3 normal, float index, out Vector3 result)
+        {
+            float cos1;
+            Dot(ref vector, ref normal, out cos1);
+
+            float radicand = 1.0f - (index * index) * (1.0f - (cos1 * cos1));
+
+            if (radicand < 0.0f)
+            {
+                result = Vector3.Zero;
+            }
+            else
+            {
+                float cos2 = (float)Math.Sqrt(radicand);
+                result = (index * vector) + ((cos2 - index * cos1) * normal);
+            }
+        }
+
+        /// <summary>
+        /// Returns the fraction of a vector off a surface that has the specified normal and index.
+        /// </summary>
+        /// <param name="vector">The source vector.</param>
+        /// <param name="normal">Normal of the surface.</param>
+        /// <param name="index">Index of refraction.</param>
+        /// <returns>The refracted vector.</returns>
+        public static Vector3 Refract(Vector3 vector, Vector3 normal, float index)
+        {
+            Vector3 result;
+            Refract(ref vector, ref normal, index, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Orthogonalizes a list of vectors.
         /// </summary>
         /// <param name="destination">The list of orthogonalized vectors.</param>

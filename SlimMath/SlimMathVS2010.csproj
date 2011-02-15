@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Angle.cs" />
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingSphere.cs" />
     <Compile Include="Collision.cs" />
@@ -59,6 +58,11 @@
     <Compile Include="Design\Vector3Converter.cs" />
     <Compile Include="Design\Vector4Converter.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Half.cs" />
+    <Compile Include="Half2.cs" />
+    <Compile Include="Half3.cs" />
+    <Compile Include="Half4.cs" />
+    <Compile Include="HalfUtils.cs" />
     <Compile Include="MathExtended.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Plane.cs" />
