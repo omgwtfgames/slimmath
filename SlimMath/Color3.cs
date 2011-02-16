@@ -735,7 +735,7 @@ namespace SlimMath
         /// </returns>
         public bool Equals(Color3 other)
         {
-            return Red == other.Red && Green == other.Green && Blue == other.Blue;
+            return (Red == other.Red) && (Green == other.Green) && (Blue == other.Blue);
         }
 
         /// <summary>

@@ -290,7 +290,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Scales the plane by the given scaling factor.
+        /// Scales each component of the plane by the given scaling factor.
         /// </summary>
         /// <param name="value">The plane to scale.</param>
         /// <param name="scale">The amount by which to scale the plane.</param>
@@ -304,7 +304,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Scales the plane by the given scaling factor.
+        /// Scales each component of the plane by the given scaling factor.
         /// </summary>
         /// <param name="value">The plane to scale.</param>
         /// <param name="scale">The amount by which to scale the plane.</param>
@@ -312,6 +312,31 @@ namespace SlimMath
         public static Plane Multiply(Plane value, float scale)
         {
             return new Plane(value.Normal.X * scale, value.Normal.Y * scale, value.Normal.Z * scale, value.D * scale);
+        }
+
+        /// <summary>
+        /// Scales the distance component of the plane by the given scaling factor.
+        /// </summary>
+        /// <param name="value">The plane to scale.</param>
+        /// <param name="scale">The amount by which to scale the plane.</param>
+        /// <param name="result">When the method completes, contains the scaled plane.</param>
+        public static void Scale(ref Plane value, float scale, out Plane result)
+        {
+            result.Normal = value.Normal;
+            result.D = value.D * scale;
+        }
+
+        /// <summary>
+        /// Scales the distance component of the plane by the given scaling factor.
+        /// </summary>
+        /// <param name="value">The plane to scale.</param>
+        /// <param name="scale">The amount by which to scale the plane.</param>
+        /// <returns>The scaled plane.</returns>
+        public static Plane Scale(Plane value, float scale)
+        {
+            Plane result;
+            Scale(ref value, scale, out result);
+            return result;
         }
 
         /// <summary>
@@ -431,6 +456,10 @@ namespace SlimMath
             float y = plane.Normal.Y;
             float z = plane.Normal.Z;
 
+            /*
+             * Note:
+             * Factor common arithmetic out of loop.
+            */
             result.Normal.X = ((x * ((1.0f - yy) - zz)) + (y * (xy - wz))) + (z * (xz + wy));
             result.Normal.Y = ((x * (xy + wz)) + (y * ((1.0f - xx) - zz))) + (z * (yz - wx));
             result.Normal.Z = ((x * (xz - wy)) + (y * (yz + wx))) + (z * ((1.0f - xx) - yy));
@@ -463,6 +492,10 @@ namespace SlimMath
             float y = plane.Normal.Y;
             float z = plane.Normal.Z;
 
+            /*
+             * Note:
+             * Factor common arithmetic out of loop.
+            */
             result.Normal.X = ((x * ((1.0f - yy) - zz)) + (y * (xy - wz))) + (z * (xz + wy));
             result.Normal.Y = ((x * (xy + wz)) + (y * ((1.0f - xx) - zz))) + (z * (yz - wx));
             result.Normal.Z = ((x * (xz - wy)) + (y * (yz + wx))) + (z * ((1.0f - xx) - yy));
@@ -577,7 +610,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Scales a plane by the given value.
+        /// Scales each component of the plane by the given value.
         /// </summary>
         /// <param name="scale">The amount by which to scale the plane.</param>
         /// <param name="plane">The plane to scale.</param>
@@ -588,7 +621,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Scales a plane by the given value.
+        /// Scales each component of the plane by the given value.
         /// </summary>
         /// <param name="plane">The plane to scale.</param>
         /// <param name="scale">The amount by which to scale the plane.</param>

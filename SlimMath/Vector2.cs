@@ -1351,12 +1351,25 @@ namespace SlimMath
         /// </summary>
         /// <param name="other">The <see cref="SlimMath.Vector2"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="SlimMath.Vector2"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="SlimMath.Vector2"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(Vector2 other)
         {
-            return ((float)Math.Abs(other.X - X) < Utilities.ZeroTolerance &&
-                (float)Math.Abs(other.Y - Y) < Utilities.ZeroTolerance);
+            return (this.X == other.X) && (this.Y == other.Y);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SlimMath.Vector2"/> is equal to this instance using an epsilon value.
+        /// </summary>
+        /// <param name="other">The <see cref="SlimMath.Vector2"/> to compare with this instance.</param>
+        /// <param name="epsilon">The amount of error allowed.</param>
+        /// <returns>
+        /// <c>true</c> if the specified <see cref="SlimMath.Vector2"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Equals(Vector2 other, float epsilon)
+        {
+            return ((float)Math.Abs(other.X - X) < epsilon &&
+                (float)Math.Abs(other.Y - Y) < epsilon);
         }
 
         /// <summary>
@@ -1364,7 +1377,7 @@ namespace SlimMath
         /// </summary>
         /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object value)
         {

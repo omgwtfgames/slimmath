@@ -103,6 +103,7 @@ namespace SlimMath
         /// <summary>
         ///   Gets or sets the raw 16 bit value used to back this half-float.
         /// </summary>
+        [CLSCompliant(false)]
         public ushort RawValue
         {
             get { return value; }

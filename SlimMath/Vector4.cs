@@ -1223,10 +1223,23 @@ namespace SlimMath
         /// </returns>
         public bool Equals(Vector4 other)
         {
-            return ((float)Math.Abs(other.X - X) < Utilities.ZeroTolerance &&
-                (float)Math.Abs(other.Y - Y) < Utilities.ZeroTolerance &&
-                (float)Math.Abs(other.Z - Z) < Utilities.ZeroTolerance &&
-                (float)Math.Abs(other.W - W) < Utilities.ZeroTolerance);
+            return (this.X == other.X) && (this.Y == other.Y) && (this.Z == other.Z) && (this.W == other.W);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SlimMath.Vector4"/> is equal to this instance.
+        /// </summary>
+        /// <param name="other">The <see cref="SlimMath.Vector4"/> to compare with this instance.</param>
+        /// <param name="epsilon">The amount of error allowed.</param>
+        /// <returns>
+        /// <c>true</c> if the specified <see cref="SlimMath.Vector4"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Equals(Vector4 other, float epsilon)
+        {
+            return ((float)Math.Abs(other.X - X) < epsilon &&
+                (float)Math.Abs(other.Y - Y) < epsilon &&
+                (float)Math.Abs(other.Z - Z) < epsilon &&
+                (float)Math.Abs(other.W - W) < epsilon);
         }
 
         /// <summary>

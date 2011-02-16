@@ -1701,11 +1701,11 @@ namespace SlimMath
             Vector3 final;
             Vector3 difference = objectPosition - cameraPosition;
 
-            float lengthSq = difference.LengthSquared();
-            if (lengthSq < Utilities.ZeroTolerance)
+            float lengthsq = difference.LengthSquared();
+            if (lengthsq < Utilities.ZeroTolerance)
                 difference = -cameraForwardVector;
             else
-                difference *= (float)(1.0 / Math.Sqrt(lengthSq));
+                difference *= (float)(1.0 / Math.Sqrt(lengthsq));
 
             Vector3.Cross(ref cameraUpVector, ref difference, out crossed);
             crossed.Normalize();
@@ -2993,25 +2993,56 @@ namespace SlimMath
         /// </returns>
         public bool Equals(Matrix other)
         {
-            return (Math.Abs(other.M11 - M11) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M12 - M12) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M13 - M13) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M14 - M14) < Utilities.ZeroTolerance &&
+            return (other.M11 == M11 &&
+                other.M12 == M12 &&
+                other.M13 == M13 &&
+                other.M14 == M14 &&
 
-                Math.Abs(other.M21 - M21) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M22 - M22) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M23 - M23) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M24 - M24) < Utilities.ZeroTolerance &&
+                other.M21 == M21 &&
+                other.M22 == M22 &&
+                other.M23 == M23 &&
+                other.M24 == M24 &&
 
-                Math.Abs(other.M31 - M31) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M32 - M32) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M33 - M33) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M34 - M34) < Utilities.ZeroTolerance &&
+                other.M31 == M31 &&
+                other.M32 == M32 &&
+                other.M33 == M33 &&
+                other.M34 == M34 &&
 
-                Math.Abs(other.M41 - M41) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M42 - M42) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M43 - M43) < Utilities.ZeroTolerance &&
-                Math.Abs(other.M44 - M44) < Utilities.ZeroTolerance);
+                other.M41 == M41 &&
+                other.M42 == M42 &&
+                other.M43 == M43 &&
+                other.M44 == M44);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SlimMath.Matrix"/> is equal to this instance.
+        /// </summary>
+        /// <param name="other">The <see cref="SlimMath.Matrix"/> to compare with this instance.</param>
+        /// <param name="epsilon">The amount of error allowed.</param>
+        /// <returns>
+        /// <c>true</c> if the specified <see cref="SlimMath.Matrix"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Equals(Matrix other, float epsilon)
+        {
+            return (Math.Abs(other.M11 - M11) < epsilon &&
+                Math.Abs(other.M12 - M12) < epsilon &&
+                Math.Abs(other.M13 - M13) < epsilon &&
+                Math.Abs(other.M14 - M14) < epsilon &&
+
+                Math.Abs(other.M21 - M21) < epsilon &&
+                Math.Abs(other.M22 - M22) < epsilon &&
+                Math.Abs(other.M23 - M23) < epsilon &&
+                Math.Abs(other.M24 - M24) < epsilon &&
+
+                Math.Abs(other.M31 - M31) < epsilon &&
+                Math.Abs(other.M32 - M32) < epsilon &&
+                Math.Abs(other.M33 - M33) < epsilon &&
+                Math.Abs(other.M34 - M34) < epsilon &&
+
+                Math.Abs(other.M41 - M41) < epsilon &&
+                Math.Abs(other.M42 - M42) < epsilon &&
+                Math.Abs(other.M43 - M43) < epsilon &&
+                Math.Abs(other.M44 - M44) < epsilon);
         }
 
         /// <summary>

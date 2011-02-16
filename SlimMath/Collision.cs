@@ -265,9 +265,6 @@ namespace SlimMath
         /// <returns>The distance between the two objects.</returns>
         public static float DistanceBoxBox(ref BoundingBox box1, ref BoundingBox box2)
         {
-            //Source:
-            //Reference:
-
             float distance = 0f;
 
             //Distance for X.
