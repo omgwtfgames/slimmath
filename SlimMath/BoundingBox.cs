@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -52,6 +53,21 @@ namespace SlimMath
         {
             this.Minimum = minimum;
             this.Maximum = maximum;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SlimMath.BoundingBox"/> struct.
+        /// </summary>
+        /// <param name="minimumX">The minimum x-coordinate of the bounding box.</param>
+        /// <param name="minimumY">The minimum y-coordinate of the bounding box.</param>
+        /// <param name="minimumZ">The minimum z-coordinate of the bounding box.</param>
+        /// <param name="maximumX">The maximum x-coordinate of the bounding box.</param>
+        /// <param name="maximumY">The maximum y-coordinate of the bounding box.</param>
+        /// <param name="maximumZ">The maximum z-coordinate of the bounding box.</param>
+        public BoundingBox(float minimumX, float minimumY, float minimumZ, float maximumX, float maximumY, float maximumZ)
+        {
+            this.Minimum = new Vector3(minimumX, minimumY, minimumZ);
+            this.Maximum = new Vector3(maximumX, maximumY, maximumZ);
         }
 
         /// <summary>
@@ -117,7 +133,6 @@ namespace SlimMath
             return Collision.PlaneIntersectsBox(ref plane, ref this);
         }
 
-        /* This implentation is wrong
         /// <summary>
         /// Determines if there is an intersection between the current object and a triangle.
         /// </summary>
@@ -129,7 +144,6 @@ namespace SlimMath
         {
             return Collision.BoxIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
-        */
 
         /// <summary>
         /// Determines if there is an intersection between the current object and a <see cref="SlimMath.BoundingBox"/>.
@@ -161,7 +175,6 @@ namespace SlimMath
             return Collision.BoxContainsPoint(ref this, ref point);
         }
 
-        /* This implentation is wrong
         /// <summary>
         /// Determines whether the current objects contains a triangle.
         /// </summary>
@@ -173,7 +186,6 @@ namespace SlimMath
         {
             return Collision.BoxContainsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
-        */
 
         /// <summary>
         /// Determines whether the current objects contains a <see cref="SlimMath.BoundingBox"/>.
@@ -193,6 +205,18 @@ namespace SlimMath
         public ContainmentType Contains(ref BoundingSphere sphere)
         {
             return Collision.BoxContainsSphere(ref this, ref sphere);
+        }
+
+        public void SupportMapping(ref Vector3 direction, out Vector3 result)
+        {
+            Collision.SupportPoint(ref this, ref direction, out result);
+        }
+
+        public Vector3 SupportMapping(Vector3 direction)
+        {
+            Vector3 result;
+            SupportMapping(ref direction, out result);
+            return result;
         }
 
         /// <summary>
@@ -395,19 +419,19 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value == null)
+            if (obj == null)
                 return false;
 
-            if (value.GetType() != GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((BoundingBox)value);
+            return Equals((BoundingBox)obj);
         }
 
 #if SlimDX1xInterop

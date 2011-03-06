@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -171,6 +172,30 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Calculates the length of the vector.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="SlimMath.Vector4.LengthSquared"/> may be preferred when only the relative length is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public float Length
+        {
+            get { return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
+        }
+
+        /// <summary>
+        /// Calculates the squared length of the vector.
+        /// </summary>
+        /// <remarks>
+        /// This property may be preferred to <see cref="SlimMath.Vector4.Length"/> when only a relative length is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public float LengthSquared
+        {
+            get { return (X * X) + (Y * Y) + (Z * Z) + (W * W); }
+        }
+
+        /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the X, Y, Z, or W component, depending on the index.</value>
@@ -206,37 +231,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Calculates the length of the vector.
-        /// </summary>
-        /// <returns>The length of the vector.</returns>
-        /// <remarks>
-        /// <see cref="SlimMath.Vector4.LengthSquared"/> may be preferred when only the relative length is needed
-        /// and speed is of the essence.
-        /// </remarks>
-        public float Length()
-        {
-            return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
-        }
-
-        /// <summary>
-        /// Calculates the squared length of the vector.
-        /// </summary>
-        /// <returns>The squared length of the vector.</returns>
-        /// <remarks>
-        /// This method may be preferred to <see cref="SlimMath.Vector4.Length"/> when only a relative length is needed
-        /// and speed is of the essence.
-        /// </remarks>
-        public float LengthSquared()
-        {
-            return (X * X) + (Y * Y) + (Z * Z) + (W * W);
-        }
-
-        /// <summary>
         /// Converts the vector into a unit vector.
         /// </summary>
         public void Normalize()
         {
-            float length = Length();
+            float length = Length;
             if (length > Utilities.ZeroTolerance)
             {
                 float inverse = 1.0f / length;
@@ -1245,19 +1244,19 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value == null)
+            if (obj == null)
                 return false;
 
-            if (value.GetType() != GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((Vector4)value);
+            return Equals((Vector4)obj);
         }
 
 #if SlimDX1xInterop

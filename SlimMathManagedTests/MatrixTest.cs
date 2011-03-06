@@ -588,17 +588,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = target.Equals(value);
             Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateMatrix();
-            temp = target;
-            temp.M11 -= (Utilities.ZeroTolerance / 2f); temp.M12 -= (Utilities.ZeroTolerance / 2f); temp.M13 += (Utilities.ZeroTolerance / 2f); temp.M14 -= (Utilities.ZeroTolerance / 2f);
-            temp.M21 -= (Utilities.ZeroTolerance / 2f); temp.M22 += (Utilities.ZeroTolerance / 2f); temp.M23 -= (Utilities.ZeroTolerance / 2f); temp.M24 -= (Utilities.ZeroTolerance / 2f);
-            temp.M31 += (Utilities.ZeroTolerance / 2f); temp.M32 -= (Utilities.ZeroTolerance / 2f); temp.M33 -= (Utilities.ZeroTolerance / 2f); temp.M34 -= (Utilities.ZeroTolerance / 2f);
-            temp.M41 -= (Utilities.ZeroTolerance / 2f); temp.M42 += (Utilities.ZeroTolerance / 2f); temp.M43 += (Utilities.ZeroTolerance / 2f); temp.M44 += (Utilities.ZeroTolerance / 2f);
-            value = temp;
-            expected = true;
-            actual = target.Equals(value);
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -617,16 +606,6 @@ namespace SlimMathManagedTests
 
             target = Utilities.GenerateMatrix();
             other = target;
-            expected = true;
-            actual = target.Equals(other);
-            Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateMatrix();
-            other = target;
-            other.M11 -= (Utilities.ZeroTolerance / 2f); other.M12 -= (Utilities.ZeroTolerance / 2f); other.M13 += (Utilities.ZeroTolerance / 2f); other.M14 -= (Utilities.ZeroTolerance / 2f);
-            other.M21 -= (Utilities.ZeroTolerance / 2f); other.M22 += (Utilities.ZeroTolerance / 2f); other.M23 -= (Utilities.ZeroTolerance / 2f); other.M24 -= (Utilities.ZeroTolerance / 2f);
-            other.M31 += (Utilities.ZeroTolerance / 2f); other.M32 -= (Utilities.ZeroTolerance / 2f); other.M33 -= (Utilities.ZeroTolerance / 2f); other.M34 -= (Utilities.ZeroTolerance / 2f);
-            other.M41 -= (Utilities.ZeroTolerance / 2f); other.M42 += (Utilities.ZeroTolerance / 2f); other.M43 += (Utilities.ZeroTolerance / 2f); other.M44 += (Utilities.ZeroTolerance / 2f);
             expected = true;
             actual = target.Equals(other);
             Utilities.AreEqual(expected, actual);
@@ -1261,14 +1240,14 @@ namespace SlimMathManagedTests
             target.Orthonormalize();
 
             //All lengths of rows should be equal.
-            Utilities.AreEqual(target.Row1.Length(), target.Row2.Length());
-            Utilities.AreEqual(target.Row2.Length(), target.Row3.Length());
-            Utilities.AreEqual(target.Row3.Length(), target.Row4.Length());
+            Utilities.AreEqual(target.Row1.Length, target.Row2.Length);
+            Utilities.AreEqual(target.Row2.Length, target.Row3.Length);
+            Utilities.AreEqual(target.Row3.Length, target.Row4.Length);
 
             //All lengths of columns should be equal.
-            Utilities.AreEqual(target.Column1.Length(), target.Column2.Length());
-            Utilities.AreEqual(target.Column2.Length(), target.Column3.Length());
-            Utilities.AreEqual(target.Column3.Length(), target.Column4.Length());
+            Utilities.AreEqual(target.Column1.Length, target.Column2.Length);
+            Utilities.AreEqual(target.Column2.Length, target.Column3.Length);
+            Utilities.AreEqual(target.Column3.Length, target.Column4.Length);
 
             //All rows should be orthogonal to each other.
             Utilities.AreEqual(0f, Vector4.Dot(target.Row1, target.Row2));
@@ -1298,14 +1277,14 @@ namespace SlimMathManagedTests
             Matrix result = Matrix.Orthonormalize(value);
 
             //All lengths of rows should be equal.
-            Utilities.AreEqual(result.Row1.Length(), result.Row2.Length());
-            Utilities.AreEqual(result.Row2.Length(), result.Row3.Length());
-            Utilities.AreEqual(result.Row3.Length(), result.Row4.Length());
+            Utilities.AreEqual(result.Row1.Length, result.Row2.Length);
+            Utilities.AreEqual(result.Row2.Length, result.Row3.Length);
+            Utilities.AreEqual(result.Row3.Length, result.Row4.Length);
 
             //All lengths of columns should be equal.
-            Utilities.AreEqual(result.Column1.Length(), result.Column2.Length());
-            Utilities.AreEqual(result.Column2.Length(), result.Column3.Length());
-            Utilities.AreEqual(result.Column3.Length(), result.Column4.Length());
+            Utilities.AreEqual(result.Column1.Length, result.Column2.Length);
+            Utilities.AreEqual(result.Column2.Length, result.Column3.Length);
+            Utilities.AreEqual(result.Column3.Length, result.Column4.Length);
 
             //All rows should be orthogonal to each other.
             Utilities.AreEqual(0f, Vector4.Dot(result.Row1, result.Row2));
@@ -1340,14 +1319,14 @@ namespace SlimMathManagedTests
             Utilities.AreEqual(value, valueExpected);
 
             //All lengths of rows should be equal.
-            Utilities.AreEqual(result.Row1.Length(), result.Row2.Length());
-            Utilities.AreEqual(result.Row2.Length(), result.Row3.Length());
-            Utilities.AreEqual(result.Row3.Length(), result.Row4.Length());
+            Utilities.AreEqual(result.Row1.Length, result.Row2.Length);
+            Utilities.AreEqual(result.Row2.Length, result.Row3.Length);
+            Utilities.AreEqual(result.Row3.Length, result.Row4.Length);
 
             //All lengths of columns should be equal.
-            Utilities.AreEqual(result.Column1.Length(), result.Column2.Length());
-            Utilities.AreEqual(result.Column2.Length(), result.Column3.Length());
-            Utilities.AreEqual(result.Column3.Length(), result.Column4.Length());
+            Utilities.AreEqual(result.Column1.Length, result.Column2.Length);
+            Utilities.AreEqual(result.Column2.Length, result.Column3.Length);
+            Utilities.AreEqual(result.Column3.Length, result.Column4.Length);
 
             //All rows should be orthogonal to each other.
             Utilities.AreEqual(0f, Vector4.Dot(result.Row1, result.Row2));
@@ -2477,16 +2456,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = target == other;
             Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateMatrix();
-            other = target;
-            other.M11 -= (Utilities.ZeroTolerance / 2f); other.M12 -= (Utilities.ZeroTolerance / 2f); other.M13 += (Utilities.ZeroTolerance / 2f); other.M14 -= (Utilities.ZeroTolerance / 2f);
-            other.M21 -= (Utilities.ZeroTolerance / 2f); other.M22 += (Utilities.ZeroTolerance / 2f); other.M23 -= (Utilities.ZeroTolerance / 2f); other.M24 -= (Utilities.ZeroTolerance / 2f);
-            other.M31 += (Utilities.ZeroTolerance / 2f); other.M32 -= (Utilities.ZeroTolerance / 2f); other.M33 -= (Utilities.ZeroTolerance / 2f); other.M34 -= (Utilities.ZeroTolerance / 2f);
-            other.M41 -= (Utilities.ZeroTolerance / 2f); other.M42 += (Utilities.ZeroTolerance / 2f); other.M43 += (Utilities.ZeroTolerance / 2f); other.M44 += (Utilities.ZeroTolerance / 2f);
-            expected = true;
-            actual = target == other;
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -2505,16 +2474,6 @@ namespace SlimMathManagedTests
 
             target = Utilities.GenerateMatrix();
             other = target;
-            expected = false;
-            actual = target != other;
-            Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateMatrix();
-            other = target;
-            other.M11 -= (Utilities.ZeroTolerance / 2f); other.M12 -= (Utilities.ZeroTolerance / 2f); other.M13 += (Utilities.ZeroTolerance / 2f); other.M14 -= (Utilities.ZeroTolerance / 2f);
-            other.M21 -= (Utilities.ZeroTolerance / 2f); other.M22 += (Utilities.ZeroTolerance / 2f); other.M23 -= (Utilities.ZeroTolerance / 2f); other.M24 -= (Utilities.ZeroTolerance / 2f);
-            other.M31 += (Utilities.ZeroTolerance / 2f); other.M32 -= (Utilities.ZeroTolerance / 2f); other.M33 -= (Utilities.ZeroTolerance / 2f); other.M34 -= (Utilities.ZeroTolerance / 2f);
-            other.M41 -= (Utilities.ZeroTolerance / 2f); other.M42 += (Utilities.ZeroTolerance / 2f); other.M43 += (Utilities.ZeroTolerance / 2f); other.M44 += (Utilities.ZeroTolerance / 2f);
             expected = false;
             actual = target != other;
             Utilities.AreEqual(expected, actual);

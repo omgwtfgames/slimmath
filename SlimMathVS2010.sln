@@ -7,7 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlimMathManagedTests", "Sli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC26B28A-882F-40CC-8CE9-D43A07E78E21}"
 	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
 		SlimMathVS2010.vsmdi = SlimMathVS2010.vsmdi
 	EndProjectSection
 EndProject

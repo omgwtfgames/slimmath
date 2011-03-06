@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,7 +30,7 @@ namespace SlimMath
     /// <summary>
     /// Contains mathmeatical methods and constants that extend the System.Math class.
     /// </summary>
-    public static class MathExtended
+    public static class MathHelper
     {
         /// <summary>
         /// A value specifying the approximation of π which is 180 degrees.

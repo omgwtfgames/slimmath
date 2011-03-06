@@ -315,12 +315,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = target.Equals(value);
             Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateQuaternion();
-            value = new Quaternion(target.X + (Utilities.ZeroTolerance / 2f), target.Y - (Utilities.ZeroTolerance / 2f), target.Z + (Utilities.ZeroTolerance / 2f), target.W - (Utilities.ZeroTolerance / 2f));
-            expected = true;
-            actual = target.Equals(value);
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -335,12 +329,6 @@ namespace SlimMathManagedTests
 
             target = Utilities.GenerateQuaternion();
             other = target;
-            expected = true;
-            actual = target.Equals(other);
-            Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateQuaternion();
-            other = new Quaternion(target.X + (Utilities.ZeroTolerance / 2f), target.Y - (Utilities.ZeroTolerance / 2f), target.Z + (Utilities.ZeroTolerance / 2f), target.W - (Utilities.ZeroTolerance / 2f));
             expected = true;
             actual = target.Equals(other);
             Utilities.AreEqual(expected, actual);
@@ -423,7 +411,7 @@ namespace SlimMathManagedTests
                 Utilities.ConvertToMdx(target));
 
             float actual;
-            actual = target.Length();
+            actual = target.Length;
             Utilities.AreEqual(expected, actual);
         }
 
@@ -436,7 +424,7 @@ namespace SlimMathManagedTests
                 Utilities.ConvertToMdx(target));
 
             float actual;
-            actual = target.LengthSquared();
+            actual = target.LengthSquared;
             Utilities.AreEqual(expected, actual);
         }
 
@@ -939,12 +927,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = left == right;
             Utilities.AreEqual(expected, actual);
-
-            left = Utilities.GenerateQuaternion();
-            right = new Quaternion(left.X + (Utilities.ZeroTolerance / 2f), left.Y - (Utilities.ZeroTolerance / 2f), left.Z + (Utilities.ZeroTolerance / 2f), left.W - (Utilities.ZeroTolerance / 2f));
-            expected = true;
-            actual = left == right;
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -1046,19 +1028,35 @@ namespace SlimMathManagedTests
         [TestMethod()]
         public void AngleTest()
         {
+            //angle = 2 * arcos(qw)
+
             Quaternion target = Utilities.GenerateQuaternion();
             float actual;
             actual = target.Angle;
-            Assert.Inconclusive("Verify the correctness of this test method.");
+
+            float expected = 2.0f * (float)Math.Acos(target.W);
+
+            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
         public void AxisTest()
         {
+            //x = qx / sqrt(1 - qw²)
+            //y = qy / sqrt(1 - qw²)
+            //z = qz / sqrt(1 - qw²)
+
             Quaternion target = Utilities.GenerateQuaternion();
             Vector3 actual;
             actual = target.Axis;
-            Assert.Inconclusive("Verify the correctness of this test method.");
+
+            float denominator = (float)Math.Sqrt(1 - (target.W * target.W));
+            Vector3 expected = new Vector3(
+                target.X / denominator,
+                target.Y / denominator,
+                target.Z / denominator);
+
+            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]

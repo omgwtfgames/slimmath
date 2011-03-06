@@ -29,21 +29,20 @@ using System.Globalization;
 namespace SlimMath.Design
 {
     /// <summary>
-    /// Defines a type converter for <see cref="Vector3"/>.
+    /// Defines a type converter for <see cref="Half2"/>.
     /// </summary>
-    public class Vector3Converter : BaseConverter
+    public class Half2Converter : BaseConverter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector3Converter"/> class.
+        /// Initializes a new instance of the <see cref="Half2Converter"/> class.
         /// </summary>
-        public Vector3Converter()
+        public Half2Converter()
         {
-            var type = typeof(Vector3);
+            var type = typeof(Half2);
             Properties = new PropertyDescriptorCollection(new[] 
             {
                 new FieldPropertyDescriptor(type.GetField("X")), 
-                new FieldPropertyDescriptor(type.GetField("Y")),
-                new FieldPropertyDescriptor(type.GetField("Z")) 
+                new FieldPropertyDescriptor(type.GetField("Y")) 
             });
         }
 
@@ -68,16 +67,16 @@ namespace SlimMath.Design
             if (destinationType == null)
                 throw new ArgumentNullException("destinationType");
 
-            if (value is Vector3)
+            if (value is Half2)
             {
-                var vector = (Vector3)value;
+                var vector = (Half2)value;
 
                 if (destinationType == typeof(string))
                     return ConvertFromValues(context, culture, vector.ToArray());
 
                 if (destinationType == typeof(InstanceDescriptor))
                 {
-                    var constructor = typeof(Vector3).GetConstructor(Utilities.Array(typeof(float), 3));
+                    var constructor = typeof(Half2).GetConstructor(Utilities.Array(typeof(float), 2));
                     if (constructor != null)
                         return new InstanceDescriptor(constructor, vector.ToArray());
                 }
@@ -101,7 +100,7 @@ namespace SlimMath.Design
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             var values = ConvertToValues<float>(context, culture, value);
-            return values != null ? new Vector3(values) : base.ConvertFrom(context, culture, value);
+            return values != null ? new Half2(values) : base.ConvertFrom(context, culture, value);
         }
 
         /// <summary>
@@ -117,7 +116,7 @@ namespace SlimMath.Design
             if (propertyValues == null)
                 throw new ArgumentNullException("propertyValues");
 
-            return new Vector3((float)propertyValues["X"], (float)propertyValues["Y"], (float)propertyValues["Z"]);
+            return new Half2((float)propertyValues["X"], (float)propertyValues["Y"]);
         }
     }
 }

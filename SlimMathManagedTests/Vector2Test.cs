@@ -417,12 +417,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = target.Equals(other);
             Utilities.AreEqual(expected, actual);
-
-            target = Utilities.GenerateVector2();
-            other = new Vector2(target.X + (Utilities.ZeroTolerance / 2f), target.Y - (Utilities.ZeroTolerance / 2f));
-            expected = true;
-            actual = target.Equals(other);
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -437,12 +431,6 @@ namespace SlimMathManagedTests
 
             target = new Vector2(7f, 3f);
             value = new Vector2(7f, 3f);
-            expected = true;
-            actual = target.Equals(value);
-            Utilities.AreEqual(expected, actual);
-
-            target = new Vector2(5f, 6f);
-            value = new Vector2(5f + (Utilities.ZeroTolerance / 2f), 6f - (Utilities.ZeroTolerance / 2f));
             expected = true;
             actual = target.Equals(value);
             Utilities.AreEqual(expected, actual);
@@ -506,7 +494,7 @@ namespace SlimMathManagedTests
             float expected = Utilities.ConvertToXna(target).Length();
 
             float actual;
-            actual = target.Length();
+            actual = target.Length;
             Utilities.AreEqual(expected, actual);
         }
 
@@ -518,7 +506,7 @@ namespace SlimMathManagedTests
             float expected = Utilities.ConvertToXna(target).LengthSquared();
 
             float actual;
-            actual = target.LengthSquared();
+            actual = target.LengthSquared;
             Utilities.AreEqual(expected, actual);
         }
 
@@ -816,7 +804,7 @@ namespace SlimMathManagedTests
 
             for (int i = 0; i < destination.Length; ++i)
             {
-                Utilities.AreEqual(1f, destination[i].Length());
+                Utilities.AreEqual(1f, destination[i].Length);
             }
 
             Utilities.AreEqual(0f, Vector2.Dot(destination[0], destination[1]));
@@ -869,31 +857,28 @@ namespace SlimMathManagedTests
         [TestMethod()]
         public void PerpTest()
         {
-            Vector2 vector = new Vector2(); // TODO: Initialize to an appropriate value
-            Vector2 expected = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 vector = Utilities.GenerateVector2();
             Vector2 actual;
 
             actual = Vector2.Perp(vector);
 
-            Assert.AreEqual(expected, actual);
+            Vector2 expected = (Vector2)Vector3.Cross(new Vector3(vector.X, vector.Y, 0f), new Vector3(0f, 0f, -1f));
 
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
         public void PerpByRefTest()
         {
-            Vector2 vector = new Vector2(); // TODO: Initialize to an appropriate value
-            Vector2 vectorExpected = new Vector2(); // TODO: Initialize to an appropriate value
-            Vector2 result = new Vector2(); // TODO: Initialize to an appropriate value
-            Vector2 resultExpected = new Vector2(); // TODO: Initialize to an appropriate value
+            Vector2 vector = Utilities.GenerateVector2();
+            Vector2 vectorExpected = vector;
 
-            Vector2.Perp(ref vector, out result);
+            Vector2 result = Utilities.GenerateVector2();
 
-            Assert.AreEqual(vectorExpected, vector);
-            Assert.AreEqual(resultExpected, result);
+            Vector2 expected = (Vector2)Vector3.Cross(new Vector3(vector.X, vector.Y, 0f), new Vector3(0f, 0f, -1f));
 
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Utilities.AreEqual(vectorExpected, vector);
+            Utilities.AreEqual(result, result);
         }
 
         [TestMethod()]
@@ -1300,12 +1285,6 @@ namespace SlimMathManagedTests
             expected = true;
             actual = (left == right);
             Utilities.AreEqual(expected, actual);
-
-            left = new Vector2(5f, 6f);
-            right = new Vector2(5f + (Utilities.ZeroTolerance / 2f), 6f - (Utilities.ZeroTolerance / 2f));
-            expected = true;
-            actual = (left == right);
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]
@@ -1344,12 +1323,6 @@ namespace SlimMathManagedTests
 
             left = new Vector2(7f, 3f);
             right = new Vector2(7f, 3f);
-            expected = false;
-            actual = (left != right);
-            Utilities.AreEqual(expected, actual);
-
-            left = new Vector2(5f, 6f);
-            right = new Vector2(5f + (Utilities.ZeroTolerance / 2f), 6f - (Utilities.ZeroTolerance / 2f));
             expected = false;
             actual = (left != right);
             Utilities.AreEqual(expected, actual);

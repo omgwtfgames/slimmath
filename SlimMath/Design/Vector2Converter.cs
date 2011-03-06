@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -39,7 +40,7 @@ namespace SlimMath.Design
         {
             var type = typeof(Vector2);
             Properties = new PropertyDescriptorCollection(new[] 
-            { 
+            {
                 new FieldPropertyDescriptor(type.GetField("X")), 
                 new FieldPropertyDescriptor(type.GetField("Y")) 
             });

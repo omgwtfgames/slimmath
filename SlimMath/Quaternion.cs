@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -214,6 +215,30 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Calculates the length of the quaternion.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="SlimMath.Quaternion.LengthSquared"/> may be preferred when only the relative length is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public float Length
+        {
+            get { return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)); }
+        }
+
+        /// <summary>
+        /// Calculates the squared length of the quaternion.
+        /// </summary>
+        /// <remarks>
+        /// This property may be preferred to <see cref="SlimMath.Quaternion.Length"/> when only a relative length is needed
+        /// and speed is of the essence.
+        /// </remarks>
+        public float LengthSquared
+        {
+            get { return (X * X) + (Y * Y) + (Z * Z) + (W * W); }
+        }
+
+        /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the X, Y, Z, or W component, depending on the index.</value>
@@ -263,7 +288,7 @@ namespace SlimMath
         /// </summary>
         public void Invert()
         {
-            float lengthSq = LengthSquared();
+            float lengthSq = LengthSquared;
             if (lengthSq > Utilities.ZeroTolerance)
             {
                 lengthSq = 1.0f / lengthSq;
@@ -276,37 +301,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Calculates the length of the quaternion.
-        /// </summary>
-        /// <returns>The length of the quaternion.</returns>
-        /// <remarks>
-        /// <see cref="SlimMath.Quaternion.LengthSquared"/> may be preferred when only the relative length is needed
-        /// and speed is of the essence.
-        /// </remarks>
-        public float Length()
-        {
-            return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
-        }
-
-        /// <summary>
-        /// Calculates the squared length of the quaternion.
-        /// </summary>
-        /// <returns>The squared length of the quaternion.</returns>
-        /// <remarks>
-        /// This method may be preferred to <see cref="SlimMath.Quaternion.Length"/> when only a relative length is needed
-        /// and speed is of the essence.
-        /// </remarks>
-        public float LengthSquared()
-        {
-            return (X * X) + (Y * Y) + (Z * Z) + (W * W);
-        }
-
-        /// <summary>
         /// Converts the quaternion into a unit quaternion.
         /// </summary>
         public void Normalize()
         {
-            float length = Length();
+            float length = Length;
             if (length > Utilities.ZeroTolerance)
             {
                 float inverse = 1.0f / length;
@@ -954,22 +953,37 @@ namespace SlimMath
         /// <param name="value2">Second source quaternion.</param>
         /// <param name="value3">Third source quaternion.</param>
         /// <param name="value4">Fourth source quaternion.</param>
-        /// <returns>An array of three quaternions that represent control points for spherical quadrangle interpolation.</returns>
-        public static Quaternion[] SquadSetup(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4)
+        /// <param name="result1">When the method completes, contains the first control point for spherical quadrangle interpolation.</param>
+        /// <param name="result2">When the method completes, contains the second control point for spherical quadrangle interpolation.</param>
+        /// <param name="result3">When the method completes, contains the third control point for spherical quadrangle interpolation.</param>
+        public static void SquadSetup(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, ref Quaternion value4, out Quaternion result1, out Quaternion result2, out Quaternion result3)
         {
-            Quaternion q0 = (value1 + value2).LengthSquared() < (value1 - value2).LengthSquared() ? -value1 : value1;
-            Quaternion q2 = (value2 + value3).LengthSquared() < (value2 - value3).LengthSquared() ? -value3 : value3;
-            Quaternion q3 = (value3 + value4).LengthSquared() < (value3 - value4).LengthSquared() ? -value4 : value4;
+            Quaternion q0 = (value1 + value2).LengthSquared < (value1 - value2).LengthSquared ? -value1 : value1;
+            Quaternion q2 = (value2 + value3).LengthSquared < (value2 - value3).LengthSquared ? -value3 : value3;
+            Quaternion q3 = (value3 + value4).LengthSquared < (value3 - value4).LengthSquared ? -value4 : value4;
             Quaternion q1 = value2;
 
             Quaternion q1Exp, q2Exp;
             Exponential(ref q1, out q1Exp);
             Exponential(ref q2, out q2Exp);
 
+            result1 = q1 * Exponential(-0.25f * (Logarithm(q1Exp * q2) + Logarithm(q1Exp * q0)));
+            result2 = q2 * Exponential(-0.25f * (Logarithm(q2Exp * q3) + Logarithm(q2Exp * q1)));
+            result3 = q2;
+        }
+
+        /// <summary>
+        /// Sets up control points for spherical quadrangle interpolation.
+        /// </summary>
+        /// <param name="value1">First source quaternion.</param>
+        /// <param name="value2">Second source quaternion.</param>
+        /// <param name="value3">Third source quaternion.</param>
+        /// <param name="value4">Fourth source quaternion.</param>
+        /// <returns>An array of three quaternions that represent control points for spherical quadrangle interpolation.</returns>
+        public static Quaternion[] SquadSetup(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4)
+        {
             Quaternion[] results = new Quaternion[3];
-            results[0] = q1 * Exponential(-0.25f * (Logarithm(q1Exp * q2) + Logarithm(q1Exp * q0)));
-            results[1] = q2 * Exponential(-0.25f * (Logarithm(q2Exp * q3) + Logarithm(q2Exp * q1)));
-            results[2] = q2;
+            SquadSetup(ref value1, ref value2, ref value3, ref value4, out results[0], out results[1], out results[2]);
 
             return results;
         }
@@ -1171,19 +1185,19 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value == null)
+            if (obj == null)
                 return false;
 
-            if (value.GetType() != GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((Quaternion)value);
+            return Equals((Quaternion)obj);
         }
 
 #if SlimDX1xInterop

@@ -19,10 +19,12 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.ComponentModel;
 
 namespace SlimMath
 {
@@ -38,16 +40,18 @@ namespace SlimMath
      * 3. Segment
      * 4. Plane
      * 5. Triangle
-     * 6. Polygon
-     * 7. Box
-     * 8. Sphere
-     * 9. Ellipsoid
-     * 10. Cylinder
-     * 11. Cone
-     * 12. Capsule
-     * 13. Torus
-     * 14. Polyhedron
-     * 15. Frustum
+     * 6. Polygon (polygon that lies on a single plane)
+     * 7. Tetrahedron
+     * 8. Box
+     * 9. AABox
+     * 10. Sphere
+     * 11. Ellipsoid
+     * 12. Cylinder
+     * 13. Cone
+     * 14. Capsule
+     * 15. Torus
+     * 16. Polyhedron
+     * 17. Frustum
     */
 
     /// <summary>
@@ -56,71 +60,24 @@ namespace SlimMath
     public static class Collision
     {
         /// <summary>
-        /// Determines the closest point between a point and a triangle.
+        /// Determines the closest point between a point and a segment.
         /// </summary>
         /// <param name="point">The point to test.</param>
-        /// <param name="vertex1">The first vertex to test.</param>
-        /// <param name="vertex2">The second vertex to test.</param>
-        /// <param name="vertex3">The third vertex to test.</param>
+        /// <param name="segment1">The starting point of the segment to test.</param>
+        /// <param name="segment2">The ending point of the segment to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPointTriangle(ref Vector3 point, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Vector3 result)
+        public static void ClosestPointOnSegmentToPoint(ref Vector3 segment1, ref Vector3 segment2, ref Vector3 point, out Vector3 result)
         {
-            //Source: Real-Time Collision Detection by Christer Ericson
-            //Reference: Page 136
+            Vector3 ab = segment2 - segment1;
+            float t = Vector3.Dot(point - segment1, ab) / Vector3.Dot(ab, ab);
 
-            //Check if P in vertex region outside A
-            Vector3 ab = vertex2 - vertex1;
-            Vector3 ac = vertex3 - vertex1;
-            Vector3 ap = point - vertex1;
+            if (t < 0.0f)
+                t = 0.0f;
 
-            float d1 = Vector3.Dot(ab, ap);
-            float d2 = Vector3.Dot(ac, ap);
-            if (d1 <= 0.0f && d2 <= 0.0f)
-                result = vertex1; //Barycentric coordinates (1,0,0)
+            if (t > 1.0f)
+                t = 1.0f;
 
-            //Check if P in vertex region outside B
-            Vector3 bp = point - vertex2;
-            float d3 = Vector3.Dot(ab, bp);
-            float d4 = Vector3.Dot(ac, bp);
-            if (d3 >= 0.0f && d4 <= d3)
-                result = vertex2; // barycentric coordinates (0,1,0)
-
-            //Check if P in edge region of AB, if so return projection of P onto AB
-            float vc = d1 * d4 - d3 * d2;
-            if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
-            {
-                float v = d1 / (d1 - d3);
-                result = vertex1 + v * ab; //Barycentric coordinates (1-v,v,0)
-            }
-
-            //Check if P in vertex region outside C
-            Vector3 cp = point - vertex3;
-            float d5 = Vector3.Dot(ab, cp);
-            float d6 = Vector3.Dot(ac, cp);
-            if (d6 >= 0.0f && d5 <= d6)
-                result = vertex3; //Barycentric coordinates (0,0,1)
-
-            //Check if P in edge region of AC, if so return projection of P onto AC
-            float vb = d5 * d2 - d1 * d6;
-            if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
-            {
-                float w = d2 / (d2 - d6);
-                result = vertex1 + w * ac; //Barycentric coordinates (1-w,0,w)
-            }
-
-            //Check if P in edge region of BC, if so return projection of P onto BC
-            float va = d3 * d6 - d5 * d4;
-            if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
-            {
-                float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-                result = vertex2 + w * (vertex3 - vertex2); //Barycentric coordinates (0,1-w,w)
-            }
-
-            //P inside face region. Compute Q through its barycentric coordinates (u,v,w)
-            float denom = 1.0f / (va + vb + vc);
-            float v2 = vb * denom;
-            float w2 = vc * denom;
-            result = vertex1 + ab * v2 + ac * w2; //= u*vertex1 + v*vertex2 + w*vertex3, u = va * denom = 1.0f - v - w
+            result = segment1 + t * ab;
         }
 
         /// <summary>
@@ -129,7 +86,7 @@ namespace SlimMath
         /// <param name="plane">The plane to test.</param>
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPlanePoint(ref Plane plane, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointOnPlaneToPoint(ref Plane plane, ref Vector3 point, out Vector3 result)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 126
@@ -142,12 +99,92 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Determines the closest point between a point and a triangle.
+        /// </summary>
+        /// <param name="point">The point to test.</param>
+        /// <param name="vertex1">The first vertex to test.</param>
+        /// <param name="vertex2">The second vertex to test.</param>
+        /// <param name="vertex3">The third vertex to test.</param>
+        /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
+        public static void ClosestPointOnTriangleToPoint(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, ref Vector3 point, out Vector3 result)
+        {
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 136
+
+            //Check if P in vertex region outside A
+            Vector3 ab = vertex2 - vertex1;
+            Vector3 ac = vertex3 - vertex1;
+            Vector3 ap = point - vertex1;
+
+            float d1 = Vector3.Dot(ab, ap);
+            float d2 = Vector3.Dot(ac, ap);
+            if (d1 <= 0.0f && d2 <= 0.0f)
+            {
+                result = vertex1; //Barycentric coordinates (1,0,0)
+                return;
+            }
+
+            //Check if P in vertex region outside B
+            Vector3 bp = point - vertex2;
+            float d3 = Vector3.Dot(ab, bp);
+            float d4 = Vector3.Dot(ac, bp);
+            if (d3 >= 0.0f && d4 <= d3)
+            {
+                result = vertex2; // barycentric coordinates (0,1,0)
+                return;
+            }
+
+            //Check if P in edge region of AB, if so return projection of P onto AB
+            float vc = d1 * d4 - d3 * d2;
+            if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+            {
+                float v = d1 / (d1 - d3);
+                result = vertex1 + v * ab; //Barycentric coordinates (1-v,v,0)
+                return;
+            }
+
+            //Check if P in vertex region outside C
+            Vector3 cp = point - vertex3;
+            float d5 = Vector3.Dot(ab, cp);
+            float d6 = Vector3.Dot(ac, cp);
+            if (d6 >= 0.0f && d5 <= d6)
+            {
+                result = vertex3; //Barycentric coordinates (0,0,1)
+                return;
+            }
+
+            //Check if P in edge region of AC, if so return projection of P onto AC
+            float vb = d5 * d2 - d1 * d6;
+            if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+            {
+                float w = d2 / (d2 - d6);
+                result = vertex1 + w * ac; //Barycentric coordinates (1-w,0,w)
+                return;
+            }
+
+            //Check if P in edge region of BC, if so return projection of P onto BC
+            float va = d3 * d6 - d5 * d4;
+            if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+            {
+                float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+                result = vertex2 + w * (vertex3 - vertex2); //Barycentric coordinates (0,1-w,w)
+                return;
+            }
+
+            //P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+            float denom = 1.0f / (va + vb + vc);
+            float v2 = vb * denom;
+            float w2 = vc * denom;
+            result = vertex1 + ab * v2 + ac * w2; //= u*vertex1 + v*vertex2 + w*vertex3, u = va * denom = 1.0f - v - w
+        }
+
+        /// <summary>
         /// Determines the closest point between a <see cref="SlimMath.BoundingBox"/> and a point.
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointBoxPoint(ref BoundingBox box, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointOnBoxToPoint(ref BoundingBox box, ref Vector3 point, out Vector3 result)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 130
@@ -164,7 +201,7 @@ namespace SlimMath
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects;
         /// or, if the point is directly in the center of the sphere, contains <see cref="SlimMath.Vector3.Zero"/>.</param>
-        public static void ClosestPointSpherePoint(ref BoundingSphere sphere, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointOnSphereToPoint(ref BoundingSphere sphere, ref Vector3 point, out Vector3 result)
         {
             //Source: Jorgy343
             //Reference: None
@@ -193,7 +230,7 @@ namespace SlimMath
         /// is the 'closest' point of intersection. This can also be considered is the deepest point of
         /// intersection.
         /// </remarks>
-        public static void ClosestPointSphereSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2, out Vector3 result)
+        public static void ClosestPointOnSphereToSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2, out Vector3 result)
         {
             //Source: Jorgy343
             //Reference: None
@@ -383,23 +420,23 @@ namespace SlimMath
         /// <remarks>
         /// This method performs a ray vs ray intersection test based on the following formula
         /// from Goldman.
-        /// <code>s = det([o_2 - o_1, d_2, d_1 x d_2]) / ||d_1 x d_2||^2</code>
-        /// <code>t = det([o_2 - o_1, d_1, d_1 x d_2]) / ||d_1 x d_2||^2</code>
-        /// Where o_1 is the position of the first ray, o_2 is the position of the second ray,
-        /// d_1 is the normalized direction of the first ray, d_2 is the normalized direction
-        /// of the second ray, det denotes the determinant of a matrix, x denotes the cross
-        /// product, [ ] denotes a matrix, and || || denotes the length or magnitude of a vector.
+        /// <code>s = det([o₂ - o₁, d₂, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
+        /// <code>t = det([o₂ - o₁, d₁, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
+        /// Where o₁ is the position of the first ray, o₂ is the position of the second ray,
+        /// d₁ is the normalized direction of the first ray, d₂ is the normalized direction
+        /// of the second ray, det denotes the determinant of a matrix, ⨯ denotes the cross
+        /// product, [ ] denotes a matrix, and ‖ ‖ denotes the length or magnitude of a vector.
         /// </remarks>
         public static bool RayIntersectsRay(ref Ray ray1, ref Ray ray2, out Vector3 point)
         {
             //Source: Real-Time Rendering, Third Edition
             //Reference: Page 780
-
+            
             Vector3 cross;
 
             Vector3.Cross(ref ray1.Direction, ref ray2.Direction, out cross);
-            float denominator = cross.Length();
-
+            float denominator = cross.Length;
+            
             //Lines are parallel.
             if (Math.Abs(denominator) < Utilities.ZeroTolerance)
             {
@@ -1033,7 +1070,8 @@ namespace SlimMath
             return PlaneIntersectionType.Intersecting;
         }
 
-        /* This implentation is wrong
+        //THIS IMPLEMENTATION IS INCOMPLETE!
+        //NEEDS TO BE COMPLETED SOON
         /// <summary>
         /// Determines whether there is an intersection between a <see cref="SlimMath.BoundingBox"/> and a triangle.
         /// </summary>
@@ -1044,18 +1082,60 @@ namespace SlimMath
         /// <returns>Whether the two objects intersected.</returns>
         public static bool BoxIntersectsTriangle(ref BoundingBox box, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
         {
-            if (BoxContainsPoint(ref box, ref vertex1) == ContainmentType.Contains)
-                return true;
+            //Source: Real-Time Collision Detection by Christer Ericson
+            //Reference: Page 169
 
-            if (BoxContainsPoint(ref box, ref vertex2) == ContainmentType.Contains)
-                return true;
+            float p0, p1, p2, r;
 
-            if (BoxContainsPoint(ref box, ref vertex3) == ContainmentType.Contains)
-                return true;
+            //Compute box center and extents (if not already given in that format)
+            Vector3 center = (box.Minimum + box.Maximum) * 0.5f;
+            float e0 = (box.Maximum.X - box.Minimum.X) * 0.5f;
+            float e1 = (box.Maximum.Y - box.Minimum.Y) * 0.5f;
+            float e2 = (box.Maximum.Z - box.Minimum.Z) * 0.5f;
 
-            return false;
+            //Translate triangle as conceptually moving AABB to origin
+            vertex1 = vertex1 - center;
+            vertex2 = vertex2 - center;
+            vertex3 = vertex3 - center;
+
+            //Compute edge vectors for triangle
+            Vector3 f0 = vertex2 - vertex1;
+            Vector3 f1 = vertex3 - vertex2;
+            Vector3 f2 = vertex1 - vertex3;
+
+            //Test axes a00..a22 (category 3)
+            //Test axis a00
+            p0 = vertex1.Z * vertex2.Y - vertex1.Y * vertex2.Z;
+            p2 = vertex3.Z * (vertex2.Y - vertex1.Y) - vertex3.Z * (vertex2.Z - vertex1.Z);
+            r = e1 * Math.Abs(f0.Z) + e2 * Math.Abs(f0.Y);
+
+            if (Math.Max(-Math.Max(p0, p2), Math.Min(p0, p2)) > r)
+                return false; //Axis is a separating axis
+
+            //Repeat similar tests for remaining axes a01..a22
+            //...
+
+            //Test the three axes corresponding to the face normals of AABB b (category 1).
+            //Exit if...
+            // ... [-e0, e0] and [Math.Min(vertex1.X,vertex2.X,vertex3.X), Math.Max(vertex1.X,vertex2.X,vertex3.X)] do not overlap
+            if (Math.Max(Math.Max(vertex1.X, vertex2.X), vertex3.X) < -e0 || Math.Min(Math.Min(vertex1.X, vertex2.X), vertex3.X) > e0)
+                return false;
+
+            // ... [-e1, e1] and [Math.Min(vertex1.Y,vertex2.Y,vertex3.Y), Math.Max(vertex1.Y,vertex2.Y,vertex3.Y)] do not overlap
+            if (Math.Max(Math.Max(vertex1.Y, vertex2.Y), vertex3.Y) < -e1 || Math.Min(Math.Min(vertex1.Y, vertex2.Y), vertex3.Y) > e1)
+                return false;
+
+            // ... [-e2, e2] and [Math.Min(vertex1.Z,vertex2.Z,vertex3.Z), Math.Max(vertex1.Z,vertex2.Z,vertex3.Z)] do not overlap
+            if (Math.Max(Math.Max(vertex1.Z, vertex2.Z), vertex3.Z) < -e2 || Math.Min(Math.Min(vertex1.Z, vertex2.Z), vertex3.Z) > e2)
+                return false;
+
+            //Test separating axis corresponding to triangle face normal (category 2)
+            Plane plane;
+            plane.Normal = Vector3.Cross(f0, f1);
+            plane.D = Vector3.Dot(plane.Normal, vertex1);
+
+            return PlaneIntersectsBox(ref plane, ref box) == PlaneIntersectionType.Intersecting;
         }
-        */
 
         /// <summary>
         /// Determines whether there is an intersection between a <see cref="SlimMath.BoundingBox"/> and a <see cref="SlimMath.BoundingBox"/>.
@@ -1109,7 +1189,7 @@ namespace SlimMath
             //Reference: Page 167
 
             Vector3 point;
-            ClosestPointPointTriangle(ref sphere.Center, ref vertex1, ref vertex2, ref vertex3, out point);
+            ClosestPointOnTriangleToPoint(ref sphere.Center, ref vertex1, ref vertex2, ref vertex3, out point);
             Vector3 v = point - sphere.Center;
 
             float dot;
@@ -1148,7 +1228,6 @@ namespace SlimMath
             return ContainmentType.Disjoint;
         }
 
-        /* This implentation is wrong
         /// <summary>
         /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a triangle.
         /// </summary>
@@ -1166,12 +1245,11 @@ namespace SlimMath
             if (test1 == ContainmentType.Contains && test2 == ContainmentType.Contains && test3 == ContainmentType.Contains)
                 return ContainmentType.Contains;
 
-            if (test1 == ContainmentType.Contains || test2 == ContainmentType.Contains || test3 == ContainmentType.Contains)
+            if (BoxIntersectsTriangle(ref box, ref vertex1, ref vertex2, ref vertex3))
                 return ContainmentType.Intersects;
 
             return ContainmentType.Disjoint;
         }
-        */
 
         /// <summary>
         /// Determines whether a <see cref="SlimMath.BoundingBox"/> contains a <see cref="SlimMath.BoundingBox"/>.
@@ -1283,56 +1361,56 @@ namespace SlimMath
             vector.Y = sphere.Center.Y - box.Maximum.Y;
             vector.Z = sphere.Center.Z - box.Maximum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Maximum.X;
             vector.Y = sphere.Center.Y - box.Maximum.Y;
             vector.Z = sphere.Center.Z - box.Maximum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Maximum.X;
             vector.Y = sphere.Center.Y - box.Minimum.Y;
             vector.Z = sphere.Center.Z - box.Maximum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Minimum.X;
             vector.Y = sphere.Center.Y - box.Minimum.Y;
             vector.Z = sphere.Center.Z - box.Maximum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Minimum.X;
             vector.Y = sphere.Center.Y - box.Maximum.Y;
             vector.Z = sphere.Center.Z - box.Minimum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Maximum.X;
             vector.Y = sphere.Center.Y - box.Maximum.Y;
             vector.Z = sphere.Center.Z - box.Minimum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Maximum.X;
             vector.Y = sphere.Center.Y - box.Minimum.Y;
             vector.Z = sphere.Center.Z - box.Minimum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             vector.X = sphere.Center.X - box.Minimum.X;
             vector.Y = sphere.Center.Y - box.Minimum.Y;
             vector.Z = sphere.Center.Z - box.Minimum.Z;
 
-            if (vector.LengthSquared() > radiussquared)
+            if (vector.LengthSquared > radiussquared)
                 return ContainmentType.Intersects;
 
             return ContainmentType.Contains;
@@ -1355,6 +1433,75 @@ namespace SlimMath
                 return ContainmentType.Intersects;
 
             return ContainmentType.Contains;
+        }
+
+        /// <summary>
+        /// Generates a supporting point from a specific triangle.
+        /// </summary>
+        /// <param name="vertex1">The first vertex of the triangle.</param>
+        /// <param name="vertex2">The second vertex of the triangle.</param>
+        /// <param name="vertex3">The third vertex of the triangle</param>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
+        public static void SupportPoint(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, ref Vector3 direction, out Vector3 result)
+        {
+            float dot1 = Vector3.Dot(vertex1, direction);
+            float dot2 = Vector3.Dot(vertex2, direction);
+            float dot3 = Vector3.Dot(vertex3, direction);
+
+            if (dot1 > dot2 && dot1 > dot3)
+                result = vertex1;
+            else if (dot2 > dot1 && dot2 > dot3)
+                result = vertex2;
+            else
+                result = vertex3;
+        }
+
+        /// <summary>
+        /// Generates a supporting point from a specific <see cref="SlimMath.BoundingBox"/>.
+        /// </summary>
+        /// <param name="box">The box to generate the supporting point for.</param>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
+        public static void SupportPoint(ref BoundingBox box, ref Vector3 direction, out Vector3 result)
+        {
+            result.X = direction.X >= 0.0f ? box.Maximum.X : box.Minimum.X;
+            result.Y = direction.Y >= 0.0f ? box.Maximum.Y : box.Minimum.Y;
+            result.Z = direction.Z >= 0.0f ? box.Maximum.Z : box.Minimum.Z;
+        }
+
+        /// <summary>
+        /// Generates a supporting point from a specific <see cref="SlimMath.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="sphere">The sphere to generate the supporting point for.</param>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
+        public static void SupportPoint(ref BoundingSphere sphere, ref Vector3 direction, out Vector3 result)
+        {
+            result = (sphere.Radius / direction.Length) * direction + sphere.Center;
+        }
+
+        /// <summary>
+        /// Generates a supporting point from a polyhedra.
+        /// </summary>
+        /// <param name="points">The points that make up the polyhedra.</param>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
+        public static void SupportPoint(IEnumerable<Vector3> points, ref Vector3 direction, out Vector3 result)
+        {
+            float maxdot = float.MinValue;
+            result = Vector3.Zero;
+
+            foreach (Vector3 point in points)
+            {
+                float tempdot = Vector3.Dot(direction, point);
+
+                if (tempdot > maxdot)
+                {
+                    maxdot = tempdot;
+                    result = point;
+                }
+            }
         }
     }
 }

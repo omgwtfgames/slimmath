@@ -9,6 +9,7 @@
     <AssemblyName>SlimMath</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,14 +43,19 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoundingBox.cs" />
+    <Compile Include="BoundingFrustum.cs" />
     <Compile Include="BoundingSphere.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
+    <Compile Include="Design\Half2Converter.cs" />
+    <Compile Include="Design\Half3Converter.cs" />
+    <Compile Include="Design\Half4Converter.cs" />
+    <Compile Include="Design\HalfConverter.cs" />
+    <Compile Include="Gjk.cs" />
     <Compile Include="Design\BaseConverter.cs" />
     <Compile Include="Design\FieldPropertyDescriptor.cs" />
     <Compile Include="Design\MatrixConverter.cs" />
@@ -62,8 +68,8 @@
     <Compile Include="Half2.cs" />
     <Compile Include="Half3.cs" />
     <Compile Include="Half4.cs" />
-    <Compile Include="HalfUtils.cs" />
-    <Compile Include="MathExtended.cs" />
+    <Compile Include="HalfUtilities.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

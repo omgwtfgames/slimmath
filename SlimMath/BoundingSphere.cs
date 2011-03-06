@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -46,11 +47,24 @@ namespace SlimMath
         /// <summary>
         /// Initializes a new instance of the <see cref="SlimMath.BoundingBox"/> struct.
         /// </summary>
-        /// <param name="center">The center of the sphere in three dimensional space.</param>
+        /// <param name="center">The center of the sphere.</param>
         /// <param name="radius">The radius of the sphere.</param>
         public BoundingSphere(Vector3 center, float radius)
         {
             this.Center = center;
+            this.Radius = radius;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SlimMath.BoundingBox"/> struct.
+        /// </summary>
+        /// <param name="centerX">The x-coordinate for the center of the sphere.</param>
+        /// <param name="centerY">The y-coordinate for the center of the sphere.</param>
+        /// <param name="centerZ">The z-coordinate for the center of the sphere.</param>
+        /// <param name="radius">The radius of the sphere.</param>
+        public BoundingSphere(float centerX, float centerY, float centerZ, float radius)
+        {
+            this.Center = new Vector3(centerX, centerY, centerZ);
             this.Radius = radius;
         }
 
@@ -174,6 +188,66 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Translates and scales this instance by a <see cref="SlimMath.Matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The <see cref="SlimMath.Matrix"/> to transform this instance by.</param>
+        /// <param name="result">When the method completes, contains the transformed <see cref="SlimMath.BoundingSphere"/>.</param>
+        /// <remarks>
+        /// The result of this operation is undefined if the matrix contains any transformations other than
+        /// translation, rotation, and uniform scaling.
+        /// </remarks>
+        public void Transform(ref Matrix matrix, out BoundingSphere result)
+        {
+            Vector3.TransformCoordinate(ref Center, ref matrix, out result.Center);
+
+            float row1 = (matrix.M11 * matrix.M11) + (matrix.M12 * matrix.M12) + (matrix.M13 * matrix.M13);
+            float row2 = (matrix.M21 * matrix.M21) + (matrix.M22 * matrix.M22) + (matrix.M23 * matrix.M23);
+            float row3 = (matrix.M31 * matrix.M31) + (matrix.M32 * matrix.M32) + (matrix.M33 * matrix.M33);
+            float num = Math.Max(row1, Math.Max(row2, row3));
+
+            result.Radius = Radius * (float)Math.Sqrt(num);
+
+        }
+
+        /// <summary>
+        /// Translates and scales this instance by a <see cref="SlimMath.Matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The <see cref="SlimMath.Matrix"/> to transform this instance by.</param>
+        /// <returns>The transformed <see cref="SlimMath.BoundingSphere"/>.</returns>
+        /// <remarks>
+        /// The result of this operation is undefined if the matrix contains any transformations other than
+        /// translation, rotation, and uniform scaling.
+        /// </remarks>
+        public BoundingSphere Transform(Matrix matrix)
+        {
+            BoundingSphere result;
+            Transform(ref matrix, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Generates a supporting point for this instance.
+        /// </summary>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
+        public void SupportMapping(ref Vector3 direction, out Vector3 result)
+        {
+            Collision.SupportPoint(ref this, ref direction, out result);
+        }
+
+        /// <summary>
+        /// Generates a support mapping for this instance.
+        /// </summary>
+        /// <param name="direction">The direction for which to build the support mapping.</param>
+        /// <returns>The resulting support mapping.</returns>
+        public Vector3 SupportMapping(Vector3 direction)
+        {
+            Vector3 result;
+            SupportMapping(ref direction, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Constructs a <see cref="SlimMath.BoundingSphere"/> that fully contains the given points.
         /// </summary>
         /// <param name="points">The points that will be contained by the sphere.</param>
@@ -194,7 +268,7 @@ namespace SlimMath
             float radius = 0f;
             for (int i = 0; i < points.Length; ++i)
             {
-                //We are doing a relative distance comparasin to find the maximum distance
+                //We are doing a relative distance comparison to find the maximum distance
                 //from the center of our sphere.
                 float distance;
                 Vector3.DistanceSquared(ref center, ref points[i], out distance);
@@ -262,7 +336,7 @@ namespace SlimMath
         {
             Vector3 difference = value2.Center - value1.Center;
 
-            float length = difference.Length();
+            float length = difference.Length;
             float radius = value1.Radius;
             float radius2 = value2.Radius;
 
@@ -406,19 +480,19 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value == null)
+            if (obj == null)
                 return false;
 
-            if (value.GetType() != GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((BoundingSphere)value);
+            return Equals((BoundingSphere)obj);
         }
 
 #if SlimDX1xInterop
@@ -443,7 +517,7 @@ namespace SlimMath
         }
 #endif
 
-#if SlimDX1xInterop
+#if XnaInterop
         /// <summary>
         /// Performs an implicit conversion from <see cref="SlimMath.BoundingSphere"/> to <see cref="Microsoft.Xna.Framework.BoundingSphere"/>.
         /// </summary>

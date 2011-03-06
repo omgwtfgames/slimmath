@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -174,15 +175,15 @@ namespace SlimMath
         /// <returns>A packed integer containing all four color components.</returns>
         public int ToArgb()
         {
-            uint a = (uint)(Alpha * 255.0f);
-            uint r = (uint)(Red * 255.0f);
-            uint g = (uint)(Green * 255.0f);
-            uint b = (uint)(Blue * 255.0f);
+            uint a = ((uint)(Alpha * 255.0f) & 0xFF);
+            uint r = ((uint)(Red * 255.0f) & 0xFF);
+            uint g = ((uint)(Green * 255.0f) & 0xFF);
+            uint b = ((uint)(Blue * 255.0f) & 0xFF);
 
             uint value = b;
-            value += g << 8;
-            value += r << 16;
-            value += a << 24;
+            value |= g << 8;
+            value |= r << 16;
+            value |= a << 24;
 
             return (int)value;
         }
@@ -812,19 +813,19 @@ namespace SlimMath
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
         /// </summary>
-        /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
         /// <returns>
         /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value == null)
+            if (obj == null)
                 return false;
 
-            if (value.GetType() != GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((Color4)value);
+            return Equals((Color4)obj);
         }
 
 #if SlimDX1xInterop

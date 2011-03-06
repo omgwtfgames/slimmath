@@ -19,6 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,42 @@ namespace SlimMath
         /// The value for which all absolute numbers smaller than are considered equal to zero.
         /// </summary>
         public const float ZeroTolerance = 1e-6f;
+
+        /// <summary>
+        /// Compares two floating point numbers based on an epsilon zero tolerance.
+        /// </summary>
+        /// <param name="left">The first number to compare.</param>
+        /// <param name="right">The second number to compare.</param>
+        /// <returns><c>true</c> if <paramref name="left"/> is within epsilon of <paramref name="right"/>; otherwise, <c>false</c>.</returns>
+        public static bool EpsilonEquals(float left, float right)
+        {
+            return Math.Abs(left - right) <= ZeroTolerance;
+        }
+
+        /// <summary>
+        /// Compares two floating point numbers based on an epsilon zero tolerance.
+        /// </summary>
+        /// <param name="left">The first number to compare.</param>
+        /// <param name="right">The second number to compare.</param>
+        /// <param name="epsilon">The epsilon value to use for zero tolerance.</param>
+        /// <returns><c>true</c> if <paramref name="left"/> is within epsilon of <paramref name="right"/>; otherwise, <c>false</c>.</returns>
+        public static bool EpsilonEquals(float left, float right, float epsilon)
+        {
+            return Math.Abs(left - right) <= epsilon;
+        }
+
+        /// <summary>
+        /// Swaps two items.
+        /// </summary>
+        /// <typeparam name="T">The type of the items to swap.</typeparam>
+        /// <param name="left">The first item to swap.</param>
+        /// <param name="right">The second item to swap.</param>
+        public static void Swap<T>(ref T left, ref T right)
+        {
+            T temp = left;
+            left = right;
+            right = temp;
+        }
 
         /// <summary>
         /// Does something with arrays.
