@@ -195,6 +195,182 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Takes the square root of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the square root of.</param>
+        /// <param name="result">When the method completes, contains a vector that is the square root of the input vector.</param>
+        public static void Sqrt(ref Vector2 value, out Vector2 result)
+        {
+            result.X = (float)Math.Sqrt(value.X);
+            result.Y = (float)Math.Sqrt(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the square root of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the square root of.</param>
+        /// <returns>A vector that is the square root of the input vector.</returns>
+        public static Vector2 Sqrt(Vector2 value)
+        {
+            Vector2 temp;
+            Sqrt(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes the reciprocal of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the reciprocal of.</param>
+        /// <param name="result">When the method completes, contains a vector that is the reciprocal of the input vector.</param>
+        public static void Reciprocal(ref Vector2 value, out Vector2 result)
+        {
+            result.X = 1.0f / value.X;
+            result.Y = 1.0f / value.Y;
+        }
+
+        /// <summary>
+        /// Takes the reciprocal of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the reciprocal of.</param>
+        /// <returns>A vector that is the reciprocal of the input vector.</returns>
+        public static Vector2 Reciprocal(Vector2 value)
+        {
+            Vector2 temp;
+            Reciprocal(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes the square root of each component in the vector and than takes the reciprocal of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the square root and recpirocal of.</param>
+        /// <param name="result">When the method completes, contains a vector that is the square root and reciprocal of the input vector.</param>
+        public static void ReciprocalSqrt(ref Vector2 value, out Vector2 result)
+        {
+            result.X = 1.0f / (float)Math.Sqrt(value.X);
+            result.Y = 1.0f / (float)Math.Sqrt(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the square root of each component in the vector and than takes the reciprocal of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the square root and recpirocal of.</param>
+        /// <returns>A vector that is the square root and reciprocal of the input vector.</returns>
+        public static Vector2 ReciprocalSqrt(Vector2 value)
+        {
+            Vector2 temp;
+            ReciprocalSqrt(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes e raised to the component in the vector.
+        /// </summary>
+        /// <param name="value">The value to take e raised to each component of.</param>
+        /// <param name="result">When the method completes, contains a vector that has e raised to each of the components in the input vector.</param>
+        public static void Exp(ref Vector2 value, out Vector2 result)
+        {
+            result.X = (float)Math.Exp(value.X);
+            result.Y = (float)Math.Exp(value.Y);
+        }
+
+        /// <summary>
+        /// Takes e raised to the component in the vector.
+        /// </summary>
+        /// <param name="value">The value to take e raised to each component of.</param>
+        /// <returns>A vector that has e raised to each of the components in the input vector.</returns>
+        public static Vector2 Exp(Vector2 value)
+        {
+            Vector2 temp;
+            Exp(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes the sine and than the cosine of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the sine and cosine of.</param>
+        /// <param name="sinResult">When the method completes, contains the sine of each component in the input vector.</param>
+        /// <param name="cosResult">When the method completes, contains the cpsome pf each component in the input vector.</param>
+        public static void SinCos(ref Vector2 value, out Vector2 sinResult, out Vector2 cosResult)
+        {
+            sinResult.X = (float)Math.Sin(value.X);
+            sinResult.Y = (float)Math.Sin(value.Y);
+
+            cosResult.X = (float)Math.Cos(value.X);
+            cosResult.Y = (float)Math.Cos(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the sine of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the sine of.</param>
+        /// <param name="result">When the method completes, a vector that contains the sine of each component in the input vector.</param>
+        public static void Sin(ref Vector2 value, out Vector2 result)
+        {
+            result.X = (float)Math.Sin(value.X);
+            result.Y = (float)Math.Sin(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the sine of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the sine of.</param>
+        /// <returns>A vector that contains the sine of each component in the input vector.</returns>
+        public static Vector2 Sin(Vector2 value)
+        {
+            Vector2 temp;
+            Sin(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes the cosine of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the cosine of.</param>
+        /// <param name="result">When the method completes, contains a vector that contains the cosine of each component in the input vector.</param>
+        public static void Cos(ref Vector2 value, out Vector2 result)
+        {
+            result.X = (float)Math.Cos(value.X);
+            result.Y = (float)Math.Cos(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the cosine of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the cosine of.</param>
+        /// <returns>A vector that contains the cosine of each component in the input vector.</returns>
+        public static Vector2 Cos(Vector2 value)
+        {
+            Vector2 temp;
+            Cos(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Takes the tangent of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the tangent of.</param>
+        /// <param name="result">When the method completes, contains a vector that contains the tangent of each component in the input vector.</param>
+        public static void Tan(ref Vector2 value, out Vector2 result)
+        {
+            result.X = (float)Math.Tan(value.X);
+            result.Y = (float)Math.Tan(value.Y);
+        }
+
+        /// <summary>
+        /// Takes the tangent of each component in the vector.
+        /// </summary>
+        /// <param name="value">The vector to take the tangent of.</param>
+        /// <returns>A vector that contains the tangent of each component in the input vector.</returns>
+        public static Vector2 Tan(Vector2 value)
+        {
+            Vector2 temp;
+            Tan(ref value, out temp);
+            return temp;
+        }
+
+        /// <summary>
         /// Adds two vectors.
         /// </summary>
         /// <param name="left">The first vector to add.</param>
@@ -322,6 +498,26 @@ namespace SlimMath
         public static Vector2 Negate(Vector2 value)
         {
             return new Vector2(-value.X, -value.Y);
+        }
+
+        /// <summary>
+        /// Takes the absolute value of each component.
+        /// </summary>
+        /// <param name="value">The vector to take the absolute value of.</param>
+        /// <param name="result">When the method completes, contains a vector that has all positive components.</param>
+        public static void Abs(ref Vector2 value, out Vector2 result)
+        {
+            result = new Vector2(Math.Abs(value.X), Math.Abs(value.Y));
+        }
+
+        /// <summary>
+        /// Takes the absolute value of each component.
+        /// </summary>
+        /// <param name="value">The vector to take the absolute value of.</param>
+        /// <returns>A vector that has all positive components.</returns>
+        public static Vector2 Abs(Vector2 value)
+        {
+            return new Vector2(Math.Abs(value.X), Math.Abs(value.Y));
         }
 
         /// <summary>
@@ -910,7 +1106,14 @@ namespace SlimMath
             float yy = rotation.Y * y;
             float zz = rotation.Z * z;
 
-            result = new Vector2((vector.X * (1.0f - yy - zz)) + (vector.Y * (xy - wz)), (vector.X * (xy + wz)) + (vector.Y * (1.0f - xx - zz)));
+            float num1 = (1.0f - yy - zz);
+            float num2 = (xy - wz);
+            float num3 = (xy + wz);
+            float num4 = (1.0f - xx - zz);
+
+            result = new Vector2(
+                (vector.X * num1) + (vector.Y * num2),
+                (vector.X * num3) + (vector.Y * num4));
         }
 
         /// <summary>
