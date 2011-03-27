@@ -1338,7 +1338,7 @@ namespace SlimMath
         /// </remarks>
         public static void UpperTriangularForm(ref Matrix value, out Matrix result)
         {
-            //Adapted from the row echelon code.
+            //Adapted from the row echelon code
             result = value;
             int lead = 0;
             int rowcount = 4;
@@ -1418,7 +1418,7 @@ namespace SlimMath
         /// </remarks>
         public static void LowerTriangularForm(ref Matrix value, out Matrix result)
         {
-            //Adapted from the row echelon code.
+            //Adapted from the row echelon code
             Matrix temp = value;
             Matrix.Transpose(ref temp, out result);
 

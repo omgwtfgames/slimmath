@@ -916,7 +916,7 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Returns a vector containing the smallest components of the specified vectors.
+        /// Returns a vector containing the largest components of the specified vectors.
         /// </summary>
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
