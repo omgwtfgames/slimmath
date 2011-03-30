@@ -146,6 +146,61 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Negates a color.
+        /// </summary>
+        public void Negate()
+        {
+            this.Red = -Red;
+            this.Green = -Green;
+            this.Blue = -Blue;
+        }
+
+        /// <summary>
+        /// Scales a color.
+        /// </summary>
+        /// <param name="scalar">The amount by which to scale.</param>
+        public void Scale(float scalar)
+        {
+            this.Red *= scalar;
+            this.Green *= scalar;
+            this.Blue *= scalar;
+        }
+
+        /// <summary>
+        /// Inverts the color (takes the complement of the color).
+        /// </summary>
+        public void Invert()
+        {
+            this.Red = 1.0f - Red;
+            this.Green = 1.0f - Green;
+            this.Blue = 1.0f - Blue;
+        }
+
+        /// <summary>
+        /// Adjusts the contrast of a color.
+        /// </summary>
+        /// <param name="contrast">The amount by which to adjust the contrast.</param>
+        public void AdjustContrast(float contrast)
+        {
+            this.Red = 0.5f + contrast * (Red - 0.5f);
+            this.Green = 0.5f + contrast * (Green - 0.5f);
+            this.Blue = 0.5f + contrast * (Blue - 0.5f);
+        }
+
+        /// <summary>
+        /// Adjusts the saturation of a color.
+        /// </summary>
+        /// <param name="saturation">The amount by which to adjust the saturation.</param>
+        public void AdjustSaturation(float saturation)
+        {
+            float grey = Red * 0.2125f + Green * 0.7154f + Blue * 0.0721f;
+
+            this.Red = grey + saturation * (Red - grey);
+            this.Green = grey + saturation * (Green - grey);
+            this.Blue = grey + saturation * (Blue - grey);
+        }
+
+        /// <summary>
         /// Converts the color into a packed integer.
         /// </summary>
         /// <returns>A packed integer containing all three color components. The alpha channel is set to 255.</returns>
@@ -258,24 +313,24 @@ namespace SlimMath
         /// Scales a color.
         /// </summary>
         /// <param name="value">The color to scale.</param>
-        /// <param name="scale">The amount by which to scale.</param>
+        /// <param name="Scalar">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled color.</param>
-        public static void Scale(ref Color3 value, float scale, out Color3 result)
+        public static void Scale(ref Color3 value, float Scalar, out Color3 result)
         {
-            result.Red = value.Red * scale;
-            result.Green = value.Green * scale;
-            result.Blue = value.Blue * scale;
+            result.Red = value.Red * Scalar;
+            result.Green = value.Green * Scalar;
+            result.Blue = value.Blue * Scalar;
         }
 
         /// <summary>
         /// Scales a color.
         /// </summary>
         /// <param name="value">The color to scale.</param>
-        /// <param name="scale">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color3 Scale(Color3 value, float scale)
+        public static Color3 Scale(Color3 value, float scalar)
         {
-            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scalar, value.Green * scalar, value.Blue * scalar);
         }
 
         /// <summary>
@@ -285,9 +340,9 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the negated color.</param>
         public static void Negate(ref Color3 value, out Color3 result)
         {
-            result.Red = 1.0f - value.Red;
-            result.Green = 1.0f - value.Green;
-            result.Blue = 1.0f - value.Blue;
+            result.Red = -value.Red;
+            result.Green = -value.Green;
+            result.Blue = -value.Blue;
         }
 
         /// <summary>
@@ -297,7 +352,29 @@ namespace SlimMath
         /// <returns>The negated color.</returns>
         public static Color3 Negate(Color3 value)
         {
-            return new Color3(1.0f - value.Red, 1.0f - value.Green, 1.0f - value.Blue);
+            return new Color3(-value.Red, -value.Green, -value.Blue);
+        }
+
+        /// <summary>
+        /// Inverts the color (takes the complement of the color).
+        /// </summary>
+        /// <param name="value">The color to invert.</param>
+        /// <param name="result">When the method completes, contains the inverted color.</param>
+        public static void Invert(ref Color3 value, out Color3 result)
+        {
+            result.Red = 1.0f - value.Red;
+            result.Green = 1.0f - value.Green;
+            result.Blue = 1.0f - value.Blue;
+        }
+
+        /// <summary>
+        /// Inverts the color (takes the complement of the color).
+        /// </summary>
+        /// <param name="value">The color to invert.</param>
+        /// <returns>The inverted color.</returns>
+        public static Color3 Invert(Color3 value)
+        {
+            return new Color3(-value.Red, -value.Green, -value.Blue);
         }
 
         /// <summary>
@@ -523,6 +600,16 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Inverts the color (takes the complement of the color).
+        /// </summary>
+        /// <param name="value">The color to invert.</param>
+        /// <returns>The inverted color.</returns>
+        public static Color3 operator ~(Color3 value)
+        {
+            return new Color3(1.0f - value.Red, 1.0f - value.Green, 1.0f - value.Blue);
+        }
+
+        /// <summary>
         /// Adds two colors.
         /// </summary>
         /// <param name="left">The first color to add.</param>
@@ -567,23 +654,23 @@ namespace SlimMath
         /// <summary>
         /// Scales a color.
         /// </summary>
-        /// <param name="scale">The factor by which to scale the color.</param>
+        /// <param name="scalar">The factor by which to scale the color.</param>
         /// <param name="value">The color to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color3 operator *(float scale, Color3 value)
+        public static Color3 operator *(float scalar, Color3 value)
         {
-            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scalar, value.Green * scalar, value.Blue * scalar);
         }
 
         /// <summary>
         /// Scales a color.
         /// </summary>
         /// <param name="value">The factor by which to scale the color.</param>
-        /// <param name="scale">The color to scale.</param>
+        /// <param name="scalar">The color to scale.</param>
         /// <returns>The scaled color.</returns>
-        public static Color3 operator *(Color3 value, float scale)
+        public static Color3 operator *(Color3 value, float scalar)
         {
-            return new Color3(value.Red * scale, value.Green * scale, value.Blue * scale);
+            return new Color3(value.Red * scalar, value.Green * scalar, value.Blue * scalar);
         }
 
         /// <summary>

@@ -207,11 +207,21 @@ namespace SlimMath
             return Collision.BoxContainsSphere(ref this, ref sphere);
         }
 
+        /// <summary>
+        /// Generates a supporting point for this instance.
+        /// </summary>
+        /// <param name="direction">The direction for which to build the supporting point.</param>
+        /// <param name="result">When the method completes, contains the supporting point.</param>
         public void SupportMapping(ref Vector3 direction, out Vector3 result)
         {
             Collision.SupportPoint(ref this, ref direction, out result);
         }
 
+        /// <summary>
+        /// Generates a support mapping for this instance.
+        /// </summary>
+        /// <param name="direction">The direction for which to build the support mapping.</param>
+        /// <returns>The resulting support mapping.</returns>
         public Vector3 SupportMapping(Vector3 direction)
         {
             Vector3 result;

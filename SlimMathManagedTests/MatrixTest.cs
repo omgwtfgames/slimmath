@@ -498,7 +498,7 @@ namespace SlimMathManagedTests
             float expected = Utilities.ConvertToXna(target).Determinant();
 
             float actual;
-            actual = target.Determinant();
+            actual = target.Determinant;
             Utilities.AreEqual(expected, actual);
         }
 

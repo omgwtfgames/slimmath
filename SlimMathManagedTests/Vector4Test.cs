@@ -1152,12 +1152,6 @@ namespace SlimMathManagedTests
             expected = false;
             actual = left != right;
             Utilities.AreEqual(expected, actual);
-
-            left = Utilities.GenerateVector4();
-            right = new Vector4(left.X + (Utilities.ZeroTolerance / 2f), left.Y - (Utilities.ZeroTolerance / 2f), left.Z + (Utilities.ZeroTolerance / 2f), left.W - (Utilities.ZeroTolerance / 2f));
-            expected = false;
-            actual = left != right;
-            Utilities.AreEqual(expected, actual);
         }
 
         [TestMethod()]

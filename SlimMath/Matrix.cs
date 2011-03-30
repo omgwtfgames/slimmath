@@ -310,6 +310,27 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Calculates the determinant of the matrix.
+        /// </summary>
+        /// <returns>The determinant of the matrix.</returns>
+        public float Determinant
+        {
+            get
+            {
+                float temp1 = (M33 * M44) - (M34 * M43);
+                float temp2 = (M32 * M44) - (M34 * M42);
+                float temp3 = (M32 * M43) - (M33 * M42);
+                float temp4 = (M31 * M44) - (M34 * M41);
+                float temp5 = (M31 * M43) - (M33 * M41);
+                float temp6 = (M31 * M42) - (M32 * M41);
+
+                return ((((M11 * (((M22 * temp1) - (M23 * temp2)) + (M24 * temp3))) - (M12 * (((M21 * temp1) -
+                    (M23 * temp4)) + (M24 * temp5)))) + (M13 * (((M21 * temp2) - (M22 * temp4)) + (M24 * temp6)))) -
+                    (M14 * (((M21 * temp3) - (M22 * temp5)) + (M23 * temp6))));
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the component at the specified index.
         /// </summary>
         /// <value>The value of the matrix component, depending on the index.</value>
@@ -400,21 +421,11 @@ namespace SlimMath
         }
 
         /// <summary>
-        /// Calculates the determinant of the matrix.
+        /// Negates a matrix.
         /// </summary>
-        /// <returns>The determinant of the matrix.</returns>
-        public float Determinant()
+        public void Negate()
         {
-            float temp1 = (M33 * M44) - (M34 * M43);
-            float temp2 = (M32 * M44) - (M34 * M42);
-            float temp3 = (M32 * M43) - (M33 * M42);
-            float temp4 = (M31 * M44) - (M34 * M41);
-            float temp5 = (M31 * M43) - (M33 * M41);
-            float temp6 = (M31 * M42) - (M32 * M41);
-
-            return ((((M11 * (((M22 * temp1) - (M23 * temp2)) + (M24 * temp3))) - (M12 * (((M21 * temp1) -
-                (M23 * temp4)) + (M24 * temp5)))) + (M13 * (((M21 * temp2) - (M22 * temp4)) + (M24 * temp6)))) -
-                (M14 * (((M21 * temp3) - (M22 * temp5)) + (M23 * temp6))));
+            Negate(ref this, out this);
         }
 
         /// <summary>
@@ -431,6 +442,16 @@ namespace SlimMath
         public void Transpose()
         {
             Transpose(ref this, out this);
+        }
+
+        /// <summary>
+        /// Performs the exponential operation on a matrix.
+        /// </summary>
+        /// <param name="exponent">The exponent to raise the matrix to.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="exponent"/> is negative.</exception>
+        public void Exponent(int exponent)
+        {
+            Exponent(ref this, exponent, out this);
         }
 
         /// <summary>
@@ -740,38 +761,38 @@ namespace SlimMath
         /// Scales a matrix by the given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Multiply(ref Matrix left, float right, out Matrix result)
+        public static void Multiply(ref Matrix left, float scalar, out Matrix result)
         {
-            result.M11 = left.M11 * right;
-            result.M12 = left.M12 * right;
-            result.M13 = left.M13 * right;
-            result.M14 = left.M14 * right;
-            result.M21 = left.M21 * right;
-            result.M22 = left.M22 * right;
-            result.M23 = left.M23 * right;
-            result.M24 = left.M24 * right;
-            result.M31 = left.M31 * right;
-            result.M32 = left.M32 * right;
-            result.M33 = left.M33 * right;
-            result.M34 = left.M34 * right;
-            result.M41 = left.M41 * right;
-            result.M42 = left.M42 * right;
-            result.M43 = left.M43 * right;
-            result.M44 = left.M44 * right;
+            result.M11 = left.M11 * scalar;
+            result.M12 = left.M12 * scalar;
+            result.M13 = left.M13 * scalar;
+            result.M14 = left.M14 * scalar;
+            result.M21 = left.M21 * scalar;
+            result.M22 = left.M22 * scalar;
+            result.M23 = left.M23 * scalar;
+            result.M24 = left.M24 * scalar;
+            result.M31 = left.M31 * scalar;
+            result.M32 = left.M32 * scalar;
+            result.M33 = left.M33 * scalar;
+            result.M34 = left.M34 * scalar;
+            result.M41 = left.M41 * scalar;
+            result.M42 = left.M42 * scalar;
+            result.M43 = left.M43 * scalar;
+            result.M44 = left.M44 * scalar;
         }
 
         /// <summary>
         /// Scales a matrix by the given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix Multiply(Matrix left, float right)
+        public static Matrix Multiply(Matrix left, float scalar)
         {
             Matrix result;
-            Multiply(ref left, right, out result);
+            Multiply(ref left, scalar, out result);
             return result;
         }
 
@@ -819,11 +840,11 @@ namespace SlimMath
         /// Scales a matrix by the given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Divide(ref Matrix left, float right, out Matrix result)
+        public static void Divide(ref Matrix left, float scalar, out Matrix result)
         {
-            float inv = 1.0f / right;
+            float inv = 1.0f / scalar;
 
             result.M11 = left.M11 * inv;
             result.M12 = left.M12 * inv;
@@ -847,12 +868,12 @@ namespace SlimMath
         /// Scales a matrix by the given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix Divide(Matrix left, float right)
+        public static Matrix Divide(Matrix left, float scalar)
         {
             Matrix result;
-            Divide(ref left, right, out result);
+            Divide(ref left, scalar, out result);
             return result;
         }
 
@@ -2285,6 +2306,29 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Creates a matrix that uniformally scales along all three axis.
+        /// </summary>
+        /// <param name="scale">The uniform scale that is applied along all axis.</param>
+        /// <param name="result">When the method completes, contains the created scaling matrix.</param>
+        public static void Scaling(float scale, out Matrix result)
+        {
+            result = Matrix.Identity;
+            result.M11 = result.M22 = result.M33 = scale;
+        }
+
+        /// <summary>
+        /// Creates a matrix that uniformally scales along all three axis.
+        /// </summary>
+        /// <param name="scale">The uniform scale that is applied along all axis.</param>
+        /// <returns>The created scaling matrix.</returns>
+        public static Matrix Scaling(float scale)
+        {
+            Matrix result;
+            Scaling(scale, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Creates a matrix that scales along the x-axis, y-axis, and y-axis.
         /// </summary>
         /// <param name="x">Scaling factor that is applied along the x-axis.</param>
@@ -2310,29 +2354,6 @@ namespace SlimMath
         {
             Matrix result;
             Scaling(x, y, z, out result);
-            return result;
-        }
-
-        /// <summary>
-        /// Creates a matrix that uniformally scales along all three axis.
-        /// </summary>
-        /// <param name="scale">The uniform scale that is applied along all axis.</param>
-        /// <param name="result">When the method completes, contains the created scaling matrix.</param>
-        public static void Scaling(float scale, out Matrix result)
-        {
-            result = Matrix.Identity;
-            result.M11 = result.M22 = result.M33 = scale;
-        }
-
-        /// <summary>
-        /// Creates a matrix that uniformally scales along all three axis.
-        /// </summary>
-        /// <param name="scale">The uniform scale that is applied along all axis.</param>
-        /// <returns>The created scaling matrix.</returns>
-        public static Matrix Scaling(float scale)
-        {
-            Matrix result;
-            Scaling(scale, out result);
             return result;
         }
 
@@ -2821,12 +2842,12 @@ namespace SlimMath
         /// Scales a matrix by a given value.
         /// </summary>
         /// <param name="right">The matrix to scale.</param>
-        /// <param name="left">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator *(float left, Matrix right)
+        public static Matrix operator *(float scalar, Matrix right)
         {
             Matrix result;
-            Multiply(ref right, left, out result);
+            Multiply(ref right, scalar, out result);
             return result;
         }
 
@@ -2834,12 +2855,12 @@ namespace SlimMath
         /// Scales a matrix by a given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator *(Matrix left, float right)
+        public static Matrix operator *(Matrix left, float scalar)
         {
             Matrix result;
-            Multiply(ref left, right, out result);
+            Multiply(ref left, scalar, out result);
             return result;
         }
 
@@ -2860,12 +2881,12 @@ namespace SlimMath
         /// Scales a matrix by a given value.
         /// </summary>
         /// <param name="left">The matrix to scale.</param>
-        /// <param name="right">The amount by which to scale.</param>
+        /// <param name="scalar">The amount by which to scale.</param>
         /// <returns>The scaled matrix.</returns>
-        public static Matrix operator /(Matrix left, float right)
+        public static Matrix operator /(Matrix left, float scalar)
         {
             Matrix result;
-            Divide(ref left, right, out result);
+            Divide(ref left, scalar, out result);
             return result;
         }
 

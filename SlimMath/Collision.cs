@@ -420,8 +420,8 @@ namespace SlimMath
         /// <remarks>
         /// This method performs a ray vs ray intersection test based on the following formula
         /// from Goldman.
-        /// <code>s = det([o₂ - o₁, d₂, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
-        /// <code>t = det([o₂ - o₁, d₁, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
+        /// <code>s = det([o₂ − o₁, d₂, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
+        /// <code>t = det([o₂ − o₁, d₁, d₁ ⨯ d₂]) / ‖d₁ ⨯ d₂‖²</code>
         /// Where o₁ is the position of the first ray, o₂ is the position of the second ray,
         /// d₁ is the normalized direction of the first ray, d₂ is the normalized direction
         /// of the second ray, det denotes the determinant of a matrix, ⨯ denotes the cross
@@ -842,16 +842,45 @@ namespace SlimMath
         /// <param name="distance">When the method completes, contains the distance of the intersection,
         /// or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
+        /// <remarks>
+        /// <para>
+        /// This method uses the following math to compute the intersection:
+        /// ‖x − c‖² = r²           Equation of sphere
+        /// x = s + td              Equation of ray
+        /// 
+        /// Solve for t
+        /// ‖s + td − c‖² = r²      Substitute equation of ray into equation of sphere
+        /// v ≝ s − c
+        /// ‖v + td‖² = r²
+        /// v² + 2v⋅td + t²d² = r²
+        /// d²t² + (2v⋅d)t + (v² − r²) = 0
+        /// t² + (2v⋅d)t + (v² − r²) = 0    If d is a normalized vector
+        /// 
+        /// Quadratic equation gives us
+        /// t = (−(2v⋅d) ± √((2v⋅d)² − 4(v² − r)²)) / 2
+        /// t = −(v⋅d) ± √((v⋅d)² − (v² − r)²)
+        /// </para>
+        /// <para>
+        /// Entrance of intersection is given by the smaller t
+        /// t = −(v⋅d) − √((v⋅d)² − (v² − r)²)
+        /// 
+        /// Exit of intersection is given by the larger t
+        /// t = −(v⋅d) + √((v⋅d)² − (v² − r)²)
+        /// 
+        /// If the smaller t value is &lt; 0 than the ray started inside of the sphere.
+        /// 
+        /// If the descriminant (v⋅d)² − (v² − r)² is &lt; 0 than no intersection occured. If the
+        /// descriminant (v⋅d)² − (v² − r)² is = 0 than the ray is tangential to the sphere. If
+        /// the descriminant (v⋅d)² − (v² − r)² is > 0 than the ray passes through the sphere.
+        /// </para>
+        /// </remarks>
         public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out float distance)
         {
-            //Source: Real-Time Collision Detection by Christer Ericson
-            //Reference: Page 177
+            Vector3 v;
+            Vector3.Subtract(ref ray.Position, ref sphere.Center, out v);
 
-            Vector3 m;
-            Vector3.Subtract(ref ray.Position, ref sphere.Center, out m);
-
-            float b = Vector3.Dot(m, ray.Direction);
-            float c = Vector3.Dot(m, m) - (sphere.Radius * sphere.Radius);
+            float b = Vector3.Dot(v, ray.Direction);
+            float c = Vector3.Dot(v, v) - (sphere.Radius * sphere.Radius);
 
             if (c > 0f && b > 0f)
             {
@@ -883,6 +912,38 @@ namespace SlimMath
         /// <param name="point">When the method completes, contains the point of intersection,
         /// or <see cref="SlimMath.Vector3.Zero"/> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
+        /// <remarks>
+        /// <para>
+        /// This method uses the following math to compute the intersection:
+        /// ‖x − c‖² = r²           Equation of sphere
+        /// x = s + td              Equation of ray
+        /// 
+        /// Solve for t
+        /// ‖s + td − c‖² = r²      Substitute equation of ray into equation of sphere
+        /// v ≝ s − c
+        /// ‖v + td‖² = r²
+        /// v² + 2v⋅td + t²d² = r²
+        /// d²t² + (2v⋅d)t + (v² − r²) = 0
+        /// t² + (2v⋅d)t + (v² − r²) = 0    If d is a normalized vector
+        /// 
+        /// Quadratic equation gives us
+        /// t = (−(2v⋅d) ± √((2v⋅d)² − 4(v² − r)²)) / 2
+        /// t = −(v⋅d) ± √((v⋅d)² − (v² − r)²)
+        /// </para>
+        /// <para>
+        /// Entrance of intersection is given by the smaller t
+        /// t = −(v⋅d) − √((v⋅d)² − (v² − r)²)
+        /// 
+        /// Exit of intersection is given by the larger t
+        /// t = −(v⋅d) + √((v⋅d)² − (v² − r)²)
+        /// 
+        /// If the smaller t value is &lt; 0 than the ray started inside of the sphere.
+        /// 
+        /// If the descriminant (v⋅d)² − (v² − r)² is &lt; 0 than no intersection occured. If the
+        /// descriminant (v⋅d)² − (v² − r)² is = 0 than the ray is tangential to the sphere. If
+        /// the descriminant (v⋅d)² − (v² − r)² is > 0 than the ray passes through the sphere.
+        /// </para>
+        /// </remarks>
         public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out Vector3 point)
         {
             float distance;
@@ -893,6 +954,162 @@ namespace SlimMath
             }
 
             point = ray.Position + (ray.Direction * distance);
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Ray"/> and a <see cref="SlimMath.BoundingSphere"/>. 
+        /// </summary>
+        /// <param name="ray">The ray to test.</param>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <param name="point">When the method completes, contains the point of intersection,
+        /// or <see cref="SlimMath.Vector3.Zero"/> if there was no intersection.</param>
+        /// <param name="normal">When the method completes, contains the normal vector on the
+        /// sphere at the point of intersection.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        /// <remarks>
+        /// <para>
+        /// This method uses the following math to compute the intersection:
+        /// ‖x − c‖² = r²           Equation of sphere
+        /// x = s + td              Equation of ray
+        /// 
+        /// Solve for t
+        /// ‖s + td − c‖² = r²      Substitute equation of ray into equation of sphere
+        /// v ≝ s − c
+        /// ‖v + td‖² = r²
+        /// v² + 2v⋅td + t²d² = r²
+        /// d²t² + (2v⋅d)t + (v² − r²) = 0
+        /// t² + (2v⋅d)t + (v² − r²) = 0    If d is a normalized vector
+        /// 
+        /// Quadratic equation gives us
+        /// t = (−(2v⋅d) ± √((2v⋅d)² − 4(v² − r)²)) / 2
+        /// t = −(v⋅d) ± √((v⋅d)² − (v² − r)²)
+        /// </para>
+        /// <para>
+        /// Entrance of intersection is given by the smaller t
+        /// t = −(v⋅d) − √((v⋅d)² − (v² − r)²)
+        /// 
+        /// Exit of intersection is given by the larger t
+        /// t = −(v⋅d) + √((v⋅d)² − (v² − r)²)
+        /// 
+        /// If the smaller t value is &lt; 0 than the ray started inside of the sphere.
+        /// 
+        /// If the descriminant (v⋅d)² − (v² − r)² is &lt; 0 than no intersection occured. If the
+        /// descriminant (v⋅d)² − (v² − r)² is = 0 than the ray is tangential to the sphere. If
+        /// the descriminant (v⋅d)² − (v² − r)² is > 0 than the ray passes through the sphere.
+        /// </para>
+        /// </remarks>
+        public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out Vector3 point, out Vector3 normal)
+        {
+            float distance;
+            if (!RayIntersectsSphere(ref ray, ref sphere, out distance))
+            {
+                point = Vector3.Zero;
+                normal = Vector3.Zero;
+                return false;
+            }
+
+            point = ray.Position + (ray.Direction * distance);
+            normal = point - sphere.Center;
+            normal.Normalize();
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between a <see cref="SlimMath.Ray"/> and a <see cref="SlimMath.BoundingSphere"/>. 
+        /// </summary>
+        /// <param name="ray">The ray to test.</param>
+        /// <param name="sphere">The sphere to test.</param>
+        /// <param name="entrancePoint">When the method completes, contains the closest point of intersection,
+        /// or <see cref="SlimMath.Vector3.Zero"/> if there was no intersection.</param>
+        /// <param name="entranceNormal">When the method completes, contains the normal vector on the
+        /// sphere at the point of closest intersection.</param>
+        /// <param name="exitPoint">When the method completes, contains the farthest point of intersection,
+        /// or <see cref="SlimMath.Vector3.Zero"/> if there was no intersection.</param>
+        /// <param name="exitNormal">Whent he method completes, contains the normal vector on the
+        /// sphere at the point of farthest intersection.</param>
+        /// <returns>Whether the two objects intersected.</returns>
+        /// <remarks>
+        /// <para>
+        /// This method uses the following math to compute the intersection:
+        /// ‖x − c‖² = r²           Equation of sphere
+        /// x = s + td              Equation of ray
+        /// 
+        /// Solve for t
+        /// ‖s + td − c‖² = r²      Substitute equation of ray into equation of sphere
+        /// v ≝ s − c
+        /// ‖v + td‖² = r²
+        /// v² + 2v⋅td + t²d² = r²
+        /// d²t² + (2v⋅d)t + (v² − r²) = 0
+        /// t² + (2v⋅d)t + (v² − r²) = 0    If d is a normalized vector
+        /// 
+        /// Quadratic equation gives us
+        /// t = (−(2v⋅d) ± √((2v⋅d)² − 4(v² − r)²)) / 2
+        /// t = −(v⋅d) ± √((v⋅d)² − (v² − r)²)
+        /// </para>
+        /// <para>
+        /// Entrance of intersection is given by the smaller t
+        /// t = −(v⋅d) − √((v⋅d)² − (v² − r)²)
+        /// 
+        /// Exit of intersection is given by the larger t
+        /// t = −(v⋅d) + √((v⋅d)² − (v² − r)²)
+        /// 
+        /// If the smaller t value is &lt; 0 than the ray started inside of the sphere.
+        /// 
+        /// If the descriminant (v⋅d)² − (v² − r)² is &lt; 0 than no intersection occured. If the
+        /// descriminant (v⋅d)² − (v² − r)² is = 0 than the ray is tangential to the sphere. If
+        /// the descriminant (v⋅d)² − (v² − r)² is > 0 than the ray passes through the sphere.
+        /// </para>
+        /// </remarks>
+        public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out Vector3 entrancePoint, out Vector3 entranceNormal, out Vector3 exitPoint, out Vector3 exitNormal)
+        {
+            Vector3 v;
+            Vector3.Subtract(ref ray.Position, ref sphere.Center, out v);
+
+            float b = Vector3.Dot(v, ray.Direction);
+            float c = Vector3.Dot(v, v) - (sphere.Radius * sphere.Radius);
+
+            if (c > 0f && b > 0f)
+            {
+                entrancePoint = Vector3.Zero;
+                entranceNormal = Vector3.Zero;
+                exitPoint = Vector3.Zero;
+                exitNormal = Vector3.Zero;
+                return false;
+            }
+
+            float discriminant = b * b - c;
+
+            if (discriminant < 0f)
+            {
+                entrancePoint = Vector3.Zero;
+                entranceNormal = Vector3.Zero;
+                exitPoint = Vector3.Zero;
+                exitNormal = Vector3.Zero;
+                return false;
+            }
+
+            float discriminantSquared = (float)Math.Sqrt(discriminant);
+            float distance1 = -b - discriminantSquared;
+            float distance2 = -b + discriminantSquared;
+
+            if (distance1 < 0f)
+            {
+                distance1 = 0f;
+                entrancePoint = Vector3.Zero;
+                entranceNormal = Vector3.Zero;
+            }
+            else
+            {
+                entrancePoint = ray.Position + (ray.Direction * distance1);
+                entranceNormal = entrancePoint - sphere.Center;
+                entranceNormal.Normalize();
+            }
+
+            exitPoint = ray.Position + (ray.Direction * distance2);
+            exitNormal = exitPoint - sphere.Center;
+            exitNormal.Normalize();
+
             return true;
         }
 

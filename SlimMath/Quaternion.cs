@@ -284,6 +284,17 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Reverses the direction of a given quaternion.
+        /// </summary>
+        public void Negate()
+        {
+            this.X = -X;
+            this.Y = -Y;
+            this.Z = -Z;
+            this.W = -W;
+        }
+
+        /// <summary>
         /// Conjugates and renormalizes the quaternion.
         /// </summary>
         public void Invert()
@@ -314,6 +325,22 @@ namespace SlimMath
                 Z *= inverse;
                 W *= inverse;
             }
+        }
+
+        /// <summary>
+        /// Exponentiates a quaternion.
+        /// </summary>
+        public void Exponential()
+        {
+            Exponential(ref this, out this);
+        }
+
+        /// <summary>
+        /// Calculates the natural logarithm of the specified quaternion.
+        /// </summary>
+        public void Logarithm()
+        {
+            Logarithm(ref this, out this);
         }
 
         /// <summary>
@@ -383,26 +410,26 @@ namespace SlimMath
         /// Scales a quaternion by the given value.
         /// </summary>
         /// <param name="value">The quaternion to scale.</param>
-        /// <param name="scale">The amount by which to scale the quaternion.</param>
+        /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <param name="result">When the method completes, contains the scaled quaternion.</param>
-        public static void Multiply(ref Quaternion value, float scale, out Quaternion result)
+        public static void Multiply(ref Quaternion value, float scalar, out Quaternion result)
         {
-            result.X = value.X * scale;
-            result.Y = value.Y * scale;
-            result.Z = value.Z * scale;
-            result.W = value.W * scale;
+            result.X = value.X * scalar;
+            result.Y = value.Y * scalar;
+            result.Z = value.Z * scalar;
+            result.W = value.W * scalar;
         }
 
         /// <summary>
         /// Scales a quaternion by the given value.
         /// </summary>
         /// <param name="value">The quaternion to scale.</param>
-        /// <param name="scale">The amount by which to scale the quaternion.</param>
+        /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion Multiply(Quaternion value, float scale)
+        public static Quaternion Multiply(Quaternion value, float scalar)
         {
             Quaternion result;
-            Multiply(ref value, scale, out result);
+            Multiply(ref value, scalar, out result);
             return result;
         }
 
@@ -440,6 +467,28 @@ namespace SlimMath
             Quaternion result;
             Multiply(ref left, ref right, out result);
             return result;
+        }
+
+        /// <summary>
+        /// Scales a vector by the given value.
+        /// </summary>
+        /// <param name="value">The vector to scale.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
+        /// <param name="result">When the method completes, contains the scaled vector.</param>
+        public static void Divide(ref Quaternion value, float scalar, out Quaternion result)
+        {
+            result = new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
+        }
+
+        /// <summary>
+        /// Scales a vector by the given value.
+        /// </summary>
+        /// <param name="value">The vector to scale.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
+        /// <returns>The scaled vector.</returns>
+        public static Quaternion Divide(Quaternion value, float scalar)
+        {
+            return new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
 
         /// <summary>
@@ -667,7 +716,7 @@ namespace SlimMath
         /// <param name="result">When the method completes, contains the natural logarithm of the quaternion.</param>
         public static void Logarithm(ref Quaternion value, out Quaternion result)
         {
-            if (Math.Abs(value.W) < 1.0)
+            if (Math.Abs(value.W) < 1.0f)
             {
                 float angle = (float)Math.Acos(value.W);
                 float sin = (float)Math.Sin(angle);
@@ -887,7 +936,7 @@ namespace SlimMath
             else
             {
                 float acos = (float)Math.Acos(Math.Abs(dot));
-                float invSin = (float)(1.0 / Math.Sin(acos));
+                float invSin = (float)(1.0f / Math.Sin(acos));
 
                 inverse = (float)Math.Sin((1.0f - amount) * acos) * invSin;
                 opposite = (float)Math.Sin(amount * acos) * invSin * Math.Sign(dot);
@@ -1030,12 +1079,12 @@ namespace SlimMath
         /// Scales a quaternion by the given value.
         /// </summary>
         /// <param name="value">The quaternion to scale.</param>
-        /// <param name="scale">The amount by which to scale the quaternion.</param>
+        /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(float scale, Quaternion value)
+        public static Quaternion operator *(float scalar, Quaternion value)
         {
             Quaternion result;
-            Multiply(ref value, scale, out result);
+            Multiply(ref value, scalar, out result);
             return result;
         }
 
@@ -1043,12 +1092,12 @@ namespace SlimMath
         /// Scales a quaternion by the given value.
         /// </summary>
         /// <param name="value">The quaternion to scale.</param>
-        /// <param name="scale">The amount by which to scale the quaternion.</param>
+        /// <param name="scalar">The amount by which to scale the quaternion.</param>
         /// <returns>The scaled quaternion.</returns>
-        public static Quaternion operator *(Quaternion value, float scale)
+        public static Quaternion operator *(Quaternion value, float scalar)
         {
             Quaternion result;
-            Multiply(ref value, scale, out result);
+            Multiply(ref value, scalar, out result);
             return result;
         }
 
@@ -1063,6 +1112,17 @@ namespace SlimMath
             Quaternion result;
             Multiply(ref left, ref right, out result);
             return result;
+        }
+
+        /// <summary>
+        /// Scales a vector by the given value.
+        /// </summary>
+        /// <param name="value">The vector to scale.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
+        /// <returns>The scaled vector.</returns>
+        public static Quaternion operator /(Quaternion value, float scalar)
+        {
+            return new Quaternion(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
 
         /// <summary>

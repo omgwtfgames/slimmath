@@ -59,6 +59,11 @@ namespace SlimMathManagedTests
             Utilities.AreEqual(new Vector2() { X = 1f, Y = 1f }, Vector2.One);
             Utilities.AreEqual(new Vector2() { X = 1f, Y = 0f }, Vector2.UnitX);
             Utilities.AreEqual(new Vector2() { X = 0f, Y = 1f }, Vector2.UnitY);
+
+            Vector2 t = new Vector2(1, 1);
+            Vector2 q = new Vector2(2, 2);
+
+            t += q;
         }
 
         [TestMethod()]

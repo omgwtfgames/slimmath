@@ -247,6 +247,28 @@ namespace SlimMath
         }
 
         /// <summary>
+        /// Reverses the direction of a given vector.
+        /// </summary>
+        public void Negate()
+        {
+            X = -X;
+            Y = -Y;
+            Z = -Z;
+            W = -W;
+        }
+
+        /// <summary>
+        /// Takes the absolute value of each component.
+        /// </summary>
+        public void Abs()
+        {
+            this.X = Math.Abs(X);
+            this.Y = Math.Abs(Y);
+            this.Z = Math.Abs(Z);
+            this.W = Math.Abs(W);
+        }
+
+        /// <summary>
         /// Creates an array containing the elements of the vector.
         /// </summary>
         /// <returns>A four-element array containing the components of the vector.</returns>
@@ -255,6 +277,7 @@ namespace SlimMath
             return new float[] { X, Y, Z, W };
         }
 
+        #region Transcendentals
         /// <summary>
         /// Takes the square root of each component in the vector.
         /// </summary>
@@ -448,6 +471,7 @@ namespace SlimMath
             Tan(ref value, out temp);
             return temp;
         }
+        #endregion
 
         /// <summary>
         /// Adds two vectors.
@@ -497,22 +521,22 @@ namespace SlimMath
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Vector4 value, float scale, out Vector4 result)
+        public static void Multiply(ref Vector4 value, float scalar, out Vector4 result)
         {
-            result = new Vector4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
+            result = new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 Multiply(Vector4 value, float scale)
+        public static Vector4 Multiply(Vector4 value, float scalar)
         {
-            return new Vector4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
+            return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
 
         /// <summary>
@@ -541,22 +565,22 @@ namespace SlimMath
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Vector4 value, float scale, out Vector4 result)
+        public static void Divide(ref Vector4 value, float scalar, out Vector4 result)
         {
-            result = new Vector4(value.X / scale, value.Y / scale, value.Z / scale, value.W / scale);
+            result = new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 Divide(Vector4 value, float scale)
+        public static Vector4 Divide(Vector4 value, float scalar)
         {
-            return new Vector4(value.X / scale, value.Y / scale, value.Z / scale, value.W / scale);
+            return new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
 
         /// <summary>
@@ -932,10 +956,21 @@ namespace SlimMath
             float squared = amount * amount;
             float cubed = amount * squared;
 
-            result.X = 0.5f * ((((2.0f * value2.X) + ((-value1.X + value3.X) * amount)) + (((((2.0f * value1.X) - (5.0f * value2.X)) + (4.0f * value3.X)) - value4.X) * squared)) + ((((-value1.X + (3.0f * value2.X)) - (3.0f * value3.X)) + value4.X) * cubed));
-            result.Y = 0.5f * ((((2.0f * value2.Y) + ((-value1.Y + value3.Y) * amount)) + (((((2.0f * value1.Y) - (5.0f * value2.Y)) + (4.0f * value3.Y)) - value4.Y) * squared)) + ((((-value1.Y + (3.0f * value2.Y)) - (3.0f * value3.Y)) + value4.Y) * cubed));
-            result.Z = 0.5f * ((((2.0f * value2.Z) + ((-value1.Z + value3.Z) * amount)) + (((((2.0f * value1.Z) - (5.0f * value2.Z)) + (4.0f * value3.Z)) - value4.Z) * squared)) + ((((-value1.Z + (3.0f * value2.Z)) - (3.0f * value3.Z)) + value4.Z) * cubed));
-            result.W = 0.5f * ((((2.0f * value2.W) + ((-value1.W + value3.W) * amount)) + (((((2.0f * value1.W) - (5.0f * value2.W)) + (4.0f * value3.W)) - value4.W) * squared)) + ((((-value1.W + (3.0f * value2.W)) - (3.0f * value3.W)) + value4.W) * cubed));
+            result.X = 0.5f * ((((2.0f * value2.X) + ((-value1.X + value3.X) * amount)) +
+                (((((2.0f * value1.X) - (5.0f * value2.X)) + (4.0f * value3.X)) - value4.X) * squared)) +
+                ((((-value1.X + (3.0f * value2.X)) - (3.0f * value3.X)) + value4.X) * cubed));
+
+            result.Y = 0.5f * ((((2.0f * value2.Y) + ((-value1.Y + value3.Y) * amount)) +
+                (((((2.0f * value1.Y) - (5.0f * value2.Y)) + (4.0f * value3.Y)) - value4.Y) * squared)) +
+                ((((-value1.Y + (3.0f * value2.Y)) - (3.0f * value3.Y)) + value4.Y) * cubed));
+
+            result.Z = 0.5f * ((((2.0f * value2.Z) + ((-value1.Z + value3.Z) * amount)) +
+                (((((2.0f * value1.Z) - (5.0f * value2.Z)) + (4.0f * value3.Z)) - value4.Z) * squared)) +
+                ((((-value1.Z + (3.0f * value2.Z)) - (3.0f * value3.Z)) + value4.Z) * cubed));
+
+            result.W = 0.5f * ((((2.0f * value2.W) + ((-value1.W + value3.W) * amount)) +
+                (((((2.0f * value1.W) - (5.0f * value2.W)) + (4.0f * value3.W)) - value4.W) * squared)) +
+                ((((-value1.W + (3.0f * value2.W)) - (3.0f * value3.W)) + value4.W) * cubed));
         }
 
         /// <summary>
@@ -957,54 +992,54 @@ namespace SlimMath
         /// <summary>
         /// Returns a vector containing the largest components of the specified vectors.
         /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
+        /// <param name="value1">The first source vector.</param>
+        /// <param name="value2">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the largest components of the source vectors.</param>
-        public static void Max(ref Vector4 left, ref Vector4 right, out Vector4 result)
+        public static void Max(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
         {
-            result.X = (left.X > right.X) ? left.X : right.X;
-            result.Y = (left.Y > right.Y) ? left.Y : right.Y;
-            result.Z = (left.Z > right.Z) ? left.Z : right.Z;
-            result.W = (left.W > right.W) ? left.W : right.W;
+            result.X = (value1.X > value2.X) ? value1.X : value2.X;
+            result.Y = (value1.Y > value2.Y) ? value1.Y : value2.Y;
+            result.Z = (value1.Z > value2.Z) ? value1.Z : value2.Z;
+            result.W = (value1.W > value2.W) ? value1.W : value2.W;
         }
 
         /// <summary>
         /// Returns a vector containing the largest components of the specified vectors.
         /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
+        /// <param name="value1">The first source vector.</param>
+        /// <param name="value2">The second source vector.</param>
         /// <returns>A vector containing the largest components of the source vectors.</returns>
-        public static Vector4 Max(Vector4 left, Vector4 right)
+        public static Vector4 Max(Vector4 value1, Vector4 value2)
         {
             Vector4 result;
-            Max(ref left, ref right, out result);
+            Max(ref value1, ref value2, out result);
             return result;
         }
 
         /// <summary>
         /// Returns a vector containing the smallest components of the specified vectors.
         /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
+        /// <param name="value1">The first source vector.</param>
+        /// <param name="value2">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
-        public static void Min(ref Vector4 left, ref Vector4 right, out Vector4 result)
+        public static void Min(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
         {
-            result.X = (left.X < right.X) ? left.X : right.X;
-            result.Y = (left.Y < right.Y) ? left.Y : right.Y;
-            result.Z = (left.Z < right.Z) ? left.Z : right.Z;
-            result.W = (left.W < right.W) ? left.W : right.W;
+            result.X = (value1.X < value2.X) ? value1.X : value2.X;
+            result.Y = (value1.Y < value2.Y) ? value1.Y : value2.Y;
+            result.Z = (value1.Z < value2.Z) ? value1.Z : value2.Z;
+            result.W = (value1.W < value2.W) ? value1.W : value2.W;
         }
 
         /// <summary>
         /// Returns a vector containing the smallest components of the specified vectors.
         /// </summary>
-        /// <param name="left">The first source vector.</param>
-        /// <param name="right">The second source vector.</param>
+        /// <param name="value1">The first source vector.</param>
+        /// <param name="value2">The second source vector.</param>
         /// <returns>A vector containing the smallest components of the source vectors.</returns>
-        public static Vector4 Min(Vector4 left, Vector4 right)
+        public static Vector4 Min(Vector4 value1, Vector4 value2)
         {
             Vector4 result;
-            Min(ref left, ref right, out result);
+            Min(ref value1, ref value2, out result);
             return result;
         }
 
@@ -1301,33 +1336,33 @@ namespace SlimMath
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator *(float scale, Vector4 value)
+        public static Vector4 operator *(float scalar, Vector4 value)
         {
-            return new Vector4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
+            return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator *(Vector4 value, float scale)
+        public static Vector4 operator *(Vector4 value, float scalar)
         {
-            return new Vector4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
+            return new Vector4(value.X * scalar, value.Y * scalar, value.Z * scalar, value.W * scalar);
         }
 
         /// <summary>
         /// Scales a vector by the given value.
         /// </summary>
         /// <param name="value">The vector to scale.</param>
-        /// <param name="scale">The amount by which to scale the vector.</param>
+        /// <param name="scalar">The amount by which to scale the vector.</param>
         /// <returns>The scaled vector.</returns>
-        public static Vector4 operator /(Vector4 value, float scale)
+        public static Vector4 operator /(Vector4 value, float scalar)
         {
-            return new Vector4(value.X / scale, value.Y / scale, value.Z / scale, value.W / scale);
+            return new Vector4(value.X / scalar, value.Y / scalar, value.Z / scalar, value.W / scalar);
         }
 
         /// <summary>
